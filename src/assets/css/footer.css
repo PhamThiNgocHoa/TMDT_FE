@@ -1,0 +1,81 @@
+.footer {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Màu nền gradient */
+    color: white;
+    padding: 40px 20px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.footer-left, .footer-center, .footer-right {
+    width: 30%;
+}
+
+.footer-left h2, .footer-center h3, .footer-right h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer-left p, .footer-center p, .footer-right p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.email-subscription {
+    display: flex;
+    margin-top: 10px;
+}
+
+.email-subscription input {
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    margin-right: 10px;
+    flex: 1;
+}
+
+.email-subscription button {
+    padding: 10px 15px;
+    background-color: #333;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.email-subscription button:hover {
+    background-color: #555;
+}
+
+.footer-right .app-download {
+    margin-top: 20px;
+}
+
+.app-download p {
+    font-size: 16px;
+}
+
+.app-download .qr-code img {
+    width: 100px;
+    height: 100px;
+    margin: 10px 0;
+}
+
+.download-buttons a {
+    margin: 0 10px;
+}
+
+.download-buttons img {
+    width: 120px;
+}
+
+.footer-bottom {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+    border-top: 1px solid #fff;
+    padding-top: 10px;
+}
