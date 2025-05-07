@@ -1,6 +1,6 @@
 // src/components/Header.tsx
 import React from 'react';
-import logo from '../assets/image/logo.png';
+import logo from '../assets/image/logo2.png';
 import '../assets/css/header.css';
 
 const Header = () => {

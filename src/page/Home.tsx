@@ -1,6 +1,7 @@
 import React from 'react';
 import '../assets/css/home.css';
-import anhtest from '../assets/image/anhtest.png';
+import slide1 from '../assets/image/slide1.png';
+import slide2 from '../assets/image/slide2.png';
 
 const Home = () => {
     return (
@@ -20,16 +21,17 @@ const Home = () => {
             </div>
 
             <div className="slider">
+                {/*<div className="slider-image">*/}
+                {/*    <img src={slide1} alt="Slider Image 1" />*/}
+                {/*</div>*/}
                 <div className="slider-image">
-                    <img src={anhtest} alt="Slider Image 1" />
+                    <img src={slide2} alt="Slider Image 1" />
                 </div>
-                <div className="slider-image">
-                    <img src={anhtest} alt="Slider Image 2" />
-                </div>
-                <div className="slider-image">
-                    <img src={anhtest} alt="Slider Image 3" />
-                </div>
+
             </div>
+
+
+
         </div>
     );
 };

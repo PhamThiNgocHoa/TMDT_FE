@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Thay useHistory thành useNavigate
-import '../assets/css/login.css';
-import imglogin from '../assets/image/imagelogin.png';
+import imglogin from '../../assets/image/imagelogin.png';
 
-const Login = () => {
+const LoginAd = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -45,7 +44,7 @@ const Login = () => {
                         </div>
                         <button type="submit" onClick={handleLogin}>Đăng nhập</button>
                         <div className="forgot-password">
-                            <a href="/forgotpass">Quên mật khẩu?</a>
+                            <a href="#">Quên mật khẩu?</a>
                         </div>
                     </form>
                 </div>
@@ -54,4 +53,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginAd;
