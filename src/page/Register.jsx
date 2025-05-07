@@ -1,20 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Thay useHistory thành useNavigate
+import { useNavigate } from 'react-router-dom';
 import '../assets/css/login.css';
+import GoogleIcon from '../assets/image/iconGoogle.png';
 import imglogin from '../assets/image/imagelogin.png';
 
-const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+const Register = () => {
 
-    const handleLogin = () => {
-        if (username === 'admin' && password === '12345') {
-            navigate('/home');
-        } else {
-            alert('Thông tin đăng nhập sai');
-        }
-    };
 
     return (
         <div className="login-container">
@@ -23,15 +14,22 @@ const Login = () => {
                     <img src={imglogin} alt="Login Illustration" />
                 </div>
                 <div className="login-right">
-                    <h2>Đăng nhập</h2>
+                    <h2>Tạo tài khoản</h2>
                     <form onSubmit={(e) => e.preventDefault()}>
+                        <div className="form-group">
+                            <label>Họ tên</label>
+                            <input
+                                type="text"
+                                placeholder="Nhập họ tên"
+
+                            />
+                        </div>
                         <div className="form-group">
                             <label>Email hoặc Số Điện Thoại</label>
                             <input
                                 type="text"
                                 placeholder="Nhập email hoặc số điện thoại"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+
                             />
                         </div>
                         <div className="form-group">
@@ -39,13 +37,21 @@ const Login = () => {
                             <input
                                 type="password"
                                 placeholder="Nhập mật khẩu"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+
                             />
                         </div>
-                        <button type="submit" onClick={handleLogin}>Đăng nhập</button>
+                        <button type="submit">Tạo tài khoản</button>
+                        <button className="btn-google" type="submit">
+                            <img
+                                src={GoogleIcon}
+                                alt="Google Logo"
+                                style={{ width: '15px', height: '15px', marginRight: '10px' }}
+                            />
+                            Đăng kí bằng Google
+                        </button>
+                        {/*<button className="btn-google" type="submit"> Đăng kí bằng Google</button>*/}
                         <div className="forgot-password">
-                            <a href="/forgotpass">Quên mật khẩu?</a>
+                            Bạn đã có tài khoản     <a href="/login">Đăng nhập</a>
                         </div>
                     </form>
                 </div>
@@ -54,4 +60,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Register;
