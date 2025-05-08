@@ -11,6 +11,7 @@ import Home from './page/Home';
 import Header from './component/Header';
 import Footer from './component/Footer';
 
+import AccountManagement from './page/account/AccountManagement';
 const App = () => {
     return (
         <Router>
@@ -32,6 +33,7 @@ const HeaderFooterControl = () => {
                 <Route path="/forgotpass" element={<ForgotPass />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/account" element={<AccountManagement />} />
 
                 <Route path="/admin" element={<LoginAd />} />
             </Routes>
