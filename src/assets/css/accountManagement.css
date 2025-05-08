@@ -1,0 +1,202 @@
+.account-management-container.topbody {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.account-management-container{
+    padding: 20px;
+}
+
+
+.breadcrumb-container {
+    font-size: 14px;
+    color: #333;
+}
+
+.breadcrumb-item {
+    color: #555;
+    text-decoration: none;
+}
+
+.breadcrumb-item:hover {
+    text-decoration: underline;
+    color: #f39c12;
+}
+
+.account-name-container {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 16px;
+    color: #333;
+}
+
+.account-name-container strong {
+    color: #e62e4d;
+}
+
+.content-container {
+    display: flex;
+    margin-top: 30px;
+}
+
+.tab-container {
+    width: 33%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tab-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tab-container ul li {
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.tab-container ul li.active {
+    color: #e62e4d; /* Red color for active tab */
+    font-weight: bold;
+}
+
+.tab-container ul li:hover {
+    color: #f39c12; /* Color on hover */
+}
+
+.content-section {
+    width: 67%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-section h2 {
+    font-size: 18px;
+    color: #e62e4d;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.save-btn {
+    background-color: #e62e4d;
+    color: #fff;
+}
+
+.cancel-btn:hover {
+    background-color: #ddd;
+}
+
+.save-btn:hover {
+    background-color: #c5223e;
+}
+.tab-account{
+    margin-left: 20px;
+}
+.form-body {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0px;
+    background-color: #fff;
+}
+
+.form-row1 {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.save-btn {
+    background-color: #e62e4d;
+    color: #fff;
+}
+
+.cancel-btn:hover {
+    background-color: #ddd;
+}
+
+.save-btn:hover {
+    background-color: #c5223e;
+}
+
