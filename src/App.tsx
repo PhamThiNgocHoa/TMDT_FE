@@ -11,6 +11,8 @@ import Home from './page/Home';
 import Header from './component/Header';
 import Footer from './component/Footer';
 
+import AdminDashboard from './page/admin/AdminDashboard';
+
 import AccountManagement from './page/account/AccountManagement';
 const App = () => {
     return (
@@ -25,8 +27,7 @@ const HeaderFooterControl = () => {
 
     return (
         <>
-            {location.pathname !== '/loginAd' && <Header />}
-
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Header />}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
@@ -35,10 +36,11 @@ const HeaderFooterControl = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/account" element={<AccountManagement />} />
 
-                <Route path="/admin" element={<LoginAd />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/loginad" element={<LoginAd />} />
             </Routes>
 
-            {location.pathname !== '/loginAd' && <Footer />}
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Footer />}
         </>
     );
 };
