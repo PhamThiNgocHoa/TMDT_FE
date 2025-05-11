@@ -1,0 +1,113 @@
+.category-section {
+    margin: 60px 0;
+}
+
+.category-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.categories-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #db4444 transparent;
+}
+
+.categories-grid::-webkit-scrollbar {
+    height: 6px;
+}
+
+.categories-grid::-webkit-scrollbar-thumb {
+    background-color: #db4444;
+    border-radius: 10px;
+}
+
+.category-card {
+    flex: 0 0 auto;
+    margin-top: 20px;
+    width: 170px;
+    height: 145px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    border: 1px solid #0e0e0e;
+    border-radius: 8px;
+    padding: 24px;
+    background-color: #f0f0f0;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    border-color: #db4444;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 14px rgba(219, 68, 68, 0.2);
+}
+
+.category-card.active {
+    background-color: #db4444;
+    border-color: #db4444;
+    box-shadow: 0 6px 18px rgba(219, 68, 68, 0.3);
+}
+
+.category-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-icon img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.category-name {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    margin: 0;
+    color: #0e0e0e;
+    transition: color 0.3s;
+}
+.category-card:hover .category-name {
+    color: #db4444;
+}
+
+.category-card.active .category-name {
+    color: #fff;
+}
+
+.navigation-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.nav-btn {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: #db4444;
+    color: #fff;
+}

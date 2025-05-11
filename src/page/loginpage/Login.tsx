@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Thay useHistory thành useNavigate
-import '../assets/css/login.css';
-import imglogin from '../assets/image/imagelogin.png';
+import '../../assets/css/login.css';
+import imglogin from '../../assets/image/imagelogin.png';
 
 const Login = () => {
     const [username, setUsername] = useState('');

@@ -1,0 +1,43 @@
+.services-section {
+    margin: 140px 0;
+}
+
+.services-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 88px;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+}
+
+.service-icon {
+    width: 80px;
+    height: 80px;
+}
+
+.service-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.service-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+    margin: 0;
+}
+
+.service-description {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    margin: 0;
+    max-width: 300px;
+}

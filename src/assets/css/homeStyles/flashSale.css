@@ -1,0 +1,116 @@
+.flash-sale-section {
+    margin: 60px 0;
+
+}
+
+.flash-sale-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.timer-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-value {
+    font-family: Inter, var(--default-font-family);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 30px;
+    color: #0e0e0e;
+}
+
+.timer-label {
+    font-size: 12px;
+    font-weight: 500;
+    color:#0e0e0e;
+    opacity: 0.8;
+}
+
+.timer-separator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: -15px;
+}
+
+.timer-separator::before,
+.timer-separator::after {
+    content: "";
+    width: 4px;
+    height: 4px;
+    background-color:#0e0e0e;
+    border-radius: 50%;
+}
+
+.navigation-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: #ded2d2;
+    color: #0e0e0e;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: #db4444;
+    color: white;
+}
+
+.products-slider {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    scrollbar-width: thin;
+}
+
+.products-slider::-webkit-scrollbar {
+    height: 6px;
+}
+
+.products-slider::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.view-all-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+}
+.view-all-button {
+    background-color: #db4444;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}

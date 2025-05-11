@@ -1,0 +1,16 @@
+.top-products-section {
+    margin: 60px 0;
+}
+
+.top-products-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.top-products-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}

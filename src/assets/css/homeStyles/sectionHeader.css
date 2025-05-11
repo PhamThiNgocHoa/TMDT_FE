@@ -1,0 +1,35 @@
+.section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.label-indicator {
+    width: 20px;
+    height: 40px;
+    background-color: #db4444;
+    border-radius: 4px;
+}
+
+.label-text {
+    color: #db4444;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 20px;
+}
+
+.section-title {
+    font-family: Inter, var(--default-font-family);
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 48px;
+    letter-spacing: 1.44px;
+    color: var(--color-text);
+    margin: 0;
+}
