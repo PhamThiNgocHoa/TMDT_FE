@@ -1,0 +1,110 @@
+.promo-banner {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background: linear-gradient(270deg, #0e0e0e, #000000);
+    margin-top: 176px;
+    margin-bottom: 60px;
+}
+
+.promo-content {
+    display: flex;
+    height: 100%;
+}
+
+.promo-left {
+    width: 40%;
+    padding: 58px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.promo-right {
+    width: 60%;
+    position: relative;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 29px;
+}
+
+.brand-logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.brand-name {
+    color: #f0f0f0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.promo-title {
+    color: #f0f0f0;
+    font-family: Inter, var(--default-font-family);
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 60px;
+    letter-spacing: 1.92px;
+    margin: 0 0 22px 0;
+}
+
+.promo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    position: relative;
+}
+
+.promo-link::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 81px;
+    height: 1px;
+    background-color:#f0f0f0;
+}
+
+.arrow-icon {
+    font-size: 24px;
+}
+
+.promo-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height:100% ;
+    object-fit: contain;
+}
+
+.promo-indicators {
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    display: flex;
+    gap: 12px;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.indicator.active {
+    background-color: #f0f0f0;
+    width: 14px;
+    height: 14px;
+}

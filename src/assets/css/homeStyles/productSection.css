@@ -1,0 +1,25 @@
+.products-section {
+    margin: 60px 0;
+}
+
+.products-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.view-all-container {
+    margin-top: 40px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
