@@ -11,7 +11,15 @@ import ProductDetailsPage from "./page/productDetails/ProductDetailsPage";
 import HomePage from "./page/homePage/HomePage";
 import Header from "./component/Header";
 import Footer from "./component/Footer";
+import LoginAd from './page/admin/LoginAd';
+import Register from './page/Register';
+import ForgotPass from './page/ForgotPass';
+import Home from './page/Home';
 
+
+import AdminDashboard from './page/admin/AdminDashboard';
+
+import AccountManagement from './page/account/AccountManagement';
 const App = () => {
     return (
         <Router>
@@ -25,17 +33,21 @@ const HeaderFooterControl = () => {
 
     return (
         <>
-            {location.pathname !== '/login' && <Header />}
-
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Header />}
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductDetailsPage />} />
-                {/* Add other routes here */}
-            </Routes>
+                <Route path="/forgotpass" element={<ForgotPass />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/account" element={<AccountManagement />} />
 
-            {location.pathname !== '/login' && <Footer />}
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/loginad" element={<LoginAd />} />
+            </Routes>
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Footer />}
         </>
     );
 };

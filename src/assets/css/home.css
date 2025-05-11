@@ -47,7 +47,6 @@
     border-radius: 8px;
 }
 
-/* Nếu bạn muốn tạo hiệu ứng cho slider */
 .slider-image {
     animation: fade-in 1s ease-out;
 }
