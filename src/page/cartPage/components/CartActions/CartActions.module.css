@@ -1,0 +1,47 @@
+.actionsContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 757px;
+  position: relative;
+  width: 1166px;
+  margin-top: 24px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  position: relative;
+  padding: 16px 48px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.actionButtonText {
+  position: relative;
+  height: 24px;
+  color: #000000;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.actionButton:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.continueShoppingButton {
+  width: 161px;
+}
+
+.updateCartButton {
+  width: 248px;
+}

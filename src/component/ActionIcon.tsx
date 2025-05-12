@@ -11,7 +11,7 @@ export const ActionIcons = () => {
             <button className="iconButton" aria-label="Wishlist">
                 <WishlistIcon />
             </button>
-            <button className="iconButton" aria-label="Shopping Cart">
+            <button className="iconButton" aria-label="Shopping Cart" onClick={() => window.location.href = '/cart'}>
                 <CartIcon />
             </button>
             <button className="iconButton" aria-label="User Account">

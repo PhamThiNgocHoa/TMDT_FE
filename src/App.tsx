@@ -20,6 +20,8 @@ import Home from './page/Home';
 import AdminDashboard from './page/admin/AdminDashboard';
 
 import AccountManagement from './page/account/AccountManagement';
+import CartMain from "./page/cartPage/page";
+import CheckoutPage from "./page/checkOutPage/page";
 const App = () => {
     return (
         <Router>
@@ -43,9 +45,10 @@ const HeaderFooterControl = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/account" element={<AccountManagement />} />
-
+                <Route path="/cart" element={<CartMain />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/loginad" element={<LoginAd />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
             </Routes>
             {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Footer />}
         </>
