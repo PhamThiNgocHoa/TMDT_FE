@@ -1,0 +1,75 @@
+.couponContainer {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  gap: 16px;
+  position: relative;
+  width: 555px;
+}
+
+.couponInput {
+  position: relative;
+  width: 300px;
+  height: 56px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 0 20px;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  color: #000000;
+}
+
+.couponInput::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.applyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  position: relative;
+  width: 239px;
+  padding: 16px 48px;
+  background: #db4444;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.applyButtonText {
+  position: relative;
+  height: 24px;
+  color: #f9f9f9;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.applyButton:hover {
+  background: #c03a3a;
+}
+
+.errorMessage {
+  color: #db4444;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  margin-top: 8px;
+  position: absolute;
+  bottom: -24px;
+  left: 0;
+}
+
+.successMessage {
+  color: #0f5132;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  margin-top: 8px;
+  position: absolute;
+  bottom: -24px;
+  left: 0;
+}
