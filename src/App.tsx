@@ -22,6 +22,7 @@ import AdminDashboard from './page/admin/AdminDashboard';
 import AccountManagement from './page/account/AccountManagement';
 import CartMain from "./page/cartPage/page";
 import CheckoutPage from "./page/checkOutPage/page";
+import PostManagement from "./page/Management/postManagement/PostManagement";
 const App = () => {
     return (
         <Router>
@@ -35,7 +36,7 @@ const HeaderFooterControl = () => {
 
     return (
         <>
-            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Header />}
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && location.pathname !=='/postManagement' && <Header />}
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
@@ -49,8 +50,9 @@ const HeaderFooterControl = () => {
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/loginad" element={<LoginAd />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/postManagement" element={<PostManagement />} />
             </Routes>
-            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && <Footer />}
+            {location.pathname !== '/admin' && location.pathname !== '/loginAd' && location.pathname !=='/postManagement' && <Footer />}
         </>
     );
 };
