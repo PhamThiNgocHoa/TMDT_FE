@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import '../../../assets/css/homeStyles/productCard.css';
-import {Product} from "../types/product";
+import { Product } from "../types/product";
+import { useWishlist } from '../../../context/WishlistContext';
 
 interface ProductCardProps {
     product: Product;
     onProductClick: (productId: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product ,onProductClick}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) => {
     const [isHovered, setIsHovered] = useState(false);
+    const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
+
+    const isFavorited = isInWishlist(product.id);
+
+    const handleWishlistClick = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        addOrRemoveFromWishlist(product.id);
+    };
 
     return (
         <article
@@ -31,7 +40,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product ,onProductClick}) => 
                 )}
 
                 <div className="product-actions">
-                    <button className="action-btn wishlist-btn">
+                    <button
+                        className={`action-btn wishlist-btn ${isFavorited ? 'favorited' : ''}`}
+                        onClick={handleWishlistClick}
+                    >
                         <span className="icon">❤️</span>
                     </button>
                     <button className="action-btn quickview-btn">

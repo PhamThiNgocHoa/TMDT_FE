@@ -5,11 +5,12 @@ import styles from './ProductDetailsPage.module.css';
 import { ProductBreadcrumb } from './ProductBreadcrumb';
 import { ProductGallery } from './ProductGallery';
 import { ProductInfo } from './ProductInfo';
+import ProductReviewsSection from './ProductReviewsSection';
 // import { RelatedProducts } from './RelatedProducts';
-import {  relatedProducts } from './mockData';
-import {RelatedProducts} from "./RelatedProducts";
-import {useParams} from "react-router-dom";
-import {Product} from "../homePage/types/product";
+import { relatedProducts } from './mockData';
+import { RelatedProducts } from "./RelatedProducts";
+import { useParams } from "react-router-dom";
+import { Product } from "../homePage/types/product";
 
 
 
@@ -28,6 +29,10 @@ export default function ProductDetailsPage() {
         { label: product!.name, path: '' }
     ];
 
+    if (!product) {
+        return <div>Product not found</div>;
+    }
+
     return (
         <main className={styles.productDetailspage}>
             <section className={styles.container}>
@@ -36,14 +41,17 @@ export default function ProductDetailsPage() {
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
                                 <ProductBreadcrumb items={breadcrumbItems} />
-                                <ProductGallery images={product!.images} />
+                                <ProductGallery images={product.images} />
                             </div>
                         </article>
                         <aside className={styles.infoColumn}>
-                            <ProductInfo product={product!} />
+                            <ProductInfo product={product} />
                         </aside>
                     </div>
                 </div>
+
+                <ProductReviewsSection />
+
                 <RelatedProducts products={relatedProducts}/>
             </section>
         </main>
