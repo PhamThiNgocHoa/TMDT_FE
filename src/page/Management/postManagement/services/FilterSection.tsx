@@ -3,79 +3,57 @@ import React from 'react';
 import styles from '../PostManagement.module.css';
 import { usePosts } from '../context/PostContext';
 
-export function FilterSection() {
-    const { filters, setFilters, fetchPosts } = usePosts();
+export const FilterSection: React.FC = () => {
+    const { filters, setFilters } = usePosts();
 
-    const handleStatusFilter = async (status: string) => {
-        setFilters({ ...filters, status });
-        await fetchPosts();
+    // Search functionality moved to Header component
+    // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     setFilters({ ...filters, search: e.target.value });
+    // };
+
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setFilters({ ...filters, category: e.target.value });
     };
 
-    const handleDateFilter = async (date: string) => {
-        setFilters({ ...filters, date });
-        await fetchPosts();
+    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setFilters({ ...filters, sort: e.target.value });
     };
 
     return (
-        <section className={styles.adminFilter}>
-            <div className={styles.adminTabs}>
-                <button
-                    className={filters.status === '' ? styles.adminTabButton : styles.adminTabButton2}
-                    onClick={() => handleStatusFilter('')}
-                >
-                    Tất cả bài viết
+        <div className={styles.filterSection}>
+            <div className={styles.filters}>
+                <button className={styles.adminButtonWithIcon} onClick={() => console.log('Chọn ngày clicked')}>
+                    <i className="fas fa-calendar-alt"></i>
+                    <span>Chọn ngày</span>
                 </button>
-                <button
-                    className={filters.status === 'approved' ? styles.adminTabButton : styles.adminTabButton2}
-                    onClick={() => handleStatusFilter('approved')}
-                >
-                    Đã duyệt
+                <button className={styles.adminButtonWithIcon} onClick={() => console.log('Bộ lọc clicked')}>
+                    <i className="fas fa-filter"></i>
+                    <span>Bộ lọc</span>
                 </button>
-                <button
-                    className={filters.status === 'pending' ? styles.adminTabButton : styles.adminTabButton3}
-                    onClick={() => handleStatusFilter('pending')}
+
+                <select 
+                    className={styles.filterSelect}
+                    value={filters.category || ''}
+                    onChange={handleCategoryChange}
                 >
-                    Đang chờ
-                </button>
-                <button
-                    className={filters.status === 'draft' ? styles.adminTabButton : styles.adminTabButton4}
-                    onClick={() => handleStatusFilter('draft')}
+                    <option value="">Tất cả danh mục</option>
+                    <option value="news">Tin tức</option>
+                    <option value="guide">Hướng dẫn</option>
+                    <option value="review">Đánh giá</option>
+                    <option value="game">Game</option>
+                    <option value="marketing">Marketing</option>
+                </select>
+
+                <select 
+                    className={styles.filterSelect}
+                    value={filters.sort || 'newest'}
+                    onChange={handleSortChange}
                 >
-                    Bản nháp
-                </button>
-                <button
-                    className={filters.status === 'rejected' ? styles.adminTabButton : styles.adminTabButton5}
-                    onClick={() => handleStatusFilter('rejected')}
-                >
-                    Từ chối
-                </button>
+                    <option value="newest">Mới nhất</option>
+                    <option value="oldest">Cũ nhất</option>
+                    <option value="views">Lượt xem</option>
+                </select>
             </div>
-            <div className={styles.filter}>
-                <button
-                    className={styles.datepicker}
-                    onClick={() => {
-                        // Implement date picker
-                        handleDateFilter('2025-03-31');
-                    }}
-                >
-          <span className={styles.icon5}>
-            <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/002290eae4a78009da9a649e4c8fe21f822e6cea?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29" className={styles.img18} alt="Calendar" />
-          </span>
-                    <span className={styles.text4}>Chọn ngày</span>
-                </button>
-                <button
-                    className={styles.filter2}
-                    onClick={() => {
-                        // Implement filter modal
-                        console.log('Open filter modal');
-                    }}
-                >
-          <span className={styles.icon6}>
-            <span className={styles.fiSrSettingsSliders} />
-          </span>
-                    <span className={styles.filters}>Bộ lọc</span>
-                </button>
-            </div>
-        </section>
+        </div>
     );
-}
+};

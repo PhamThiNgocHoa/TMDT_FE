@@ -5,11 +5,31 @@
     background: linear-gradient(270deg, #0e0e0e, #000000);
     margin-top: 176px;
     margin-bottom: 60px;
+    overflow: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.promo-slider-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
 }
 
 .promo-content {
+    flex-shrink: 0;
+    width: 100%;
     display: flex;
     height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .promo-left {

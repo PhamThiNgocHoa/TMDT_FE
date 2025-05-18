@@ -1,0 +1,228 @@
+.reviewsSection {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #eee; /* Separator from content above */
+    font-family: 'Inter', sans-serif;
+}
+
+.reviewsSection h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.reviewsContent {
+    display: flex;
+    gap: 40px; /* Space between rating summary and breakdown */
+    margin-bottom: 30px;
+    padding-bottom: 30px; /* Add padding below this section */
+    border-bottom: 1px solid #eee; /* Separator */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.overallRatingSummary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-right: 40px; /* Separator space */
+    border-right: 1px solid #eee; /* Visual separator */
+}
+
+@media (max-width: 768px) {
+    .reviewsContent {
+        flex-direction: column; /* Stack content on smaller screens */
+        gap: 20px;
+    }
+    .overallRatingSummary {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid #eee; /* Add bottom border when stacked */
+        padding-bottom: 20px;
+    }
+}
+
+.averageRating {
+    font-size: 36px;
+    font-weight: 700;
+    color: #ff0000; /* Red color for average rating */
+}
+
+.stars {
+    color: #ffc107; /* Default yellow color for stars container */
+    font-size: 24px;
+}
+
+.filledStar {
+     color: #ffc107; /* Yellow color for filled stars */
+}
+
+.emptyStar {
+    color: #e0e0e0; /* Grey color for empty stars */
+}
+
+.reviewCount {
+    font-size: 14px;
+    color: #555;
+}
+
+.ratingBreakdown {
+    flex-grow: 1; /* Allow breakdown to take available space */
+}
+
+.starRatingRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.starLabel {
+    font-size: 14px;
+    color: #555;
+    width: 40px; /* Fixed width for star label */
+    text-align: right;
+}
+
+.progressBarContainer {
+    flex-grow: 1;
+    height: 8px;
+    background-color: #e0e0e0; /* Grey background for the bar */
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #4CAF50; /* Green color for progress */
+    border-radius: 4px;
+    transition: width 0.5s ease-in-out;
+}
+
+.ratingCount {
+    font-size: 14px;
+    color: #555;
+    width: 80px; /* Fixed width for count */
+}
+
+.reviewList h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.reviewItem {
+    border: 1px solid #ddd; /* Border around each review */
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #fff; /* White background for review item */
+}
+
+.reviewItem p {
+    margin: 0 0 10px 0;
+    color: #555;
+}
+
+.reviewItem strong {
+    color: #333;
+    margin-right: 5px; /* Space between user and rating */
+}
+
+.reviewDate {
+    font-size: 12px;
+    color: #888; /* Lighter color for date */
+    display: block; /* Place date on a new line */
+    margin-top: 5px; /* Space above date */
+}
+
+.submitReviewArea {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Separator */
+}
+
+.submitReviewArea h4 {
+     font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.reviewForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between form groups */
+}
+
+.ratingInput {
+    display: flex;
+    align-items: center;
+    font-size: 24px; /* Size of interactive stars */
+    color: #e0e0e0; /* Default star color */
+    cursor: pointer;
+}
+
+.starOption {
+    transition: color 0.2s ease;
+}
+
+.starOption:hover {
+    color: #ffc107; /* Yellow on hover */
+}
+
+.selectedStar {
+    color: #ffc107; /* Yellow when selected */
+}
+
+.commentInput label.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.commentTextarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.commentTextarea::placeholder {
+    color: #888;
+}
+
+.submitReviewButton {
+    padding: 12px 24px;
+     background: linear-gradient(to right, #fceabb, #f8b500); /* Yellow gradient */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    align-self: flex-start; /* Align button to the left */
+}
+
+.submitReviewButton:hover {
+    opacity: 0.9;
+}
+
+.submitError {
+    color: #dc3545; /* Red for error messages */
+    font-size: 14px;
+    margin-bottom: 10px;
+} 

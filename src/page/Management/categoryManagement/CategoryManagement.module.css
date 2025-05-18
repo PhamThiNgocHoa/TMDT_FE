@@ -1,0 +1,301 @@
+.container {
+    padding: 20px;
+    font-family: 'Inter', sans-serif; /* Use consistent font */
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    color: #1D2939; /* Darker heading color */
+    font-size: 24px; /* Slightly larger heading */
+}
+
+.addButton {
+    padding: 10px 15px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.addButton:hover {
+    background-color: #0056b3;
+}
+
+.tableContainer {
+    margin-top: 20px; /* Add margin below buttons/filters */
+    /* Add more styling for the table container if needed */
+}
+
+/* --- Category Table Styling --- */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Removed margin-top here as it's on tableContainer */
+    border: 1px solid #E4E7EC; /* Subtle border around the table */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure rounded corners are visible */
+}
+
+.category-table thead th {
+    background-color: #F9FAFB; /* Light background for header */
+    color: #475467; /* Darker text color for header */
+    font-size: 12px; /* Smaller font size for headers */
+    font-weight: 600; /* Semibold font weight */
+    text-transform: uppercase; /* Uppercase text */
+    padding: 12px 24px; /* Adjusted padding */
+    text-align: left;
+}
+
+.category-table tbody tr {
+    border-bottom: 1px solid #E4E7EC; /* Separator line between rows */
+}
+
+.category-table tbody tr:last-child {
+    border-bottom: none; /* No border on the last row */
+}
+
+.category-table tbody td {
+    padding: 16px 24px; /* Adjusted padding */
+    font-size: 14px; /* Consistent font size for data */
+    color: #475467; /* Darker text color for data */
+}
+
+.category-table tbody tr:hover {
+    background-color: #F5F7FA; /* Subtle hover background */
+}
+
+.category-table td button {
+    padding: 8px 12px;
+    margin-right: 8px;
+    border: 1px solid #D0D5DD; /* Add subtle border to buttons */
+    border-radius: 6px; /* Slightly more rounded buttons */
+    cursor: pointer;
+    font-size: 13px; /* Slightly smaller font for buttons */
+    font-weight: 500; /* Medium font weight */
+    transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.category-table td button:last-child {
+    margin-right: 0;
+}
+
+.category-table td button:hover {
+    /* Opacity handled by transition */
+}
+
+.category-table td button:first-child { /* Edit button */
+    background-color: #fff;
+    color: #344054;
+}
+
+.category-table td button:first-child:hover {
+    background-color: #f9fafb;
+    border-color: #d0d5dd;
+}
+
+.category-table td button:last-child { /* Delete button */
+     background-color: #dc3545; /* Red */
+     color: white;
+     border-color: #dc3545;
+}
+
+.category-table td button:last-child:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.loading,
+.error {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 50px;
+}
+
+/* Add more styles for filters, pagination as components are added */
+
+.postManagement {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: #F5F7FA;
+}
+.body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 0 32px 24px 32px;
+    margin-left: 280px; /* Adjust based on sidebar width */
+}
+
+.adminTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+}
+
+.text {
+    font-size: 20px; /* Adjusted size */
+    font-weight: 600;
+    color: #1D2939;
+    margin: 0 0 4px 0; /* Adjusted margin */
+    font-family: 'Inter', sans-serif;
+}
+
+.adminBreadcrumbs {
+    font-size: 14px; /* Adjusted size */
+    color: #667085;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adminBreadcrumbs a {
+    color: #667085;
+    text-decoration: none;
+}
+
+.adminBreadcrumbs a:hover {
+    text-decoration: underline;
+}
+
+.right2 {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Adjusted gap */
+}
+
+.adminButtonWithIcon,
+.adminButtonWithIcon2 {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px; /* Adjusted padding */
+    border: 1px solid #D0D5DD;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.adminButtonWithIcon {
+     background-color: #fff;
+     color: #344054;
+}
+
+.adminButtonWithIcon2 {
+    background-color: #007bff; /* Example primary color, adjust as needed */
+    color: #fff;
+    border-color: #007bff;
+}
+
+.adminButtonWithIcon:hover {
+    background-color: #f9fafb;
+    border-color: #d0d5dd;
+}
+
+.adminButtonWithIcon2:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.adminButtonWithIcon i,
+.adminButtonWithIcon2 i {
+    margin-right: 8px;
+    font-size: 16px; /* Adjusted icon size */
+}
+
+.content {
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
+    flex: 1; /* Allow content to grow */
+    display: flex; /* Use flex for content layout */
+    flex-direction: column;
+}
+
+.tableContainer {
+    margin-top: 0; /* Remove top margin as it's handled by .content padding */
+}
+
+/* Keep existing table styles and add .loading, .error styles */
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Add margin between buttons and table */
+}
+
+.category-table th,
+.category-table td {
+    border: 1px solid #ddd;
+    padding: 12px; /* Increased padding */
+    text-align: left;
+    font-size: 14px; /* Consistent font size */
+}
+
+.category-table th {
+    background-color: #f2f2f2;
+    font-weight: 600; /* Bolder header font */
+    color: #333;
+}
+
+.category-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.category-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+.category-table td button {
+    padding: 8px 12px; /* Adjusted button padding */
+    margin-right: 8px; /* Adjusted margin */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.3s ease;
+}
+
+.category-table td button:last-child {
+    margin-right: 0; /* Remove margin on the last button */
+}
+
+.category-table td button:hover {
+    opacity: 0.9;
+}
+
+.category-table td button:first-child {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.category-table td button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+.loading,
+.error {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 50px;
+} 
