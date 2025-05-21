@@ -1,0 +1,218 @@
+.user-permission-page {
+  background: #f7f8fa;
+  border-radius: 16px;
+  padding: 24px 24px 0 24px;
+  margin: 0 auto;
+  max-width: 1100px;
+  min-height: 600px;
+}
+.user-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.user-header-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #222;
+}
+.user-header-actions {
+  display: flex;
+  gap: 12px;
+}
+.user-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.user-btn.orange {
+  background: #ff8800;
+  color: #fff;
+}
+.user-btn.orange:hover {
+  background: #db4444;
+}
+.user-btn.purple {
+  background: #e5e6fa;
+  color: #6c63ff;
+}
+.user-btn.purple:hover {
+  background: #6c63ff;
+  color: #fff;
+}
+.user-btn.blue {
+  background: #2563eb;
+  color: #fff;
+}
+.user-btn.blue:hover {
+  background: #1d4ed8;
+}
+.user-breadcrumb {
+  color: #b0b0b0;
+  font-size: 1.01rem;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+.user-tabs-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.user-tabs-row button {
+  background: #f7f7f7;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 22px;
+  font-size: 1rem;
+  color: #222;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+.user-tabs-row button.active {
+  background: #fff;
+  color: #2563eb;
+  border-bottom: 2.5px solid #2563eb;
+}
+.user-table-wrap {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+}
+.user-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1rem;
+}
+.user-table th,
+.user-table td {
+  padding: 13px 10px;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+  background: #fff;
+}
+.user-table th {
+  color: #b0b0b0;
+  font-weight: 600;
+  border-bottom: 2px solid #f3f3f3;
+  background: #fff;
+}
+.user-table tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.18s;
+}
+.user-table tr:hover {
+  background: #f7f8fa;
+}
+.user-table tr:last-child {
+  border-bottom: none;
+}
+.user-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+.user-link {
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+}
+.user-badge.waiting {
+  background: #fff6e0;
+  color: #ff8800;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  display: inline-block;
+}
+.user-action-btn {
+  background: #f7f7f7;
+  border: none;
+  border-radius: 50%;
+  padding: 7px 9px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-right: 4px;
+  color: #b0b0b0;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.user-action-btn:hover {
+  background: #ffecec;
+  color: #db4444;
+}
+.user-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 0 0 18px 18px;
+  padding: 0 18px 12px 18px;
+  border: 1.5px solid #f3f3f3;
+  border-top: none;
+}
+.user-pagination-info {
+  color: #b0b0b0;
+  font-size: 0.98rem;
+}
+.user-pagination-pages {
+  display: flex;
+  gap: 8px;
+}
+.user-pagination-pages button {
+  background: #fff;
+  border: 1.5px solid #eee;
+  border-radius: 50%;
+  padding: 7px 15px;
+  font-size: 1rem;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
+  transition: border 0.2s, color 0.2s, background 0.2s;
+}
+.user-pagination-pages button.active,
+.user-pagination-pages button:hover {
+  background: #2563eb;
+  color: #fff;
+  border: 1.5px solid #2563eb;
+}
+@media (max-width: 900px) {
+  .user-permission-page {
+    padding: 10px 2vw 0 2vw;
+  }
+  .user-header-row {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .user-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .user-table th,
+  .user-table td {
+    font-size: 0.95rem;
+    padding: 8px 6px;
+  }
+}
