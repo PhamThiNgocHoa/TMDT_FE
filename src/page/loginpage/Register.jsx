@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../assets/css/login.css';
-import GoogleIcon from '../assets/image/iconGoogle.png';
-import imglogin from '../assets/image/imagelogin.png';
+import '../../assets/css/login.css';
+import GoogleIcon from '../../assets/image/iconGoogle.png';
+import imglogin from '../../assets/image/imagelogin.png';
 
 const Register = () => {
 
