@@ -7,45 +7,40 @@ import withReactContent from 'sweetalert2-react-content';
 
 const MySwal = withReactContent(Swal);
 
-interface User {
-    id: number;
-    email: string;
-    phone: string;
-}
-
 const ForgotPass: React.FC = () => {
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState<string>('');
-    const [error, setError] = useState<string>('');
+    const [inputValue, setInputValue] = useState('');
+    const [error, setError] = useState('');
 
-    const fakeUsers: User[] = [
-        { id: 1, email: 'test@example.com', phone: '0123456789' },
-        { id: 2, email: 'admin@gmail.com', phone: '0987654321' },
-        { id: 3, email: 'user@domain.com', phone: '0912345678' }
-    ];
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const userExists = fakeUsers.find(
-            (user) => user.email === inputValue || user.phone === inputValue
-        );
+        if (!inputValue) {
+            setError('Vui lòng nhập email hoặc số điện thoại.');
+            return;
+        }
 
-        if (!userExists) {
-            setError('Tài khoản không tồn tại. Vui lòng kiểm tra lại!');
-        } else {
-            setError('');
-
-            MySwal.fire({
-                title: 'Thành công!',
-                text: 'Đã tìm thấy tài khoản. Vui lòng kiểm tra email/SĐT để đặt lại mật khẩu.',
-                icon: 'success',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    navigate('/resetpass');
-                }
+        try {
+            const response = await fetch(`/api/customer/initPasswordReset/${encodeURIComponent(inputValue)}`, {
+                method: 'POST',
             });
+
+            if (response.ok) {
+                setError('');
+                MySwal.fire({
+                    title: 'Thành công!',
+                    text: 'Mã xác nhận đã được gửi. Kiểm tra email/SĐT để tiếp tục.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                }).then(() => {
+                    navigate('/resetpass');
+                });
+            } else {
+                const data = await response.json();
+                setError(data.message || 'Không tìm thấy tài khoản.');
+            }
+        } catch (err) {
+            setError('Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.');
         }
     };
 
