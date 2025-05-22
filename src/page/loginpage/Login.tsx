@@ -45,7 +45,7 @@ const Login = () => {
                         </div>
                         <button type="submit" onClick={handleLogin}>Đăng nhập</button>
                         <div className="forgot-password">
-                            <a href="/forgotpass">Quên mật khẩu?</a>
+                            <a href="/src/page/loginpage/ForgotPass">Quên mật khẩu?</a>
                         </div>
                     </form>
                 </div>
