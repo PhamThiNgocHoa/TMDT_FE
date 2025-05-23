@@ -38,8 +38,10 @@ const ForgotPass: React.FC = () => {
             } else {
                 const data = await response.json();
                 setError(data.message || 'Không tìm thấy tài khoản.');
+
             }
         } catch (err) {
+            console.log(err);
             setError('Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.');
         }
     };
@@ -57,7 +59,7 @@ const ForgotPass: React.FC = () => {
                             <label>Email hoặc Số Điện Thoại</label>
                             <input
                                 type="text"
-                                placeholder="Nhập email hoặc số điện thoại"
+                                placeholder="Nhập username"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                             />
