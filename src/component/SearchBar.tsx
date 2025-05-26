@@ -1,43 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/header.css";
 import { SearchIcon } from "../assets/icons/SearchIcon";
-<<<<<<< HEAD
-
-// Fake product data for search results
-const fakeProducts = [
-    {
-        id: 1,
-        name: 'Laptop MSI Modern 15',
-        price: '18.490.000₫',
-        discountedPrice: '10.990.000₫',
-        imageUrl: 'https://via.placeholder.com/50x50', // Placeholder image URL
-    },
-    {
-         id: 2,
-        name: 'Laptop Dell XPS 13',
-        price: '30.000.000₫',
-        discountedPrice: '25.000.000₫',
-        imageUrl: 'https://via.placeholder.com/50x50',
-    },
-     {
-         id: 3,
-        name: 'Laptop HP Spectre x360',
-        price: '35.000.000₫',
-        discountedPrice: '30.000.000₫',
-        imageUrl: 'https://via.placeholder.com/50x50',
-    },
-     {
-         id: 4,
-        name: 'Máy tính bảng Samsung',
-        price: '15.000.000₫',
-        discountedPrice: '12.000.000₫',
-        imageUrl: 'https://via.placeholder.com/50x50',
-    },
-];
-=======
 import {listFindByName, searchProduct} from "../server/api/product/product.get"; // ✅ Import API
 import { ProductResponse } from "../models/response/ProductResponse"; // ✅ Kiểu dữ liệu thật
->>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
 
 export const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -104,20 +69,7 @@ export const SearchBar = () => {
 
             {showResults && (
                 <div className="searchResultsDropdown">
-<<<<<<< HEAD
-                    {searchResults.map(product => (
-                        <div 
-                            key={product.id} 
-                            className="searchResultItem"
-                             onClick={() => handleResultClick(product.id.toString())} // Add click handler
-                        >
-                            <img src={product.imageUrl} alt={product.name} className="searchResultImage" />
-                            <div className="searchResultInfo">
-                                <div className="searchResultName">{product.name}</div>
-                                <div className="searchResultPrices">
-                                    <span className="searchResultDiscountedPrice">{product.discountedPrice}</span>
-                                    <span className="searchResultOriginalPrice">{product.price}</span>
-=======
+
                     {loading ? (
                         <div className="searchLoading">Đang tìm kiếm...</div>
                     ) : searchResults.length === 0 ? (
@@ -136,7 +88,6 @@ export const SearchBar = () => {
                                         <span className="searchResultDiscountedPrice">{product.discount}</span>
                                         <span className="searchResultOriginalPrice">{product.price}</span>
                                     </div>
->>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
                                 </div>
                             </div>
                         ))

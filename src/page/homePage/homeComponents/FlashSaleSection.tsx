@@ -95,7 +95,7 @@ const FlashSaleSection: React.FC = () => {
                     <ProductCard
                         key={product.id}
                         product={product}
-                        onProductClick={() => handleProductClick(product.id.toString())}
+                        onProductClick={() => handleProductClick(product.id)}
                     />
                 ))}
             </div>

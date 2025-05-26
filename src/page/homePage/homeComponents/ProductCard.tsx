@@ -9,15 +9,15 @@ interface ProductCardProps {
     onProductClick: (productId: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick, }) => {
     const [isHovered, setIsHovered] = useState(false);
     const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
 
-    const isFavorited = isInWishlist(product.id.toString());
+    const isFavorited = isInWishlist(product.id);
 
     const handleWishlistClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        addOrRemoveFromWishlist(product.id.toString());
+        addOrRemoveFromWishlist(product.id);
     };
 
     return (
@@ -25,7 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
             className={`product-card ${isHovered ? 'hovered' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => onProductClick(product.id.toString())}
+            onClick={() => onProductClick(product.id)}
         >
             <div className="product-image-container">
                 {product.discount && parseFloat(product.discount) > 0 && (
