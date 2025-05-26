@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import Swal from 'sweetalert2';
 import '../../assets/css/login.css';
 import imglogin from '../../assets/image/imagelogin.png';
 import useCustomer from "../../hooks/useCustomer";
@@ -11,18 +12,45 @@ const Login = () => {
     const {handleLogin} = useCustomer();
     const navigate = useNavigate();
 
-    // Handle login and navigate to home if success
-    const handleLogins = async (e: React.FormEvent) => {
-        e.preventDefault();  // Ngừng hành động mặc định của form
+    const handleLogins = async () => {
+        if (!username || !password) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Thiếu thông tin',
+                text: 'Vui lòng nhập đầy đủ tài khoản và mật khẩu.',
+            });
+            return;
+        }
 
-        setError('');
         try {
-            await handleLogin(username, password);
-            // Điều hướng tới trang home sau khi đăng nhập thành công
-            navigate('/home');
-        } catch (err: any) {
-            setError('Đăng nhập thất bại!');
-            console.error("Error:", err);  // Log lỗi chi tiết để debug
+            const response = await handleLogin(username, password);
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Đăng nhập thành công:', data);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đăng nhập thành công',
+                    timer: 1500,
+                    showConfirmButton: false,
+                }).then(() => {
+                    navigate('/home');
+                });
+            } else {
+                const errorData = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Đăng nhập thất bại',
+                    text: errorData.message || 'Sai tên đăng nhập hoặc mật khẩu.',
+                });
+            }
+        } catch (error) {
+            console.error('Lỗi kết nối:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi kết nối',
+                text: 'Không thể kết nối tới máy chủ.',
+            });
         }
     };
 
@@ -34,7 +62,7 @@ const Login = () => {
                 </div>
                 <div className="login-right">
                     <h2>Đăng nhập</h2>
-                    <form onSubmit={handleLogins}>
+                    <form onSubmit={(e) => e.preventDefault()}>
                         <div className="form-group">
                             <label>Email hoặc Số Điện Thoại</label>
                             <input
@@ -53,10 +81,14 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
-                        <button type="submit">Đăng nhập</button>
-                        {error && <div className="error">{error}</div>}
+                        <button type="submit" onClick={handleLogins}>
+                            Đăng nhập
+                        </button>
                         <div className="forgot-password">
-                            <a href="/forgotpass">Quên mật khẩu?</a>
+                            <a href="/forgotPass">Quên mật khẩu?</a>
+                        </div>
+                        <div className="forgot-password"> Bạn chưa có tài khoản
+                            <a href="/register"> Đăng ký</a>
                         </div>
                     </form>
                 </div>
