@@ -17,7 +17,7 @@ export const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
             className={styles.productCard}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => onProductClick(product.id.toString())}
+            onClick={() => onProductClick(product.id)}
         >
             <div className={styles.cardContent}>
                 {product.discount && (
