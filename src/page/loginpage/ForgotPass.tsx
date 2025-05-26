@@ -4,6 +4,7 @@ import '../../assets/css/login.css';
 import imglogin from '../../assets/image/imagelogin.png';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import useCustomer from "../../hooks/useCustomer";
 
 const MySwal = withReactContent(Swal);
 
@@ -11,38 +12,26 @@ const ForgotPass: React.FC = () => {
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('');
     const [error, setError] = useState('');
+    const { fetchInitPasswordReset } = useCustomer();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!inputValue) {
-            setError('Vui lòng nhập email hoặc số điện thoại.');
-            return;
-        }
+        if (!inputValue) return;
 
         try {
-            const response = await fetch(`/api/customer/initPasswordReset/${encodeURIComponent(inputValue)}`, {
-                method: 'POST',
-            });
+            const response = await fetchInitPasswordReset(inputValue);
 
-            if (response.ok) {
-                setError('');
+            if (response?.code === 200) {
                 MySwal.fire({
                     title: 'Thành công!',
-                    text: 'Mã xác nhận đã được gửi. Kiểm tra email/SĐT để tiếp tục.',
+                    text: response.message || 'Mã xác nhận đã được gửi. Kiểm tra email/SĐT để tiếp tục.',
                     icon: 'success',
                     confirmButtonText: 'OK',
-                }).then(() => {
-                    navigate('/resetpass');
-                });
-            } else {
-                const data = await response.json();
-                setError(data.message || 'Không tìm thấy tài khoản.');
-
+                }).then(() => navigate(`/resetpass/${inputValue}`));
             }
         } catch (err) {
-            console.log(err);
-            setError('Lỗi kết nối đến máy chủ. Vui lòng thử lại sau.');
+            console.error(err);
         }
     };
 
