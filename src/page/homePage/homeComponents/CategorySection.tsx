@@ -2,11 +2,15 @@ import React, {useRef, useState} from 'react';
 import SectionHeader from './SectionHeader';
 import { categories } from '../data/categories';
 import '../../../assets/css/homeStyles/caterogySection.css';
+import useCategory from "../../../hooks/useCategory";
 
 const CategorySection: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const defaultActiveId = categories.find(cat => cat.isActive)?.id ?? categories[0].id;
+    const {categories} = useCategory();
+    const defaultActiveId = categories.find(cat => cat.isActive)?.id ?? categories[0]?.id;
     const [activeCategoryId, setActiveCategoryId] = useState<number>(defaultActiveId);
+
+
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
@@ -41,7 +45,7 @@ const CategorySection: React.FC = () => {
                         className={`category-card ${activeCategoryId === category.id ? 'active' : ''}`}
                         onClick={() => setActiveCategoryId(category.id)}                    >
                         <div className="category-icon">
-                            <img src={category.iconUrl} alt={category.name} />
+                            <img src={category.img} alt={category.name} />
                         </div>
                         <h3 className="category-name">{category.name}</h3>
                     </div>

@@ -6,7 +6,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import Login from './page/loginpage/Login';
 
 import {RelatedProducts} from "./page/productDetails/RelatedProducts";
-import {relatedProducts} from "./page/productDetails/mockData";
 import ProductDetailsPage from "./page/productDetails/ProductDetailsPage";
 import HomePage from "./page/homePage/HomePage";
 import Header from "./component/Header";
@@ -67,10 +66,9 @@ const HeaderFooterControl = () => {
                 <Route path="/forgotpass" element={<ForgotPass />} />
                 <Route path="/resetpass" element={<Resetpass />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/home" element={<Home />} />
                 <Route path="/account" element={<AccountManagement />} />
                 <Route path="/cart" element={<CartMain />} />
-                <Route path="/admin" element={<AdminDashboard />} />
+                {/*<Route path="/admin" element={<AdminDashboard />} />*/}
                 <Route path="/loginad" element={<LoginAd />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
 

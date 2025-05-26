@@ -1,37 +1,56 @@
-"use client";
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import useProduct from '../../hooks/useProduct';
 import styles from './ProductDetailsPage.module.css';
-import { ProductBreadcrumb } from './ProductBreadcrumb';
 import { ProductGallery } from './ProductGallery';
 import { ProductInfo } from './ProductInfo';
 import ProductReviewsSection from './ProductReviewsSection';
-// import { RelatedProducts } from './RelatedProducts';
+import { RelatedProducts } from './RelatedProducts';
 import { relatedProducts } from './mockData';
-import { RelatedProducts } from "./RelatedProducts";
-import { useParams } from "react-router-dom";
-import { Product } from "../homePage/types/product";
-
-
 
 export default function ProductDetailsPage() {
     const { id } = useParams<{ id: string }>();
+    const { fetchGetProductById, products, setProducts} = useProduct();
 
-    const getCurrentProduct = (): Product | undefined => {
-        return relatedProducts.find(product => product.id === id);
-    };
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const product = getCurrentProduct();
 
-    const breadcrumbItems = [
-        { label: 'Home', path: '/' },
-        { label: product!.category, path: `/${product!.category.toLowerCase()}` },
-        { label: product!.name, path: '' }
-    ];
 
-    if (!product) {
-        return <div>Product not found</div>;
-    }
+    useEffect(() => {
+        const fetchProduct = async () => {
+            if (!id) return;
+            const idNum = parseInt(id);
+            if (isNaN(idNum)) {
+                setError("ID không hợp lệ");
+                return;
+            }
+            setLoading(true);
+            setError("");
+            try {
+                const data = await fetchGetProductById(idNum);
+                setProducts(data ? [data] : []);
+            } catch (err) {
+                setError("Không tìm thấy sản phẩm");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
+
+
+
+    if (loading) return <div>Đang tải sản phẩm...</div>;
+    if (error) return <div>{error}</div>;
+    if (!products) return <div>Không tìm thấy sản phẩm</div>;
+
+    // const breadcrumbItems = [
+    //     { label: 'Home', path: '/' },
+    //     { label: product.category, path: `/${product.category.toLowerCase()}` },
+    //     { label: product.name, path: '' },
+    // ];
 
     return (
         <main className={styles.productDetailspage}>
@@ -40,19 +59,18 @@ export default function ProductDetailsPage() {
                     <div className={styles.mainContent}>
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
-                                <ProductBreadcrumb items={breadcrumbItems} />
-                                <ProductGallery images={product.images} />
+                                {/*<ProductBreadcrumb items={breadcrumbItems} />*/}
+                                <ProductGallery images={products[0].productImages} />
                             </div>
                         </article>
                         <aside className={styles.infoColumn}>
-                            <ProductInfo product={product} />
+                            <ProductInfo product={products[0]} />
                         </aside>
                     </div>
                 </div>
 
                 <ProductReviewsSection />
-
-                <RelatedProducts products={relatedProducts}/>
+                <RelatedProducts products={relatedProducts} />
             </section>
         </main>
     );

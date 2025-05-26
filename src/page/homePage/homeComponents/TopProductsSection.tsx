@@ -4,11 +4,15 @@ import SectionHeader from './SectionHeader';
 import { topProducts } from '../data/products';
 import '../../../assets/css/homeStyles/topProductsSection.css';
 import {useNavigate} from "react-router-dom";
+import { Product } from '../types/product';
+import useProduct from "../../../hooks/useProduct";
 
 
 const TopProductsSection: React.FC = () => {
     const navigate = useNavigate();
-    const handleProductClick = (productId: string) => {
+    const {products} = useProduct();
+
+    const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
     };
     return (
@@ -25,11 +29,11 @@ const TopProductsSection: React.FC = () => {
             </div>
 
             <div className="top-products-grid">
-                {topProducts.map(product => (
+                {topProducts.map((products) => (
                     <ProductCard
-                        key={product.id}
-                        product={product}
-                        onProductClick={() => handleProductClick(product.id)}
+                        key={products.id}
+                        product={products}
+                        onProductClick={() => handleProductClick(products.id)}
 
                     />
                 ))}

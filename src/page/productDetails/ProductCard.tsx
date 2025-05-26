@@ -6,7 +6,7 @@ import {Product} from "../homePage/types/product";
 
 interface ProductCardProps {
     product: Product;
-    onProductClick: (productId: string) => void;
+    onProductClick: (productId: number) => void;
 }
 
 export const ProductCard = ({ product, onProductClick }: ProductCardProps) => {

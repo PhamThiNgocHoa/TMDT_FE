@@ -1,17 +1,20 @@
-"use client";
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styles from './ProductDetailsPage.module.css';
-import { ProductDeliveryInfo } from './ProductDeliveryInfo';
-import {Product} from "../homePage/types/product";
+import {ProductDeliveryInfo} from './ProductDeliveryInfo';
+import {ProductResponse} from "../../models/response/ProductResponse";
 
 interface ProductInfoProps {
-    product: Product;
+    product: ProductResponse;
 }
 
-export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
+export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
     const [quantity, setQuantity] = useState(1);
-    const [selectedSize, setSelectedSize] = useState<string>(product.sizes?.[2] || '');
+    const [selectedSize, setSelectedSize] = useState<string>(
+        product.productSizes && product.productSizes.length > 0 ? product.productSizes[0].size : ''
+    );
+    const [selectedColor, setSelectedColor] = useState<string>(
+        product.productColors && product.productColors.length > 0 ? product.productColors[0].color : ''
+    );
 
     return (
         <div className={styles.productInfo}>
@@ -24,7 +27,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                         alt="Rating"
                         className={styles.ratingStars}
                     />
-                    <span className={styles.reviewCount}>({product.reviews} Đánh giá)</span>
+                    <span className={styles.reviewCount}>(10 Đánh giá)</span>
                 </div>
                 <div className={styles.stockInfo}>
                     <div className={styles.divider}/>
@@ -32,7 +35,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                 </div>
             </div>
 
-            <p className={styles.price}>{product.price}</p>
+            <p className={styles.price}>{product.price} đ</p>
 
             <p className={styles.description}>{product.description}</p>
 
@@ -40,43 +43,60 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 
             <div className={styles.colorSection}>
                 <span className={styles.sectionLabel}>Màu sắc:</span>
-                {/* Kiểm tra nếu có màu sắc */}
-                {product.colors && product.colors.length > 0 ? (
-                    product.colors.map((color, index) => (
-                        <div
-                            key={index}
-                            className={styles.colorOption}
-                            style={{backgroundColor: color}}
-                        >
-                            <div className={styles.colorCircle} style={{backgroundColor: color}}/>
-                        </div>
-                    ))
+                {product.productColors && product.productColors.length > 0 ? (
+                    <div style={{display: 'flex', gap: 10, marginTop: 8}}>
+                        {product.productColors.map(colorObj => (
+                            <div
+                                key={colorObj.id}
+                                title={colorObj.color}
+                                onClick={() => setSelectedColor(colorObj.color)}
+                                style={{
+                                    width: 28,
+                                    height: 28,
+                                    borderRadius: '50%',
+                                    backgroundColor: colorObj.color,
+                                    border: selectedColor === colorObj.color ? '4px solid #007bff' : '1.5px solid #ccc',
+                                    cursor: 'pointer',
+                                    transition: 'border 0.3s',
+                                }}
+                            />
+                        ))}
+                    </div>
                 ) : (
                     <p>Không có màu sắc</p>
                 )}
             </div>
+
             <div className={styles.sizeOptions}>
                 <span className={styles.sectionLabel}>Kích cỡ:</span>
-                {product.sizes && product.sizes.length > 0 ? (
-                    product.sizes.map((size) => (
-                        <button
-                            key={size}
-                            className={`${styles.sizeButton} ${selectedSize === size ? styles.selected : ''}`}
-                            onClick={() => setSelectedSize(size)}
-                        >
-                            {size}
-                        </button>
-                    ))
+                {product.productSizes && product.productSizes.length > 0 ? (
+                    <div style={{marginTop: 8}}>
+                        {product.productSizes.map(sizeObj => (
+                            <button
+                                key={sizeObj.id}
+                                onClick={() => setSelectedSize(sizeObj.size)}
+                                style={{
+                                    marginRight: 8,
+                                    padding: '6px 12px',
+                                    cursor: 'pointer',
+                                    borderRadius: 4,
+                                    border: selectedSize === sizeObj.size ? '2px solid #007bff' : '1px solid #ccc',
+                                    backgroundColor: selectedSize === sizeObj.size ? '#e6f0ff' : '#fff',
+                                    fontWeight: selectedSize === sizeObj.size ? '600' : '400',
+                                }}
+                            >
+                                {sizeObj.size}
+                            </button>
+                        ))}
+                    </div>
                 ) : (
                     <p>Không có kích cỡ</p>
                 )}
             </div>
+
             <div className={styles.actionSection}>
-            <div className={styles.quantityControl}>
-                    <button
-                        className={styles.quantityButton}
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
+                <div className={styles.quantityControl}>
+                    <button className={styles.quantityButton} onClick={() => setQuantity(Math.max(1, quantity - 1))}>
                         <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/13aeb6e8e8d72783cd5e2d97f1603539abd0b939?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
                             alt="Decrease"
@@ -84,10 +104,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                         />
                     </button>
                     <span className={styles.quantityValue}>{quantity}</span>
-                    <button
-                        className={styles.quantityButton}
-                        onClick={() => setQuantity(quantity + 1)}
-                    >
+                    <button className={styles.quantityButton} onClick={() => setQuantity(quantity + 1)}>
                         <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/f607e1a8681165da6cbf6be1c0d81ea3a6c3d392?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
                             alt="Increase"
