@@ -2,13 +2,13 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Define the shape of a wishlist item (could be just product ID or a full product object)
 // For now, let's store product IDs
-type WishlistItems = string[];
+type WishlistItems = number[];
 
 // Define the shape of the context value
 interface WishlistContextType {
-    wishlistItems: string[];
-    addOrRemoveFromWishlist: (id: string) => void;
-    isInWishlist: (id: string) => boolean;
+    wishlistItems: number[];
+    addOrRemoveFromWishlist: (id: number) => void;
+    isInWishlist: (id: number) => boolean;
 
 }
 
@@ -17,8 +17,8 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 // Create the provider component
 export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [wishlistItems, setWishlistItems] = useState<string[]>([]);
-    const isInWishlist = (id: string) => wishlistItems.includes(id);
+    const [wishlistItems, setWishlistItems] = useState<number[]>([]);
+    const isInWishlist = (id: number) => wishlistItems.includes(id);
     // Load wishlist from localStorage on mount
     useEffect(() => {
         const storedItems = localStorage.getItem('wishlist');
@@ -37,7 +37,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
     }, [wishlistItems]);
 
-    const addOrRemoveFromWishlist = (id: string) => {
+    const addOrRemoveFromWishlist = (id: number) => {
         setWishlistItems(prevItems => {
             const newItems = prevItems.includes(id)
                 ? prevItems.filter(item => item !== id)

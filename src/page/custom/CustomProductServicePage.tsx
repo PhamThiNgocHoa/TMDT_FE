@@ -4,6 +4,7 @@ import PromoBanner from "../../page/homePage/homeComponents/PromoBanner";
 import SectionHeader from "../../page/homePage/homeComponents/SectionHeader";
 import { topProducts } from "../../page/homePage/data/products";
 import { Link } from "react-router-dom";
+import formatToVND from "../../hooks/formatToVND";
 
 const sidebarMenu = [
   { label: "Bàn phím", active: false },
@@ -250,17 +251,17 @@ const TopHotProductsSection = () => {
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <div className="custom-product-img">
-              <img src={p.imageUrl} alt={p.name} />
+              <img src={p.img} alt={p.name} />
               <div className="custom-product-icons">
                 <span>♥</span>
                 <span>👁</span>
               </div>
             </div>
             <div className="custom-product-name">{p.name}</div>
-            <div className="custom-product-price">{p.formattedPrice}</div>
+            <div className="custom-product-price">{formatToVND(p.price)}</div>
             <div className="custom-product-rating">
-              {"★".repeat(Math.round(p.rating))}
-              <span className="custom-product-reviews">({p.reviews})</span>
+              {"★".repeat(Math.round(5))}
+              <span className="custom-product-reviews">(10)</span>
             </div>
           </Link>
         ))}
@@ -291,17 +292,17 @@ const FeaturedProductsSection = () => (
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <div className="custom-product-img">
-            <img src={p.imageUrl} alt={p.name} />
+            <img src={p.img} alt={p.name} />
             <div className="custom-product-icons">
               <span>♥</span>
               <span>👁</span>
             </div>
           </div>
           <div className="custom-product-name">{p.name}</div>
-          <div className="custom-product-price">{p.formattedPrice}</div>
+          <div className="custom-product-price">{formatToVND(p.price)}</div>
           <div className="custom-product-rating">
-            {"★".repeat(Math.round(p.rating))}
-            <span className="custom-product-reviews">({p.reviews})</span>
+            {"★".repeat(Math.round(5))}
+            <span className="custom-product-reviews">(10)</span>
           </div>
         </Link>
       ))}
