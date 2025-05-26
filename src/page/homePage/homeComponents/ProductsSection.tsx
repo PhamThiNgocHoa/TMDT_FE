@@ -1,14 +1,26 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import ProductCard from './ProductCard';
 import SectionHeader from './SectionHeader';
-import { allProducts } from '../data/products';
 import '../../../assets/css/homeStyles/productSection.css';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import useProduct from "../../../hooks/useProduct";
 
 const ProductsSection: React.FC = () => {
     const navigate = useNavigate();
+    const {fetchGetListProduct, products} = useProduct();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await fetchGetListProduct();
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchData();
 
-    const handleProductClick = (productId: string) => {
+    }, [fetchGetListProduct]);
+
+    const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
     };
     return (
@@ -30,6 +42,7 @@ const ProductsSection: React.FC = () => {
             </div>
 
             <div className="products-grid">
+<<<<<<< HEAD
                 {allProducts.slice(0, 8).map(product => (
                     <ProductCard
                         key={product.id}
@@ -37,6 +50,21 @@ const ProductsSection: React.FC = () => {
                         onProductClick={() => handleProductClick(product.id.toString())}
                     />
                 ))}
+=======
+                {products && products.length > 0 ? (
+                    products.map((product)=>(
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onProductClick={() => handleProductClick(product.id)}
+                        />
+                    ))
+
+                ): (
+                    <span>Không có sản phẩm</span>
+
+                )}
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
             </div>
 
             <div className="view-all-container">

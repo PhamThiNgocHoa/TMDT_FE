@@ -14,7 +14,7 @@ export const RelatedProducts = ({ products }: RelatedProductsProps) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
 
-    const handleProductClick = (productId: string) => {
+    const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
     };
     const handleScroll = (direction: 'left' | 'right') => {

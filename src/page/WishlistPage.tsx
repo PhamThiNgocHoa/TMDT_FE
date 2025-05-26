@@ -22,6 +22,7 @@ const fetchFakeProductsByIds = (ids: number[]) => {
              formattedPrice: '18.490.000₫',
             formattedOriginalPrice: '10.990.000₫',
         },
+<<<<<<< HEAD
         {
              id: 2,
             name: 'Tai nghe Gaming A',
@@ -50,11 +51,41 @@ const fetchFakeProductsByIds = (ids: number[]) => {
              formattedPrice: '500.000₫',
             formattedOriginalPrice: '400.000₫',
          }
+=======
+        // {
+        //      id: '2',
+        //     name: 'Tai nghe Gaming A',
+        //     price: '1.500.000₫',
+        //     discountedPrice: '1.200.000₫',
+        //     imageUrl:"https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db",
+        //     discountPercentage: 20,
+        //     isNew: true,
+        //     rating: 4.0,
+        //     reviewCount: 50,
+        //     colors: ['#f00', '#00f'],
+        //      formattedPrice: '1.500.000₫',
+        //     formattedOriginalPrice: '1.200.000₫',
+        // },
+        //  {
+        //      id: '3',
+        //     name: 'Chuột không dây B',
+        //     price: '500.000₫',
+        //     discountedPrice: '400.000₫',
+        //      imageUrl:"https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db",
+        //      discountPercentage: 20,
+        //     isNew: false,
+        //     rating: 3.8,
+        //     reviewCount: 30,
+        //     colors: ['#0f0'],
+        //      formattedPrice: '500.000₫',
+        //     formattedOriginalPrice: '400.000₫',
+        //  }
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
         // Add more fake products as needed
     ];
 
     // Filter fake products based on the provided IDs
-    return fakeProductsData.filter(product => ids.includes(product.id));
+    return fakeProductsData.filter(product => ids.includes(Number(product.id)));
 };
 
 const WishlistPage: React.FC = () => {
@@ -71,7 +102,7 @@ const WishlistPage: React.FC = () => {
         setLoading(false);
     }, [wishlistItems]); // Re-fetch products when wishlistItems change
 
-     const handleRemoveFromWishlist = (productId: string) => {
+     const handleRemoveFromWishlist = (productId: number) => {
          addOrRemoveFromWishlist(productId); // Use context function to remove
      };
 

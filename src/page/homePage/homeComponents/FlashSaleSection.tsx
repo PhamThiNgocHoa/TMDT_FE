@@ -4,6 +4,7 @@ import SectionHeader from './SectionHeader';
 import { flashSaleProducts } from '../data/products';
 import '../../../assets/css/homeStyles/flashSale.css';
 import { useNavigate } from 'react-router-dom';
+import useProduct from "../../../hooks/useProduct";
 
 const FlashSaleSection: React.FC = () => {
     const [timeLeft, setTimeLeft] = useState({
@@ -13,9 +14,11 @@ const FlashSaleSection: React.FC = () => {
         seconds: 56
     });
     const navigate = useNavigate();
-    const handleProductClick = (productId: string) => {
+    const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
     };
+
+    const {saleProducts} = useProduct();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -88,7 +91,7 @@ const FlashSaleSection: React.FC = () => {
             </div>
 
             <div className="products-slider">
-                {flashSaleProducts.map(product => (
+                {saleProducts && saleProducts.length > 0 && saleProducts.map(product => (
                     <ProductCard
                         key={product.id}
                         product={product}

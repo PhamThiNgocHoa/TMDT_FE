@@ -1,7 +1,7 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import "../assets/css/header.css";
 import { SearchIcon } from "../assets/icons/SearchIcon";
+<<<<<<< HEAD
 
 // Fake product data for search results
 const fakeProducts = [
@@ -34,74 +34,60 @@ const fakeProducts = [
         imageUrl: 'https://via.placeholder.com/50x50',
     },
 ];
+=======
+import {listFindByName, searchProduct} from "../server/api/product/product.get"; // ✅ Import API
+import { ProductResponse } from "../models/response/ProductResponse"; // ✅ Kiểu dữ liệu thật
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
 
 export const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState<typeof fakeProducts>([]); // Use typeof fakeProducts for type safety
+    const [searchResults, setSearchResults] = useState<ProductResponse[]>([]);
     const [showResults, setShowResults] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    // Simulate search functionality (replace with actual API call)
-    const fakeSearch = (term: string) => {
+    // Thực hiện gọi API tìm kiếm sản phẩm
+    const performSearch = async (term: string) => {
         if (term.trim() === '') {
             setSearchResults([]);
-             setShowResults(false);
+            setShowResults(false);
             return;
         }
-        console.log('Searching for:', term);
-         // Filter fake data based on term (case-insensitive)
-        const filteredResults = fakeProducts.filter(product =>
-            product.name.toLowerCase().includes(term.toLowerCase())
-        );
-        setSearchResults(filteredResults);
-         setShowResults(true); // Show results when there are results
+
+        setLoading(true);
+        try {
+            const results = await listFindByName(term);
+            setSearchResults(results);
+            setShowResults(true);
+        } catch (error) {
+            console.error("Search error:", error);
+            setSearchResults([]);
+        } finally {
+            setLoading(false);
+        }
     };
 
+    // Debounce input để tránh gọi API liên tục
     useEffect(() => {
-        // Debounce could be added here for performance in a real app
-        const handler = setTimeout(() => {
-            fakeSearch(searchTerm);
-        }, 300); // Simulate debounce delay
+        const delayDebounce = setTimeout(() => {
+            performSearch(searchTerm);
+        }, 300);
 
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [searchTerm]); // Re-run effect when searchTerm changes
+        return () => clearTimeout(delayDebounce);
+    }, [searchTerm]);
 
-    // Hide results when clicking outside (basic implementation)
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-             // You might need a more robust way to check if click is outside both input and results
-             // For simplicity, hide when clicking anywhere outside for now
-            // if (/* check if click is outside search bar and results */) {
-            //     setShowResults(false);
-            // }
-        };
-
-        // window.addEventListener('click', handleClickOutside);
-        // return () => {
-        //     window.removeEventListener('click', handleClickOutside);
-        // };
-    }, []);
-
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-        // setShowResults(true); // Optionally show results immediately on input
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
     };
 
     const handleInputFocus = () => {
-        // Show results when input is focused, if there's a search term
-         if (searchTerm.trim() !== '') {
-             setShowResults(true);
-         }
+        if (searchResults.length > 0) setShowResults(true);
     };
 
-     const handleResultClick = (productId: string) => {
-         console.log('Clicked product:', productId);
-         // Implement navigation to product details page
-         setShowResults(false); // Hide results after clicking
-     };
-
+    const handleResultClick = (productId: number) => {
+        console.log("Clicked product:", productId);
+        // TODO: Bạn có thể điều hướng đến trang chi tiết tại đây
+        setShowResults(false);
+    };
 
     return (
         <div className="searchContainer">
@@ -112,13 +98,13 @@ export const SearchBar = () => {
                 value={searchTerm}
                 onChange={handleInputChange}
                 onFocus={handleInputFocus}
-                 onBlur={() => setTimeout(() => setShowResults(false), 100)} // Hide results on blur, with a slight delay to allow click
+                onBlur={() => setTimeout(() => setShowResults(false), 100)}
             />
             <SearchIcon/>
 
-            {/* Search Results Dropdown */}
-            {showResults && searchResults.length > 0 && (
+            {showResults && (
                 <div className="searchResultsDropdown">
+<<<<<<< HEAD
                     {searchResults.map(product => (
                         <div 
                             key={product.id} 
@@ -131,13 +117,32 @@ export const SearchBar = () => {
                                 <div className="searchResultPrices">
                                     <span className="searchResultDiscountedPrice">{product.discountedPrice}</span>
                                     <span className="searchResultOriginalPrice">{product.price}</span>
+=======
+                    {loading ? (
+                        <div className="searchLoading">Đang tìm kiếm...</div>
+                    ) : searchResults.length === 0 ? (
+                        <div className="searchNoResult">Không tìm thấy sản phẩm</div>
+                    ) : (
+                        searchResults.map(product => (
+                            <div
+                                key={product.id}
+                                className="searchResultItem"
+                                onClick={() => handleResultClick(product.id)}
+                            >
+                                <img src={product.img} alt={product.name} className="searchResultImage" />
+                                <div className="searchResultInfo">
+                                    <div className="searchResultName">{product.name}</div>
+                                    <div className="searchResultPrices">
+                                        <span className="searchResultDiscountedPrice">{product.discount}</span>
+                                        <span className="searchResultOriginalPrice">{product.price}</span>
+                                    </div>
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             )}
-
         </div>
     );
 };

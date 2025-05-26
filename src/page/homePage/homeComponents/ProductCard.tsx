@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import '../../../assets/css/homeStyles/productCard.css';
-import { Product } from "../types/product";
 import { useWishlist } from '../../../context/WishlistContext';
+import formatToVND from "../../../hooks/formatToVND";
+import { ProductResponse } from "../../../models/response/ProductResponse";
 
 interface ProductCardProps {
-    product: Product;
-    onProductClick: (productId: string) => void;
+    product: ProductResponse;
+    onProductClick: (productId: number) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) => {
@@ -27,13 +28,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
             onClick={() => onProductClick(product.id.toString())}
         >
             <div className="product-image-container">
-                {product.discountPercentage && product.discountPercentage > 0 && (
+                {product.discount && parseFloat(product.discount) > 0 && (
                     <div className="discount-badge">
-                        -{product.discountPercentage}%
+                        -{product.discount}
                     </div>
                 )}
 
-                {product.isNew && (
+                {product.productNew && (
                     <div className="new-badge">
                         NEW
                     </div>
@@ -52,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
                 </div>
 
                 <img
-                    src={product.imageUrl}
+                    src={product.img}
                     alt={product.name}
                     className="product-image"
                 />
@@ -70,39 +71,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
                 <h3 className="product-name">{product.name}</h3>
 
                 <div className="product-price">
-          <span className="current-price">
-            {product.formattedPrice}
-          </span>
+                    <span className="current-price">
+                        {formatToVND(product.price)}
+                    </span>
 
-                    {product.formattedOriginalPrice && (
+                    {formatToVND(product.originalPrice ?? 0) && (
                         <span className="original-price">
-              {product.formattedOriginalPrice}
-            </span>
+                            {formatToVND(product.originalPrice ?? 0)}
+                        </span>
                     )}
                 </div>
-
-                <div className="product-rating">
-                    <div className={`stars stars-${Math.floor(product.rating)}`}>
-                        {product.rating >= 1 && <span className="star">★</span>}
-                        {product.rating >= 2 && <span className="star">★</span>}
-                        {product.rating >= 3 && <span className="star">★</span>}
-                        {product.rating >= 4 && <span className="star">★</span>}
-                        {product.rating >= 5 && <span className="star">★</span>}
-                    </div>
-                    <span className="rating-count">({product.reviewCount})</span>
-                </div>
-
-                {product.colors && product.colors.length > 0 && (
-                    <div className="product-colors">
-                        {product.colors.map((color, index) => (
-                            <div
-                                key={index}
-                                className="color-option"
-                                style={{ backgroundColor: color }}
-                            ></div>
-                        ))}
-                    </div>
-                )}
             </div>
         </article>
     );
