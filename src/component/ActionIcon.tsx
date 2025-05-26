@@ -9,21 +9,21 @@ import { useNavigate } from 'react-router-dom';
 // Fake data for cart items
 const fakeCartItems = [
     {
-        id: 'cart-item-1',
+        id: 1,
         name: 'Laptop MSI Modern 15',
         quantity: 1,
         price: '10.990.000₫',
         imageUrl: 'https://via.placeholder.com/50x50', // Placeholder image
     },
      {
-        id: 'cart-item-2',
+        id: 2,
         name: 'Tai nghe Gaming A',
         quantity: 2,
         price: '1.500.000₫',
         imageUrl: 'https://via.placeholder.com/50x50', // Placeholder image
     },
       {
-        id: 'cart-item-3',
+        id: 3,
         name: 'Chuột không dây B',
         quantity: 1,
         price: '500.000₫',
@@ -94,7 +94,7 @@ export const ActionIcons = () => {
                                 <div 
                                     key={item.id} 
                                     className="cartDropdownItem"
-                                    onClick={() => handleCartItemClick(item.id)} // Add click handler
+                                    onClick={() => handleCartItemClick(item.id.toString())} // Add click handler
                                 >
                                     <img src={item.imageUrl} alt={item.name} className="cartItemImage" />
                                     <div className="cartItemInfo">

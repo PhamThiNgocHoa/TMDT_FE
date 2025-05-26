@@ -69,6 +69,7 @@ export const SearchBar = () => {
 
             {showResults && (
                 <div className="searchResultsDropdown">
+
                     {loading ? (
                         <div className="searchLoading">Đang tìm kiếm...</div>
                     ) : searchResults.length === 0 ? (

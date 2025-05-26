@@ -18,7 +18,7 @@ export const PostTable: React.FC = () => {
 
     const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const allPostIds = posts.map(post => post.id);
+            const allPostIds = posts.map(post => post.id.toString());
             setSelectedPosts(allPostIds);
         } else {
             setSelectedPosts([]);
@@ -133,8 +133,8 @@ export const PostTable: React.FC = () => {
                             <td>
                                 <input 
                                     type="checkbox" 
-                                    checked={isPostSelected(post.id)}
-                                    onChange={() => handleSelectPost(post.id)}
+                                    checked={isPostSelected(post.id.toString())}
+                                    onChange={() => handleSelectPost(post.id.toString())}
                                 />
                             </td>
                             <td>
@@ -165,7 +165,7 @@ export const PostTable: React.FC = () => {
                                 <div className={styles.actions}>
                                     <button 
                                         className={styles.editBtn}
-                                        onClick={() => handleEditClick(post.id)}
+                                        onClick={() => handleEditClick(post.id.toString())}
                                     >
                                         <i className="fas fa-edit"></i>
                                     </button>
@@ -180,7 +180,7 @@ export const PostTable: React.FC = () => {
                                     </button>
                                     <button 
                                         className={styles.deleteBtn}
-                                        onClick={() => handleShowDeleteConfirm(post.id)}
+                                        onClick={() => handleShowDeleteConfirm(post.id.toString())}
                                     >
                                         <i className="fas fa-trash"></i>
                                     </button>

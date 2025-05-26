@@ -9,7 +9,7 @@ interface ProductCardProps {
     onProductClick: (productId: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick, }) => {
     const [isHovered, setIsHovered] = useState(false);
     const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
 

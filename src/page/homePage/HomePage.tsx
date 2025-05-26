@@ -13,8 +13,8 @@ import styles from "../../assets/css/homeStyles/homePage.module.css";
 const HomePage: React.FC = () => {
     return (
         <div className={styles.homepage}>
+            <PromoBanner/>
             <main className={styles.main}>
-                <PromoBanner/>
                 <SideNavigation/>
                 <div className={styles.container}>
                     <FlashSaleSection/>

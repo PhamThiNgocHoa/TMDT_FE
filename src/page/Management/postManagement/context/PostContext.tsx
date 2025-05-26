@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useCallback, Dispatch, SetS
 import { api, PaginationParams } from '../services/api';
 
 interface Post {
-    id: string;
+    id: number;
     title: string;
     content: string;
     thumbnail: string;
@@ -43,7 +43,7 @@ const PostContext = createContext<PostContextType | undefined>(undefined);
 // Fake data - Updated with more varied statuses and tags
 const fakePosts: Post[] = [
     {
-        id: '1',
+        id: 1,
         title: 'Hướng dẫn mua sắm online an toàn',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/1/200/150',
@@ -55,7 +55,7 @@ const fakePosts: Post[] = [
         tags: ['online', 'shopping']
     },
     {
-        id: '2',
+        id: 2,
         title: 'Top 10 sản phẩm bán chạy nhất',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/2/200/150',
@@ -67,7 +67,7 @@ const fakePosts: Post[] = [
         tags: ['top', 'products']
     },
     {
-        id: '3',
+        id: 3,
         title: 'Hướng dẫn cách chuyển tiền quốc tế',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/3/200/150',
@@ -79,7 +79,7 @@ const fakePosts: Post[] = [
         tags: ['transfer', 'international']
     },
      {
-        id: '4',
+        id: 4,
         title: 'Nạp code Second Piece mới nhất',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/4/200/150',
@@ -91,7 +91,7 @@ const fakePosts: Post[] = [
         tags: ['game', 'code']
     },
      {
-        id: '5',
+        id: 5,
         title: 'Review điện thoại XYZ',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/5/200/150',
@@ -103,7 +103,7 @@ const fakePosts: Post[] = [
         tags: ['review', 'phone']
     },
       {
-        id: '6',
+        id: 6,
         title: 'Cách tối ưu SEO cho bài viết blog',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/6/200/150',
@@ -115,7 +115,7 @@ const fakePosts: Post[] = [
         tags: ['seo', 'blog']
     },
        {
-        id: '7',
+        id: 7,
         title: 'Tin tức mới nhất về thị trường E-commerce',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/7/200/150',
@@ -127,7 +127,7 @@ const fakePosts: Post[] = [
         tags: ['ecommerce', 'news']
     },
         {
-        id: '8',
+        id: 8,
         title: 'Hướng dẫn tạo landing page hiệu quả',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/8/200/150',
@@ -139,7 +139,7 @@ const fakePosts: Post[] = [
         tags: ['landing page', 'guide']
     },
       {
-        id: '9',
+        id: 9,
         title: 'Các chiến dịch marketing thành công 2023',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/9/200/150',
@@ -151,7 +151,7 @@ const fakePosts: Post[] = [
         tags: ['marketing', 'case study']
     },
       {
-        id: '10',
+        id: 10,
         title: 'Bí quyết chụp ảnh sản phẩm đẹp',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/10/200/150',
@@ -163,7 +163,7 @@ const fakePosts: Post[] = [
         tags: ['photography', 'products']
     },
         {
-        id: '11',
+        id: 11,
         title: 'Phân tích xu hướng mua sắm 2024',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/11/200/150',
@@ -175,7 +175,7 @@ const fakePosts: Post[] = [
         tags: ['trends', 'shopping']
     },
         {
-        id: '12',
+        id: 12,
         title: 'Cách sử dụng hiệu quả công cụ quảng cáo trực tuyến',
         content: 'Nội dung bài viết...',
         thumbnail: 'https://picsum.photos/seed/12/200/150',
@@ -280,7 +280,7 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
             setLoading(true);
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 500));
-            const updatedPosts = fakePosts.filter(post => post.id !== id);
+            const updatedPosts = fakePosts.filter(post => post.id !== Number(id));
             fakePosts.splice(0, fakePosts.length, ...updatedPosts);
             await fetchPosts();
             setSelectedPosts([]);
@@ -297,8 +297,7 @@ export function PostProvider({ children }: { children: React.ReactNode }) {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 500));
             const updatedPosts = fakePosts.map(post =>
-                post.id === id ? { ...post, status } : post
-            );
+                post.id === Number(id) ? { ...post, status } : post            );
             fakePosts.splice(0, fakePosts.length, ...updatedPosts);
             await fetchPosts();
         } catch (err) {

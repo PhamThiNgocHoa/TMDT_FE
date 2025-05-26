@@ -55,8 +55,9 @@ export function AddPost() {
 
     return (
         <div className={styles.addPostContainer}>
-            <Header /> {/* Thêm Header ở đây */}
             <AdminSidebar />
+            <div className={styles.body}>
+            <Header />
             <div className={styles.addPostHeader}>
                 <h2>Thêm Bài Viết Mới</h2>
                 <div className={styles.headerActions}>
@@ -172,6 +173,7 @@ export function AddPost() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

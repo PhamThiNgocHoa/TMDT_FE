@@ -1,46 +1,77 @@
+/* ===== Tổng thể container ===== */
 .checkoutContainer {
-  position: relative;
   width: 100%;
-  max-width: 1434px;
+  max-width: 1200px; /* Giảm từ 1434px cho gọn hơn */
   margin: 0 auto;
-  padding: 40px 20px;
-  background: #ffffff;
+  padding: 7.5rem 1rem; /* 40px 20px -> 2.5rem 1rem */
+  background: #fff;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
+/* ===== Nội dung chính ===== */
 .checkoutContent {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
-  margin-top: 40px;
+  gap: 2rem; /* 40px -> 32px */
+  margin-top: 2rem; /* 40px -> 32px */
+  flex-wrap: wrap; /* Cho xuống dòng nếu hẹp */
 }
 
+/* ===== Cột trái ===== */
 .leftColumn {
   flex: 1;
-  max-width: 482px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* ===== Cột phải ===== */
 .rightColumn {
   flex: 1;
-  max-width: 499px;
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@media (max-width: 1200px) {
+/* ===== Tablet & nhỏ hơn (≤ 992px) ===== */
+@media (max-width: 992px) {
   .checkoutContent {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
   }
 
   .leftColumn,
   .rightColumn {
     max-width: 100%;
-    width: 100%;
+  }
+
+  .checkoutContainer {
+    padding: 2rem 1rem;
   }
 }
 
-@media (max-width: 768px) {
+/* ===== Mobile (≤ 600px) ===== */
+@media (max-width: 600px) {
   .checkoutContainer {
-    padding: 20px 10px;
+    padding: 1.5rem 0.75rem;
+  }
+
+  .checkoutContent {
+    gap: 1.25rem;
+  }
+}
+
+/* ===== Siêu nhỏ (≤ 400px) ===== */
+@media (max-width: 400px) {
+  .checkoutContainer {
+    padding: 1rem 0.5rem;
+  }
+
+  .checkoutContent {
+    gap: 1rem;
   }
 }

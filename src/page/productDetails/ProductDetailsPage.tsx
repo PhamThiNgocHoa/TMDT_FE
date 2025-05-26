@@ -59,7 +59,6 @@ export default function ProductDetailsPage() {
                     <div className={styles.mainContent}>
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
-                                {/*<ProductBreadcrumb items={breadcrumbItems} />*/}
                                 <ProductGallery images={products[0].productImages} />
                             </div>
                         </article>
@@ -70,6 +69,7 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <ProductReviewsSection />
+
                 <RelatedProducts products={relatedProducts} />
             </section>
         </main>
