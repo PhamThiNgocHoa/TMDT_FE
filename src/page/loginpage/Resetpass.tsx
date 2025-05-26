@@ -1,64 +1,46 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../../assets/css/ResetPass.css';
+import useCustomer from "../../hooks/useCustomer";
 
 const ResetPass: React.FC = () => {
     const navigate = useNavigate();
+    const { username } = useParams(); // Lấy username từ URL params
 
-    const [username, setUsername] = useState('');
     const [resetCode, setResetCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [error, setError] = useState('');
+    const { fetchResetPassword } = useCustomer();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('Bắt đầu submit form');
-
-        if (!username || !resetCode || !newPassword) {
-            setError('Vui lòng điền đầy đủ thông tin.');
-            console.warn('Thông tin bị thiếu:', { username, resetCode, newPassword });
-            return;
-        }
+        if (!username || !resetCode || !newPassword) return setError('Vui lòng điền đầy đủ thông tin.');
 
         try {
-            console.log('Gửi yêu cầu đặt lại mật khẩu với:', {
-                username,
-                resetCode,
-                newPassword,
-            });
+            const response = await fetchResetPassword(username, resetCode, newPassword);
 
-            const response = await fetch(
-                `/api/customer/resetPassword/${encodeURIComponent(username)}?resetCode=${encodeURIComponent(resetCode)}&newPassword=${encodeURIComponent(newPassword)}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                }
-            );
-
-            console.log('Phản hồi từ server:', response);
-
-            if (response.ok) {
-                console.log('Đặt lại mật khẩu thành công');
+            if (response?.code === 200) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Đặt lại mật khẩu thành công!',
                     text: 'Bạn có thể đăng nhập lại với mật khẩu mới.',
-                }).then(() => {
-                    navigate('/login');
-                });
+                }).then(() => navigate('/login'));
             } else {
-                const data = await response.json();
-                console.error('Lỗi từ server:', data);
-                setError(data.message || 'Mã xác nhận không đúng hoặc hết hạn.');
+                setError(response?.message || 'Mã xác nhận không đúng hoặc hết hạn.');
             }
-        } catch (error: any) {
-            console.error('Lỗi khi gửi yêu cầu:', error);
+        } catch (error) {
             setError('Lỗi kết nối máy chủ.');
         }
     };
+
+    useEffect(() => {
+        // Kiểm tra nếu username không có thì điều hướng về trang khác, ví dụ trang đăng nhập
+        if (!username) {
+            navigate('/login');
+        }
+    }, [username, navigate]);
 
     return (
         <div className="reset-container">
@@ -69,9 +51,9 @@ const ResetPass: React.FC = () => {
                     <input
                         id="username"
                         type="text"
-                        placeholder="Nhập tên đăng nhập"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Tên đăng nhập"
+                        value={username || ''}
+                        disabled // Không cho phép người dùng sửa tên đăng nhập
                     />
                 </div>
 

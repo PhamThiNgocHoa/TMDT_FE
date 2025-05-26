@@ -64,7 +64,7 @@ const HeaderFooterControl = () => {
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/product/:id" element={<ProductDetailsPage />} />
                 <Route path="/forgotpass" element={<ForgotPass />} />
-                <Route path="/resetpass" element={<Resetpass />} />
+                <Route path="/resetpass/:username" element={<Resetpass />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/account" element={<AccountManagement />} />
                 <Route path="/cart" element={<CartMain />} />
