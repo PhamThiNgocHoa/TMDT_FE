@@ -31,9 +31,15 @@ const TopProductsSection: React.FC = () => {
             <div className="top-products-grid">
                 {topProducts.map((products) => (
                     <ProductCard
+<<<<<<< HEAD
+                        key={product.id}
+                        product={product}
+                        onProductClick={() => handleProductClick(product.id.toString())}
+=======
                         key={products.id}
                         product={products}
                         onProductClick={() => handleProductClick(products.id)}
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
 
                     />
                 ))}

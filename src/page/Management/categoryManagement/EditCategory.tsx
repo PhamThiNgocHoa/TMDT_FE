@@ -5,19 +5,19 @@ import styles from './EditCategory.module.css'; // Create this CSS module
 
 // Define the shape of a category item (should match the Category interface in context)
 interface Category {
-    id: string;
+    id: number;
     name: string;
     // Add other category properties here
 }
 
 // Simulate fetching a category by ID
-const fetchCategoryById = async (id: string): Promise<Category | undefined> => {
+const fetchCategoryById = async (id: number): Promise<Category | undefined> => {
     // This should fetch from your actual data source or context
     // For now, using mock data similar to the context
     const mockCategories: Category[] = [
-        { id: 'cat1', name: 'Electronics' },
-        { id: 'cat2', name: 'Books' },
-        { id: 'cat3', name: 'Clothing' },
+        { id: 1, name: 'Electronics' },
+        { id: 2, name: 'Books' },
+        { id: 3, name: 'Clothing' },
     ];
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -28,6 +28,7 @@ const fetchCategoryById = async (id: string): Promise<Category | undefined> => {
 
 const EditCategory: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>();
+    const categoryIdNumber = categoryId ? parseInt(categoryId, 10) : NaN;
     const navigate = useNavigate();
     const [category, setCategory] = useState<Category | null>(null);
     const [categoryName, setCategoryName] = useState('');
@@ -44,8 +45,7 @@ const EditCategory: React.FC = () => {
                 return;
             }
             try {
-                const data = await fetchCategoryById(categoryId);
-                if (data) {
+                const data = await fetchCategoryById(categoryIdNumber);                if (data) {
                     setCategory(data);
                     setCategoryName(data.name);
                     // Set state for other fields

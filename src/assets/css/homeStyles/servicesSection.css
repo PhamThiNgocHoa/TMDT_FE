@@ -1,24 +1,29 @@
 .services-section {
-    margin: 140px 0;
+    margin: clamp(3rem, 8vw, 6rem) 0; /* ~48px–96px */
 }
 
 .services-grid {
     display: flex;
-    justify-content: space-between;
-    gap: 88px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: clamp(1.5rem, 4vw, 4rem); /* ~24px–64px */
 }
 
 .service-card {
+    flex: 1 1 200px;
+    max-width: 280px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 1.25rem; /* ~20px */
     text-align: center;
+    margin: 0 auto;
+    padding: 0 0.5rem;
 }
 
 .service-icon {
-    width: 80px;
-    height: 80px;
+    width: 4rem;  /* 64px */
+    height: 4rem;
 }
 
 .service-icon img {
@@ -28,16 +33,38 @@
 }
 
 .service-title {
-    font-size: 20px;
+    font-size: clamp(1rem, 1.75vw, 1.125rem); /* ~16–18px */
     font-weight: 600;
-    line-height: 28px;
+    line-height: 1.4;
     margin: 0;
 }
 
 .service-description {
-    font-size: 14px;
+    font-size: clamp(0.75rem, 1.25vw, 0.875rem); /* ~12–14px */
     font-weight: 400;
-    line-height: 21px;
+    line-height: 1.5;
     margin: 0;
-    max-width: 300px;
+    max-width: 100%;
+}
+
+/* Optional: narrow screen layout stacking */
+@media (max-width: 480px) {
+    .services-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .service-card {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    .service-title {
+        font-size: 1rem;
+    }
+
+    .service-description {
+        font-size: 0.8125rem;
+    }
 }

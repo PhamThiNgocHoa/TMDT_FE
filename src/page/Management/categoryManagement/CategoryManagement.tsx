@@ -22,12 +22,12 @@ const CategoryManagement: React.FC = () => {
         navigate('/management/category/add');
     };
 
-    const handleEditCategory = (categoryId: string) => {
+    const handleEditCategory = (categoryId: number) => {
         console.log('Edit category with ID:', categoryId);
         navigate(`/management/category/edit/${categoryId}`);
     };
 
-    const handleDeleteCategory = (categoryId: string) => {
+    const handleDeleteCategory = (categoryId: number) => {
         console.log('Delete category with ID:', categoryId);
         if (window.confirm(`Are you sure you want to delete category ${categoryId}?`)) {
             // Implement actual delete logic here

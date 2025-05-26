@@ -2,16 +2,16 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 // Define the shape of a category item
 interface Category {
-    id: string;
+    id: number;
     name: string;
     // Add other category properties here based on your data structure
 }
 
 // Mock data for categories
 const mockCategories: Category[] = [
-    { id: 'cat1', name: 'Electronics' },
-    { id: 'cat2', name: 'Books' },
-    { id: 'cat3', name: 'Clothing' },
+    { id: 1, name: 'Electronics' },
+    { id: 2, name: 'Books' },
+    { id: 3, name: 'Clothing' },
     // Add more mock categories as needed
 ];
 

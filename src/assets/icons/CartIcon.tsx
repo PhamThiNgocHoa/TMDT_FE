@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const CartIcon = () => (
-    <svg width="42" height="43" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9.25 28.75C9.66421 28.75 10 28.4142 10 28C10 27.5858 9.66421 27.25 9.25 27.25C8.83579 27.25 8.5 27.5858 8.5 28C8.5 28.4142 8.83579 28.75 9.25 28.75Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M19.75 28.75C20.1642 28.75 20.5 28.4142 20.5 28C20.5 27.5858 20.1642 27.25 19.75 27.25C19.3358 27.25 19 27.5858 19 28C19 28.4142 19.3358 28.75 19.75 28.75Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M3.25 12.25H6.25L8.5 25H20.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

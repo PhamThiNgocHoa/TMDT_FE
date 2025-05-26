@@ -4,31 +4,41 @@
     align-items: center;
     background-color: #f9f9f9;
     min-height: 100vh;
+    font-family: Arial, sans-serif;
+    color: #333;
+    box-sizing: border-box;
+    margin: 0;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    line-height: 1.5;
+    font-weight: 400;
+    text-align: left;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    z-index: 1;
 }
 
 main {
-    width: 100%;
-    max-width: 1280px;
-    padding: 0 16px;
+    width: 60%;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: clamp(1rem, 3vw, 1.5rem); /* responsive gap ~16px–24px */
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
-    margin-top: 24px;
+    gap: clamp(1.5rem, 4vw, 2.5rem); /* responsive gap ~24px–40px */
+    margin-top: clamp(1rem, 3vw, 1.5rem); /* ~16px–24px */
 }
 
-/* Responsive adjustments */
+/* Optional tighter layout on smaller screens */
 @media (max-width: 768px) {
     main {
-        padding: 0 12px;
+        padding: 0 1rem;
     }
 
     .container {
-        gap: 24px;
+        gap: clamp(1rem, 3vw, 1.5rem);
     }
 }

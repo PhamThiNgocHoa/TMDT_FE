@@ -13,11 +13,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
     const [isHovered, setIsHovered] = useState(false);
     const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
 
-    const isFavorited = isInWishlist(product.id);
+    const isFavorited = isInWishlist(product.id.toString());
 
     const handleWishlistClick = (event: React.MouseEvent) => {
         event.stopPropagation();
-        addOrRemoveFromWishlist(product.id);
+        addOrRemoveFromWishlist(product.id.toString());
     };
 
     return (
@@ -25,7 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
             className={`product-card ${isHovered ? 'hovered' : ''}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={() => onProductClick(product.id)}
+            onClick={() => onProductClick(product.id.toString())}
         >
             <div className="product-image-container">
                 {product.discount && parseFloat(product.discount) > 0 && (

@@ -12,9 +12,16 @@ export default function ProductDetailsPage() {
     const { id } = useParams<{ id: string }>();
     const { fetchGetProductById, products, setProducts} = useProduct();
 
+<<<<<<< HEAD
+    const getCurrentProduct = (): Product | undefined => {
+        return relatedProducts.find(product => product.id === Number(id));
+    };
+    const product = getCurrentProduct();
+=======
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
 
 
     useEffect(() => {
@@ -59,8 +66,12 @@ export default function ProductDetailsPage() {
                     <div className={styles.mainContent}>
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
+<<<<<<< HEAD
+                                <ProductGallery images={product.images} />
+=======
                                 {/*<ProductBreadcrumb items={breadcrumbItems} />*/}
                                 <ProductGallery images={products[0].productImages} />
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
                             </div>
                         </article>
                         <aside className={styles.infoColumn}>
@@ -70,7 +81,12 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <ProductReviewsSection />
+<<<<<<< HEAD
+
+                {/*<RelatedProducts products={relatedProducts}/>*/}
+=======
                 <RelatedProducts products={relatedProducts} />
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
             </section>
         </main>
     );

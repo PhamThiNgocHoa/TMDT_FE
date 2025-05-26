@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 
 interface PaymentMethodsProps {
   paymentMethods: PaymentMethod[];
-  onSelectPaymentMethod: (id: string) => void;
+  onSelectPaymentMethod: (id: number) => void;
 }
 
 const PaymentMethods: React.FC<PaymentMethodsProps> = ({ 
@@ -17,7 +17,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
         <div className={styles.methodSelection}>
           <div 
             className={`${styles.radioButton} ${paymentMethods[0].selected ? styles.selected : ''}`}
-            onClick={() => onSelectPaymentMethod('bank')}
+            onClick={() => onSelectPaymentMethod(1)}
           />
           <span className={styles.methodName}>Ngân hàng</span>
         </div>
@@ -41,7 +41,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
       <div className={styles.cashMethod}>
         <div 
           className={`${styles.radioButton} ${paymentMethods[1].selected ? styles.selected : ''}`}
-          onClick={() => onSelectPaymentMethod('cash')}
+          onClick={() => onSelectPaymentMethod(2)}
         />
         <span className={styles.methodName}>Tiền mặt</span>
       </div>

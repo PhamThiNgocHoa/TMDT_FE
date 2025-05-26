@@ -22,6 +22,36 @@ const fetchFakeProductsByIds = (ids: number[]) => {
              formattedPrice: '18.490.000₫',
             formattedOriginalPrice: '10.990.000₫',
         },
+<<<<<<< HEAD
+        {
+             id: 2,
+            name: 'Tai nghe Gaming A',
+            price: '1.500.000₫',
+            discountedPrice: '1.200.000₫',
+            imageUrl:"https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db",
+            discountPercentage: 20,
+            isNew: true,
+            rating: 4.0,
+            reviewCount: 50,
+            colors: ['#f00', '#00f'],
+             formattedPrice: '1.500.000₫',
+            formattedOriginalPrice: '1.200.000₫',
+        },
+         {
+             id: 3,
+            name: 'Chuột không dây B',
+            price: '500.000₫',
+            discountedPrice: '400.000₫',
+             imageUrl:"https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db",
+             discountPercentage: 20,
+            isNew: false,
+            rating: 3.8,
+            reviewCount: 30,
+            colors: ['#0f0'],
+             formattedPrice: '500.000₫',
+            formattedOriginalPrice: '400.000₫',
+         }
+=======
         // {
         //      id: '2',
         //     name: 'Tai nghe Gaming A',
@@ -50,6 +80,7 @@ const fetchFakeProductsByIds = (ids: number[]) => {
         //      formattedPrice: '500.000₫',
         //     formattedOriginalPrice: '400.000₫',
         //  }
+>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96
         // Add more fake products as needed
     ];
 
@@ -65,7 +96,8 @@ const WishlistPage: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         // Simulate fetching product details for IDs in wishlist
-        const products = fetchFakeProductsByIds(wishlistItems);
+// Simulate fetching product details for IDs in wishlist
+        const products = fetchFakeProductsByIds(wishlistItems.map(Number));
         setWishlistProducts(products);
         setLoading(false);
     }, [wishlistItems]); // Re-fetch products when wishlistItems change
