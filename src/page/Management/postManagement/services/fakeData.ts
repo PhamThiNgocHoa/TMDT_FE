@@ -1,5 +1,5 @@
 export interface Post {
-    id: string;
+    id: number;
     image: string;
     title: string;
     shortTitle: string;
@@ -15,7 +15,7 @@ export interface Post {
 
 export const fakePosts: Post[] = [
     {
-        id: "402011",
+        id: 402011,
         image: "https://cdn.builder.io/api/v1/image/assets/TEMP/3e44c6124fb91f59c78fe7ad6f6f206b3fe59afa?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29",
         title: "Cách hẹn giờ tắt máy tính...",
         shortTitle: "Cách hẹn...",
@@ -29,7 +29,7 @@ export const fakePosts: Post[] = [
         views: 1200
     },
     {
-        id: "402012",
+        id: 402012,
         image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1f1acb0a9ccd5e6fd96234cd78cdc5d13f487586?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29",
         title: "Hướng dẫn chi tiết 5 cách...",
         shortTitle: "Hướng dẫn...",
@@ -43,7 +43,7 @@ export const fakePosts: Post[] = [
         views: 800
     },
     {
-        id: "402013",
+        id: 402013,
         image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8c4876cdab17f3c5948b63dc9046ec5a81bcddd2?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29",
         title: "Hướng dẫn cách chuyển...",
         shortTitle: "Hướng dẫn...",

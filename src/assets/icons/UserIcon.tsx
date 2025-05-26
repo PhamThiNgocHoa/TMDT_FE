@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const UserIcon = () => (
-    <svg width="42" height="43" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
             d="M24 27.5V24.8333C24 23.4188 23.5224 22.0623 22.6722 21.0621C21.8221 20.0619 20.669 19.5 19.4667 19.5H11.5333C10.331 19.5 9.17795 20.0619 8.32778 21.0621C7.47762 22.0623 7 23.4188 7 24.8333V27.5"
             stroke="black"

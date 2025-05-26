@@ -1,23 +1,23 @@
 .container {
-    padding: 20px;
-    font-family: 'Inter', sans-serif; /* Use consistent font */
+    padding: 1.25rem; /* 20px */
+    font-family: 'Inter', sans-serif;
 }
 
 .container h2 {
-    margin-bottom: 20px;
-    color: #1D2939; /* Darker heading color */
-    font-size: 24px; /* Slightly larger heading */
+    margin-bottom: 1.25rem; /* 20px */
+    color: #1D2939;
+    font-size: 1.5rem; /* 24px */
 }
 
 .addButton {
-    padding: 10px 15px;
-    background-color: #007bff; /* Blue */
+    padding: 0.625rem 0.9375rem; /* 10px 15px */
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 0.25rem; /* 4px */
     cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 1rem; /* 16px */
+    margin-bottom: 1.25rem; /* 20px */
     transition: background-color 0.3s ease;
 }
 
@@ -26,56 +26,54 @@
 }
 
 .tableContainer {
-    margin-top: 20px; /* Add margin below buttons/filters */
-    /* Add more styling for the table container if needed */
+    margin-top: 1.25rem; /* 20px */
 }
 
 /* --- Category Table Styling --- */
 .category-table {
     width: 100%;
     border-collapse: collapse;
-    /* Removed margin-top here as it's on tableContainer */
-    border: 1px solid #E4E7EC; /* Subtle border around the table */
-    border-radius: 8px; /* Rounded corners for the table */
-    overflow: hidden; /* Ensure rounded corners are visible */
+    border: 0.0625rem solid #E4E7EC; /* 1px */
+    border-radius: 0.5rem; /* 8px */
+    overflow: hidden;
 }
 
 .category-table thead th {
-    background-color: #F9FAFB; /* Light background for header */
-    color: #475467; /* Darker text color for header */
-    font-size: 12px; /* Smaller font size for headers */
-    font-weight: 600; /* Semibold font weight */
-    text-transform: uppercase; /* Uppercase text */
-    padding: 12px 24px; /* Adjusted padding */
+    background-color: #F9FAFB;
+    color: #475467;
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 0.75rem 1.5rem; /* 12px 24px */
     text-align: left;
 }
 
 .category-table tbody tr {
-    border-bottom: 1px solid #E4E7EC; /* Separator line between rows */
+    border-bottom: 0.0625rem solid #E4E7EC;
 }
 
 .category-table tbody tr:last-child {
-    border-bottom: none; /* No border on the last row */
+    border-bottom: none;
 }
 
 .category-table tbody td {
-    padding: 16px 24px; /* Adjusted padding */
-    font-size: 14px; /* Consistent font size for data */
-    color: #475467; /* Darker text color for data */
+    padding: 1rem 1.5rem; /* 16px 24px */
+    font-size: 0.875rem; /* 14px */
+    color: #475467;
 }
 
 .category-table tbody tr:hover {
-    background-color: #F5F7FA; /* Subtle hover background */
+    background-color: #F5F7FA;
 }
 
 .category-table td button {
-    padding: 8px 12px;
-    margin-right: 8px;
-    border: 1px solid #D0D5DD; /* Add subtle border to buttons */
-    border-radius: 6px; /* Slightly more rounded buttons */
+    padding: 0.5rem 0.75rem; /* 8px 12px */
+    margin-right: 0.5rem; /* 8px */
+    border: 0.0625rem solid #D0D5DD;
+    border-radius: 0.375rem; /* 6px */
     cursor: pointer;
-    font-size: 13px; /* Slightly smaller font for buttons */
-    font-weight: 500; /* Medium font weight */
+    font-size: 0.8125rem; /* 13px */
+    font-weight: 500;
     transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
 }
 
@@ -83,11 +81,7 @@
     margin-right: 0;
 }
 
-.category-table td button:hover {
-    /* Opacity handled by transition */
-}
-
-.category-table td button:first-child { /* Edit button */
+.category-table td button:first-child {
     background-color: #fff;
     color: #344054;
 }
@@ -97,10 +91,10 @@
     border-color: #d0d5dd;
 }
 
-.category-table td button:last-child { /* Delete button */
-     background-color: #dc3545; /* Red */
-     color: white;
-     border-color: #dc3545;
+.category-table td button:last-child {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
 }
 
 .category-table td button:last-child:hover {
@@ -111,12 +105,10 @@
 .loading,
 .error {
     text-align: center;
-    font-size: 18px;
+    font-size: 1.125rem; /* 18px */
     color: #555;
-    margin-top: 50px;
+    margin-top: 3.125rem; /* 50px */
 }
-
-/* Add more styles for filters, pagination as components are added */
 
 .postManagement {
     display: flex;
@@ -125,24 +117,25 @@
     overflow: hidden;
     background-color: #F5F7FA;
 }
+
 .body {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 0 32px 24px 32px;
-    margin-left: 280px; /* Adjust based on sidebar width */
+    padding: 0 2rem 1.5rem 2rem; /* 0 32px 24px 32px */
+    margin-left: 17.5rem; /* 280px */
 }
 
 .adminTitle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem; /* 24px */
     background: #FFFFFF;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
+    padding: 1.5rem; /* 24px */
+    border-radius: 0.75rem; /* 12px */
+    box-shadow: 0px 0.0625rem 0.1875rem rgba(16, 24, 40, 0.1); /* 1px 3px */
 }
 
 .title {
@@ -151,19 +144,19 @@
 }
 
 .text {
-    font-size: 20px; /* Adjusted size */
+    font-size: 1.25rem; /* 20px */
     font-weight: 600;
     color: #1D2939;
-    margin: 0 0 4px 0; /* Adjusted margin */
+    margin: 0 0 0.25rem 0; /* 0 0 4px 0 */
     font-family: 'Inter', sans-serif;
 }
 
 .adminBreadcrumbs {
-    font-size: 14px; /* Adjusted size */
+    font-size: 0.875rem; /* 14px */
     color: #667085;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 0.5rem; /* 8px */
 }
 
 .adminBreadcrumbs a {
@@ -178,29 +171,29 @@
 .right2 {
     display: flex;
     align-items: center;
-    gap: 12px; /* Adjusted gap */
+    gap: 0.75rem; /* 12px */
 }
 
 .adminButtonWithIcon,
 .adminButtonWithIcon2 {
     display: flex;
     align-items: center;
-    padding: 10px 16px; /* Adjusted padding */
-    border: 1px solid #D0D5DD;
-    border-radius: 8px;
+    padding: 0.625rem 1rem; /* 10px 16px */
+    border: 0.0625rem solid #D0D5DD;
+    border-radius: 0.5rem; /* 8px */
     cursor: pointer;
-    font-size: 14px;
+    font-size: 0.875rem; /* 14px */
     font-weight: 500;
     transition: background-color 0.2s, border-color 0.2s;
 }
 
 .adminButtonWithIcon {
-     background-color: #fff;
-     color: #344054;
+    background-color: #fff;
+    color: #344054;
 }
 
 .adminButtonWithIcon2 {
-    background-color: #007bff; /* Example primary color, adjust as needed */
+    background-color: #007bff;
     color: #fff;
     border-color: #007bff;
 }
@@ -217,85 +210,74 @@
 
 .adminButtonWithIcon i,
 .adminButtonWithIcon2 i {
-    margin-right: 8px;
-    font-size: 16px; /* Adjusted icon size */
+    margin-right: 0.5rem; /* 8px */
+    font-size: 1rem; /* 16px */
 }
 
 .content {
     background: #FFFFFF;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1);
-    flex: 1; /* Allow content to grow */
-    display: flex; /* Use flex for content layout */
+    padding: 1.5rem; /* 24px */
+    border-radius: 0.75rem; /* 12px */
+    box-shadow: 0px 0.0625rem 0.1875rem rgba(16, 24, 40, 0.1);
+    flex: 1;
+    display: flex;
     flex-direction: column;
 }
 
 .tableContainer {
-    margin-top: 0; /* Remove top margin as it's handled by .content padding */
+    margin-top: 0;
 }
 
-/* Keep existing table styles and add .loading, .error styles */
-.category-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px; /* Add margin between buttons and table */
-}
+/* Responsive */
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+    }
 
-.category-table th,
-.category-table td {
-    border: 1px solid #ddd;
-    padding: 12px; /* Increased padding */
-    text-align: left;
-    font-size: 14px; /* Consistent font size */
-}
+    .container h2 {
+        font-size: 1.25rem; /* 20px */
+        margin-bottom: 1rem;
+    }
 
-.category-table th {
-    background-color: #f2f2f2;
-    font-weight: 600; /* Bolder header font */
-    color: #333;
-}
+    .addButton {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        width: 100%;
+    }
 
-.category-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+    .body {
+        margin-left: 0;
+        padding: 0 1rem 1rem 1rem;
+    }
 
-.category-table tbody tr:hover {
-    background-color: #e9e9e9;
-}
+    .adminTitle {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
 
-.category-table td button {
-    padding: 8px 12px; /* Adjusted button padding */
-    margin-right: 8px; /* Adjusted margin */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: opacity 0.3s ease;
-}
+    .right2 {
+        gap: 0.5rem;
+    }
 
-.category-table td button:last-child {
-    margin-right: 0; /* Remove margin on the last button */
-}
+    .adminButtonWithIcon,
+    .adminButtonWithIcon2 {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+    }
 
-.category-table td button:hover {
-    opacity: 0.9;
-}
+    .adminButtonWithIcon i,
+    .adminButtonWithIcon2 i {
+        font-size: 0.875rem;
+        margin-right: 0.375rem;
+    }
 
-.category-table td button:first-child {
-    background-color: #ffc107;
-    color: #212529;
+    .category-table thead th,
+    .category-table tbody td {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+    }
 }
-
-.category-table td button:last-child {
-    background-color: #dc3545;
-    color: white;
-}
-
-.loading,
-.error {
-    text-align: center;
-    font-size: 18px;
-    color: #555;
-    margin-top: 50px;
-} 

@@ -4,12 +4,12 @@ import '../assets/css/wishlistPage.css'; // CSS for this page
 
 // Assuming you have a way to fetch full product details by ID
 // This is a placeholder function using fake data
-const fetchFakeProductsByIds = (ids: string[]) => {
+const fetchFakeProductsByIds = (ids: number[]) => {
     console.log('Fetching fake products for IDs:', ids);
     // This is placeholder fake data, match structure from ProductCard
     const fakeProductsData = [
         {
-            id: '1',
+            id: 1,
             name: 'Laptop MSI Modern 15',
             price: '18.490.000₫',
             discountedPrice: '10.990.000₫',
@@ -23,7 +23,7 @@ const fetchFakeProductsByIds = (ids: string[]) => {
             formattedOriginalPrice: '10.990.000₫',
         },
         {
-             id: '2',
+             id: 2,
             name: 'Tai nghe Gaming A',
             price: '1.500.000₫',
             discountedPrice: '1.200.000₫',
@@ -37,7 +37,7 @@ const fetchFakeProductsByIds = (ids: string[]) => {
             formattedOriginalPrice: '1.200.000₫',
         },
          {
-             id: '3',
+             id: 3,
             name: 'Chuột không dây B',
             price: '500.000₫',
             discountedPrice: '400.000₫',
@@ -65,7 +65,8 @@ const WishlistPage: React.FC = () => {
     useEffect(() => {
         setLoading(true);
         // Simulate fetching product details for IDs in wishlist
-        const products = fetchFakeProductsByIds(wishlistItems);
+// Simulate fetching product details for IDs in wishlist
+        const products = fetchFakeProductsByIds(wishlistItems.map(Number));
         setWishlistProducts(products);
         setLoading(false);
     }, [wishlistItems]); // Re-fetch products when wishlistItems change

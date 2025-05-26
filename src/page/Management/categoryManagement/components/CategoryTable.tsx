@@ -5,8 +5,8 @@ import { useCategory } from '../context/CategoryContext';
 
 interface CategoryTableProps {
     // Add any props needed, e.g., for handling edit/delete actions
-    onEditCategory: (categoryId: string) => void;
-    onDeleteCategory: (categoryId: string) => void;
+    onEditCategory: (categoryId: number) => void;
+    onDeleteCategory: (categoryId: number) => void;
 }
 
 const CategoryTable: React.FC<CategoryTableProps> = ({

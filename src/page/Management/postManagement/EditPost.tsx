@@ -6,11 +6,11 @@ import {Header} from "./components/Header"; // Import hooks for routing
 
 // Assuming a function to fetch fake post data by ID
 // In a real app, this would be an API call
-const fetchFakePostById = (id: string) => {
+const fetchFakePostById = (id: number) => {
     console.log(`Fetching fake post with ID: ${id}`);
      // This is placeholder fake data. Replace with actual data fetching.
     // Simulate finding/not finding a post
-    if (id && id !== 'notfound') { // Simple check for fake data
+    if (id && id !== null) { // Simple check for fake data
         return {
             id: id,
             title: `Tiêu đề bài viết Fake ${id}`,
@@ -29,8 +29,7 @@ const fetchFakePostById = (id: string) => {
 };
 
 export function EditPost() {
-    const { postId } = useParams<{ postId: string }>(); // Get post ID from URL params
-    const navigate = useNavigate();
+    const { postId } = useParams<{ postId: string }>(); // Get post ID from URL params    const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -50,8 +49,8 @@ export function EditPost() {
             setLoading(true);
             setError(null); // Clear previous errors
             // Simulate fetching data
-            const postData = fetchFakePostById(postId);
-             if (postData) {
+            const postData = fetchFakePostById(Number(postId));
+            if (postData) {
                 setTitle(postData.title);
                 setContent(postData.content);
                 setStatus(postData.status);
@@ -83,11 +82,11 @@ export function EditPost() {
         // In a real app, you might navigate back to the list after a successful save:
         // navigate('/postManagement');
     };
+    const navigate = useNavigate(); // Define navigate at the top level
 
-     const handleCancel = () => {
+    const handleCancel = () => {
         console.log('Cancelling...');
-        // Add cancel logic here (e.g., navigate back)
-         navigate('/postManagement'); // Navigate back to list
+        navigate('/postManagement'); // Navigate back to list
     };
 
      const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +123,9 @@ export function EditPost() {
 
     return (
         <div className={styles.editPostContainer}>
-            <Header />
+            <AdminSidebar />
+            <div className={styles.body}>
+                <Header />
             <div className={styles.editPostHeader}>
                 <h2>Chỉnh sửa bài viết</h2> {/* Changed title */}
                 <div className={styles.headerActions}>
@@ -255,5 +256,6 @@ export function EditPost() {
                 </div>
             </div>
         </div>
+            </div>
     );
 } 

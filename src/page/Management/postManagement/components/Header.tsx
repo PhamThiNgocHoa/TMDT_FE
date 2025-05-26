@@ -12,9 +12,6 @@ export const Header: React.FC = () => {
 
     return (
         <header className={styles.adminHeader}>
-            <div className={styles.headerLeft}>
-                <h1 className={styles.pageTitle}>Post Management</h1>
-            </div>
             <div className={styles.headerRight}>
                 <div className={styles.headerSearchBox}>
                     <i className="fas fa-search"></i>

@@ -1,16 +1,18 @@
 .top-products-section {
-    margin: 60px 0;
+    margin: clamp(2.5rem, 8vw, 4rem) 0; /* ~40px–64px */
 }
 
 .top-products-header {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 5vw, 2.5rem); /* ~24px–40px */
 }
 
 .top-products-grid {
     display: flex;
-    gap: 30px;
     flex-wrap: wrap;
+    gap: clamp(1rem, 3vw, 1.875rem); /* ~16px–30px */
 }

@@ -15,7 +15,7 @@ export const calculateDiscountPercentage = (price: number, originalPrice: number
 // Flash Sale Products
 export const flashSaleProducts: Product[] = [
     {
-        id: '1',
+        id: 1,
         name: 'Havic HV G-92 Gamepad',
         category: 'Gaming',
         imageUrl:"https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db",
@@ -42,7 +42,7 @@ export const flashSaleProducts: Product[] = [
         sizes: ['XS', 'S', 'M', 'L', 'XL']
     },
     {
-        id: '2',
+        id: 2,
         name: 'Tay cầm chơi game HAVIT HV-G92',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/21f9b9c39a3c80b6e5a8c630460e4f5710f4c373',
@@ -64,7 +64,7 @@ export const flashSaleProducts: Product[] = [
         sizes: ['M']
     },
     {
-        id: '3',
+        id: 3,
         name: 'Bàn phím có dây AK-900',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a401c8b62e51947681bf608839ff1e00ad3dfaa3',
@@ -86,7 +86,7 @@ export const flashSaleProducts: Product[] = [
         sizes: ['Standard']
     },
     {
-        id: '4',
+        id: 4,
         name: 'IPS LCD Gaming Monitor',
         category: 'Monitors',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2c9936a5a732845a7e336241db62a4dd78c6437b',
@@ -108,7 +108,7 @@ export const flashSaleProducts: Product[] = [
         sizes: ['27"']
     },
     {
-        id: '5',
+        id: 5,
         name: 'RGB liquid CPU Cooler',
         category: 'Components',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/3a81259debbe79371946ca6e164991080e4cd6f4',
@@ -132,7 +132,7 @@ export const flashSaleProducts: Product[] = [
 // Top Products
 export const topProducts: Product[] = [
     {
-        id: '1',
+        id: 1,
         name: 'Havic HV G-92 Gamepad',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db',
@@ -159,7 +159,7 @@ export const topProducts: Product[] = [
         sizes: ['XS', 'S', 'M', 'L', 'XL']
     },
     {
-        id: '2',
+        id: 2,
         name: 'Tay cầm chơi game HAVIT HV-G92',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/21f9b9c39a3c80b6e5a8c630460e4f5710f4c373',
@@ -181,7 +181,7 @@ export const topProducts: Product[] = [
         sizes: ['M']
     },
     {
-        id: '3',
+        id: 3,
         name: 'Bàn phím có dây AK-900',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a401c8b62e51947681bf608839ff1e00ad3dfaa3',
@@ -203,7 +203,7 @@ export const topProducts: Product[] = [
         sizes: ['Standard']
     },
     {
-        id: '4',
+        id: 4,
         name: 'IPS LCD Gaming Monitor',
         category: 'Monitors',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/2c9936a5a732845a7e336241db62a4dd78c6437b',
@@ -225,7 +225,7 @@ export const topProducts: Product[] = [
         sizes: ['27"']
     },
     {
-        id: '5',
+        id: 5,
         name: 'RGB liquid CPU Cooler',
         category: 'Components',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/3a81259debbe79371946ca6e164991080e4cd6f4',
@@ -249,7 +249,7 @@ export const topProducts: Product[] = [
 // All Products
 export const allProducts: Product[] = [
     {
-        id: '1',
+        id: 1,
         name: 'Havic HV G-92 Gamepad',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/11c73c757bebbfeb527092163e780840067258db',
@@ -276,7 +276,7 @@ export const allProducts: Product[] = [
         sizes: ['XS', 'S', 'M', 'L', 'XL']
     },
     {
-        id: '2',
+        id: 2,
         name: 'Tay cầm chơi game HAVIT HV-G92',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/21f9b9c39a3c80b6e5a8c630460e4f5710f4c373',
@@ -298,7 +298,7 @@ export const allProducts: Product[] = [
         sizes: ['M']
     },
     {
-        id: '3',
+        id: 3,
         name: 'Bàn phím có dây AK-900',
         category: 'Gaming',
         imageUrl: 'https://cdn.builder.io/api/v1/image/assets/TEMP/a401c8b62e51947681bf608839ff1e00ad3dfaa3',
@@ -320,7 +320,7 @@ export const allProducts: Product[] = [
         sizes: ['Standard']
     },
     {
-        id: '4',
+        id: 4,
         name: 'IPS LCD Gaming Monitor',
         category: 'Monitors',
         images: [
@@ -343,7 +343,7 @@ export const allProducts: Product[] = [
 
     },
     {
-        id: '5',
+        id: 5,
         name: 'RGB liquid CPU Cooler',
         category: 'Components',
         images: [

@@ -6,28 +6,28 @@ import { SearchIcon } from "../assets/icons/SearchIcon";
 // Fake product data for search results
 const fakeProducts = [
     {
-        id: '1',
+        id: 1,
         name: 'Laptop MSI Modern 15',
         price: '18.490.000₫',
         discountedPrice: '10.990.000₫',
         imageUrl: 'https://via.placeholder.com/50x50', // Placeholder image URL
     },
     {
-         id: '2',
+         id: 2,
         name: 'Laptop Dell XPS 13',
         price: '30.000.000₫',
         discountedPrice: '25.000.000₫',
         imageUrl: 'https://via.placeholder.com/50x50',
     },
      {
-         id: '3',
+         id: 3,
         name: 'Laptop HP Spectre x360',
         price: '35.000.000₫',
         discountedPrice: '30.000.000₫',
         imageUrl: 'https://via.placeholder.com/50x50',
     },
      {
-         id: '4',
+         id: 4,
         name: 'Máy tính bảng Samsung',
         price: '15.000.000₫',
         discountedPrice: '12.000.000₫',
@@ -123,7 +123,7 @@ export const SearchBar = () => {
                         <div 
                             key={product.id} 
                             className="searchResultItem"
-                             onClick={() => handleResultClick(product.id)} // Add click handler
+                             onClick={() => handleResultClick(product.id.toString())} // Add click handler
                         >
                             <img src={product.imageUrl} alt={product.name} className="searchResultImage" />
                             <div className="searchResultInfo">

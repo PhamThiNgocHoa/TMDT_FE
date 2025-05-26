@@ -4,7 +4,7 @@ export interface ProductImage {
 }
 
 export interface Product {
-    id: string; // Dùng string để tương thích với URL hoặc database key
+    id: number; // Dùng string để tương thích với URL hoặc database key
     name: string;
     category: string;
 

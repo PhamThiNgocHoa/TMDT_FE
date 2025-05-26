@@ -18,9 +18,8 @@ export default function ProductDetailsPage() {
     const { id } = useParams<{ id: string }>();
 
     const getCurrentProduct = (): Product | undefined => {
-        return relatedProducts.find(product => product.id === id);
+        return relatedProducts.find(product => product.id === Number(id));
     };
-
     const product = getCurrentProduct();
 
     const breadcrumbItems = [
@@ -40,7 +39,6 @@ export default function ProductDetailsPage() {
                     <div className={styles.mainContent}>
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
-                                <ProductBreadcrumb items={breadcrumbItems} />
                                 <ProductGallery images={product.images} />
                             </div>
                         </article>
@@ -52,7 +50,7 @@ export default function ProductDetailsPage() {
 
                 <ProductReviewsSection />
 
-                <RelatedProducts products={relatedProducts}/>
+                {/*<RelatedProducts products={relatedProducts}/>*/}
             </section>
         </main>
     );

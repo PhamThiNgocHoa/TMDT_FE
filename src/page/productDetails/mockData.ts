@@ -12,7 +12,7 @@ export const calculateDiscountPercentage = (price: number, originalPrice: number
 
 export const relatedProducts: Product[] = [
     {
-        id: '1',
+        id: 1,
         name: 'Havic HV G-92 Gamepad',
         category: 'Gaming',
         images: [
@@ -36,7 +36,7 @@ export const relatedProducts: Product[] = [
         sizes: ['XS', 'S', 'M', 'L', 'XL']
     },
     {
-        id: '2',
+        id: 2,
         name: 'Tay cầm chơi game HAVIT HV-G92',
         category: 'Gaming',
         images: [
@@ -55,7 +55,7 @@ export const relatedProducts: Product[] = [
         sizes: ['M']
     },
     {
-        id: '3',
+        id: 3,
         name: 'Bàn phím có dây AK-900',
         category: 'Gaming',
         images: [
@@ -74,7 +74,7 @@ export const relatedProducts: Product[] = [
         sizes: ['Standard']
     },
     {
-        id: '4',
+        id: 4,
         name: 'IPS LCD Gaming Monitor',
         category: 'Monitors',
         images: [
@@ -93,7 +93,7 @@ export const relatedProducts: Product[] = [
         sizes: ['27"']
     },
     {
-        id: '5',
+        id: 5,
         name: 'RGB liquid CPU Cooler',
         category: 'Components',
         images: [

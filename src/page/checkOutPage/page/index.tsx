@@ -77,7 +77,7 @@ const CheckoutPage: React.FC = () => {
   };
 
   // Handle payment method selection
-  const handleSelectPaymentMethod = (id: string) => {
+  const handleSelectPaymentMethod = (id: number) => {
     const updatedMethods = paymentMethods.map(method => ({
       ...method,
       selected: method.id === id
@@ -118,7 +118,7 @@ const CheckoutPage: React.FC = () => {
     setPaymentStatus('idle'); // Reset status before submitting
 
     try {
-      const selectedPaymentMethod = paymentMethods.find(method => method.selected)?.id || '';
+      const selectedPaymentMethod = paymentMethods.find(method => method.selected)?.id.toString() || '';
       
       const result = await submitOrder(
         customerInfo,
