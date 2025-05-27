@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './EditPost.module.css'; // Use EditPost styles
+import styles from './EditPost.module.css'; // Use EditRevenue styles
 import { useParams, useNavigate } from 'react-router-dom';
 import {AdminSidebar} from "./AdminSidebar";
 import {Header} from "./components/Header"; // Import hooks for routing

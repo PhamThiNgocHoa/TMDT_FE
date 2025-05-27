@@ -3,6 +3,7 @@ import axios from "axios";
 class ApiService {
     private static getAuthHeaders() {
         const token = localStorage.getItem("authToken");
+        console.log("🔐 Token lấy từ localStorage:", token); // 👈 Log token để kiểm tra
 
         const headers: any = {
             "Content-Type": "application/json",
@@ -11,6 +12,8 @@ class ApiService {
         if (token) {
             headers["Authorization"] = `Bearer ${token}`;
         }
+
+        console.log("📦 Headers sẽ gửi:", headers); // 👈 Log headers
 
         return headers;
     }
@@ -34,13 +37,25 @@ class ApiService {
                 data: body,
             };
 
+            console.log(`📡 Đang gửi request: ${method} ${url}`);
+            if (body) console.log("📨 Body:", body);
+
             const response = await axios(axiosConfig);
 
+            console.log("✅ Response nhận được:", response.data); // 👈 Log response
             return response.data;
+
         } catch (error: any) {
-            console.error("Error during API call:", error.message);
+            const status = error.response?.status;
+            const errorData = error.response?.data;
+            console.error("❌ Lỗi khi gọi API:", {
+                status,
+                data: errorData,
+                message: error.message,
+            });
+
             throw new Error(
-                `Error fetching data: ${error.response?.status} - ${error.response?.data || error.message}`
+                `Error fetching data: ${status} - ${JSON.stringify(errorData) || error.message}`
             );
         }
     }
