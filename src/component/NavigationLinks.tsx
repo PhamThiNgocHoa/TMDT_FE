@@ -8,7 +8,7 @@ export const NavigationLinks = () => {
                 <span className="navLink"> <a className="b" href="/home"> Trang chủ </a></span>
                 <div className="activeIndicator" />
             </div>
-            <span className="navLink"> <a className="a" href="/home"> Cửa hàng </a></span>
+            <span className="navLink"> <a className="a" href="/shop"> Cửa hàng </a></span>
             <span className="navLink"> <a className="a" href="/home"> Về chúng tôi</a></span>
             <span className="navLink"> <a className="a" href="/home"> Liên hệ </a></span>
         </nav>

@@ -1,26 +1,25 @@
 "use client";
 import React from 'react';
-import styles from './PostManagement.module.css';
+import styles from './CustomerManagement.module.css';
 import { AdminSidebar } from './AdminSidebar';
 // import { TopBar } from './TopBar'; // Removed TopBar as Header component replaces it
 import { Header } from './components/Header'; // Use named import
 import { TabsFilter } from './components/TabsFilter'; // Use named import
 import { FilterSection } from './services/FilterSection'; // Use named import
-import { PostTable } from './services/PostTable'; // Use named import
+import { CustomerTable } from './services/CustomerTable'; // Use named import
 import { Pagination } from './Pagination'; // Use named import
-import { PostProvider } from './context/PostContext';
+import { CustomerProvider } from './context/CustomerContext';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const PostManagement: React.FC = () => {
-    const navigate = useNavigate(); // Get navigate function
+const CustomerManagement: React.FC = () => {
+    const navigate = useNavigate();
 
     const handleAddPostClick = () => {
-        // Replace '/admin/posts/add' with the actual route for the AddRevenue screen
-        navigate('/postManagement/add');
+        navigate('/management/customerManagement/add');
     };
 
     return (
-        <PostProvider>
+        <CustomerProvider>
             <div className={styles.postManagement}>
                 <AdminSidebar />
                 <div className={styles.body}>
@@ -28,11 +27,11 @@ const PostManagement: React.FC = () => {
                     {/* <TopBar /> */}
                     <header className={styles.adminTitle}>
                         <div className={styles.title}>
-                            <h1 className={styles.text}>Quản lý bài viết</h1>
+                            <h1 className={styles.text}>Quản lý người dùng</h1>
                             <nav className={styles.adminBreadcrumbs}>
                                 <a href="/admin">Trang chủ</a>
                                 <span>/</span>
-                                <span>Quản lý bài viết</span>
+                                <span>Quản lý người dùng</span>
                             </nav>
                         </div>
                         <div className={styles.right2}>
@@ -42,20 +41,20 @@ const PostManagement: React.FC = () => {
                             </button>
                             <button className={styles.adminButtonWithIcon2} onClick={handleAddPostClick}>
                                 <i className="fas fa-plus"></i>
-                                <span>Thêm bài viết</span>
+                                <span>Thêm người dùng</span>
                             </button>
                         </div>
                     </header>
                     <div className={styles.content}>
                         <TabsFilter />
                         <FilterSection />
-                        <PostTable />
+                        <CustomerTable />
                         <Pagination />
                     </div>
                 </div>
             </div>
-        </PostProvider>
+        </CustomerProvider>
     );
 };
 
-export default PostManagement;
+export default CustomerManagement;

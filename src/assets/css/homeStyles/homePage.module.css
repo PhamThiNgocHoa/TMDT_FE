@@ -31,6 +31,11 @@ main {
     gap: clamp(1.5rem, 4vw, 2.5rem); /* responsive gap ~24px–40px */
     margin-top: clamp(1rem, 3vw, 1.5rem); /* ~16px–24px */
 }
+.shoppage{
+
+}
+
+
 
 /* Optional tighter layout on smaller screens */
 @media (max-width: 768px) {
