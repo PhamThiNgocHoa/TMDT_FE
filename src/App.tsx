@@ -9,9 +9,6 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Login from "./page/loginpage/Login";
-
-import { RelatedProducts } from "./page/productDetails/RelatedProducts";
-import { relatedProducts } from "./page/productDetails/mockData";
 import ProductDetailsPage from "./page/productDetails/ProductDetailsPage";
 import HomePage from "./page/homePage/HomePage";
 import Header from "./component/Header";
@@ -19,16 +16,13 @@ import Footer from "./component/Footer";
 import LoginAd from "./page/admin/LoginAd";
 import Register from "./page/Register";
 import ForgotPass from "./page/ForgotPass";
-import Home from "./page/Home";
-
-import AdminDashboard from "./page/admin/AdminDashboard";
-
 import AccountManagement from "./page/account/AccountManagement";
 import CartMain from "./page/cartPage/page";
 import CheckoutPage from "./page/checkOutPage/page";
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
+import AdminDashboard from "./page/admin/AdminDashboard";
 
 const App = () => {
   return (
@@ -52,7 +46,6 @@ const HeaderFooterControl = () => {
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/forgotpass" element={<ForgotPass />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/account" element={<AccountManagement />} />
         <Route path="/cart" element={<CartMain />} />
         <Route path="/admin/*" element={<AdminDashboard />} />
