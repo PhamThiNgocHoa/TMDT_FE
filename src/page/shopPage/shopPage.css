@@ -41,8 +41,10 @@ main {
     padding: 20px;
 }
 
-.products-header {
-    margin-bottom: 20px;
+.products-header h3 {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    border-radius: 10px;
 }
 
 .products-grid {
@@ -59,7 +61,7 @@ main {
 }
 
 .product-card {
-    width: calc(25% - 20px); /* Đảm bảo mỗi sản phẩm chiếm 1/4 chiều rộng màn hình */
+    width: calc(25% - 20px);
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
@@ -127,10 +129,12 @@ main {
     padding: 5px 10px;
     border-radius: 5px;
 }
-.btn {
+
+.container-btn .btn {
     width: 20%;
 }
-.container-btn{
+
+.container-btn {
     display: flex;
     justify-content: center;
 }
@@ -141,13 +145,15 @@ main {
     gap: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    width: calc(33.33% - 20px); /* Mỗi nhóm lọc chiếm 1/3 chiều rộng, trừ khoảng cách */
-    min-width: 200px;  /* Đảm bảo không bị quá hẹp trên màn hình nhỏ */
+    width: calc(25% - 20px); /* Mỗi nhóm lọc chiếm 1/4 chiều rộng */
+    min-width: 200px; /* Đảm bảo không bị quá hẹp trên màn hình nhỏ */
 }
 
 .filter-btn {
@@ -156,20 +162,22 @@ main {
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #007BFF;
+    background-color: #fff;
     transition: background-color 0.3s;
+    color:#000;
 }
 
 .filter-btn.active {
-    background-color: #007BFF;
+    background-color: #ff6f61;
     color: #fff;
 }
 
 .selected-filters {
     margin-top: 20px;
     padding: 10px;
-    background-color: #f7f7f7;
+    background-color: #fff;
     border-radius: 5px;
+    display: flex;
 }
 
 .selected-filters-list {
@@ -179,11 +187,13 @@ main {
 }
 
 .selected-filter-item {
-    background-color: #e0e0e0;
+    background-color: #ffc7c7;
     padding: 5px 10px;
     border-radius: 20px;
     display: flex;
     align-items: center;
+    line-height: 0.5;
+    margin: 0px 5px;
 }
 
 .selected-filter-item button {
@@ -194,13 +204,52 @@ main {
     font-size: 14px;
     cursor: pointer;
 }
-
-
+.filter-buttons{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+.filter-buttons .btn{
+    width: 10%;
+    margin: 0px 10px;
+}
 
 
 /* Điều chỉnh cho màn hình di động */
+@media (max-width: 1200px) {
+    .product-card {
+        width: calc(33.33% - 20px); /* 3 sản phẩm trên mỗi hàng cho màn hình vừa */
+    }
+
+    .filter-group {
+        width: calc(33.33% - 20px); /* 3 bộ lọc trên mỗi hàng */
+    }
+}
+
 @media (max-width: 768px) {
     .product-card {
-        width: calc(50% - 20px); /* Mỗi sản phẩm chiếm 50% chiều rộng trên màn hình nhỏ */
+        width: calc(50% - 20px); /* 2 sản phẩm trên mỗi hàng cho màn hình nhỏ */
+    }
+
+    .filter-group {
+        width: 100%; /* Các bộ lọc chiếm toàn bộ chiều rộng trên màn hình nhỏ */
+    }
+}
+
+@media (max-width: 480px) {
+    .product-card {
+        width: 100%; /* 1 sản phẩm trên mỗi hàng cho màn hình siêu nhỏ */
+    }
+
+    .filters {
+        flex-direction: column; /* Các bộ lọc xếp chồng lên nhau */
+    }
+
+    .filter-group {
+        width: 100%; /* Mỗi bộ lọc chiếm toàn bộ chiều rộng */
+    }
+
+    .container-btn .btn {
+        width: 80%; /* Nút "Xem tất cả" chiếm 80% chiều rộng trên màn hình nhỏ */
     }
 }
