@@ -1,0 +1,77 @@
+.reset-container {
+    max-width: 400px;
+    margin: 5rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.reset-container h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #fd4545;
+}
+
+.reset-form .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.reset-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.reset-form input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.reset-form input:focus {
+    border-color: #fd4545;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    outline: none;
+}
+
+.reset-form .error-message {
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+.reset-form button {
+    width: 100%;
+    background-color: #fd4545;
+    color: white;
+    padding: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.reset-form button:hover {
+    background-color: #fd4545;
+}
+
+@media (max-width: 500px) {
+    .reset-container {
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+    }
+
+    .reset-container h2 {
+        font-size: 1.5rem;
+    }
+}

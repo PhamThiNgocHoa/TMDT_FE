@@ -14,6 +14,8 @@ import PaymentMethods from '../components/PaymentMethods';
 import CouponForm from '../components/CouponForm';
 import CheckoutButton from '../components/CheckoutButton';
 import Notification from '../components/Notification';
+import CheckoutSuccess from '../CheckoutSuccess';
+import CheckoutFailure from '../CheckoutFailure';
 import styles from './index.module.css';
 
 const CheckoutPage: React.FC = () => {
@@ -28,6 +30,9 @@ const CheckoutPage: React.FC = () => {
   
   // State for coupon discount
   const [couponDiscount, setCouponDiscount] = useState<number>(0);
+  
+  // State to track payment status: 'idle', 'success', 'failure'
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'failure'>('idle');
   
   // Loading states
   const [isLoadingCart, setIsLoadingCart] = useState<boolean>(true);
@@ -72,7 +77,7 @@ const CheckoutPage: React.FC = () => {
   };
 
   // Handle payment method selection
-  const handleSelectPaymentMethod = (id: string) => {
+  const handleSelectPaymentMethod = (id: number) => {
     const updatedMethods = paymentMethods.map(method => ({
       ...method,
       selected: method.id === id
@@ -110,9 +115,10 @@ const CheckoutPage: React.FC = () => {
     }
     
     setIsSubmittingOrder(true);
-    
+    setPaymentStatus('idle'); // Reset status before submitting
+
     try {
-      const selectedPaymentMethod = paymentMethods.find(method => method.selected)?.id || '';
+      const selectedPaymentMethod = paymentMethods.find(method => method.selected)?.id.toString() || '';
       
       const result = await submitOrder(
         customerInfo,
@@ -121,13 +127,15 @@ const CheckoutPage: React.FC = () => {
       );
       
       if (result.success) {
-        showNotification(`Đặt hàng thành công! Mã đơn hàng: ${result.orderId}`, 'success');
-        // Reset form or redirect to success page
+        // showNotification(`Đặt hàng thành công! Mã đơn hàng: ${result.orderId}`, 'success'); // Hide default notification
+        setPaymentStatus('success');
       } else {
-        showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error');
+        // showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error'); // Hide default notification
+        setPaymentStatus('failure');
       }
     } catch (error) {
-      showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error');
+      // showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error'); // Hide default notification
+      setPaymentStatus('failure');
     } finally {
       setIsSubmittingOrder(false);
     }
@@ -158,7 +166,8 @@ const CheckoutPage: React.FC = () => {
 
   return (
     <main className={styles.checkoutContainer}>
-      {notification.show && (
+      {/* Only show the notification for validation errors, not payment status */}
+      {notification.show && paymentStatus === 'idle' && (
         <Notification
           message={notification.message}
           type={notification.type}
@@ -166,44 +175,49 @@ const CheckoutPage: React.FC = () => {
         />
       )}
       
-      <div className={styles.checkoutContent}>
-        <section className={styles.leftColumn}>
-          <CustomerForm
-            customerInfo={customerInfo}
-            onCustomerInfoChange={handleCustomerInfoChange}
-          />
-        </section>
-        
-        <section className={styles.rightColumn}>
-          {isLoadingCart ? (
-            <p>Đang tải thông tin giỏ hàng...</p>
-          ) : (
-            <>
-              <CartItems items={cartItems} />
-              
-              <OrderSummary 
-                items={cartItems}
-                couponDiscount={couponDiscount}
-              />
-              
-              <PaymentMethods
-                paymentMethods={paymentMethods}
-                onSelectPaymentMethod={handleSelectPaymentMethod}
-              />
-              
-              <CouponForm
-                onApplyCoupon={handleApplyCoupon}
-                isLoading={isApplyingCoupon}
-              />
-              
-              <CheckoutButton
-                onClick={handleSubmitOrder}
-                isLoading={isSubmittingOrder}
-              />
-            </>
-          )}
-        </section>
-      </div>
+      {paymentStatus === 'success' && <CheckoutSuccess />}
+      {paymentStatus === 'failure' && <CheckoutFailure />}
+
+      {paymentStatus === 'idle' && (
+        <div className={styles.checkoutContent}>
+          <section className={styles.leftColumn}>
+            <CustomerForm
+              customerInfo={customerInfo}
+              onCustomerInfoChange={handleCustomerInfoChange}
+            />
+          </section>
+          
+          <section className={styles.rightColumn}>
+            {isLoadingCart ? (
+              <p>Đang tải thông tin giỏ hàng...</p>
+            ) : (
+              <>
+                <CartItems items={cartItems} />
+                
+                <OrderSummary 
+                  items={cartItems}
+                  couponDiscount={couponDiscount}
+                />
+                
+                <PaymentMethods
+                  paymentMethods={paymentMethods}
+                  onSelectPaymentMethod={handleSelectPaymentMethod}
+                />
+                
+                <CouponForm
+                  onApplyCoupon={handleApplyCoupon}
+                  isLoading={isApplyingCoupon}
+                />
+                
+                <CheckoutButton
+                  onClick={handleSubmitOrder}
+                  isLoading={isSubmittingOrder}
+                />
+              </>
+            )}
+          </section>
+        </div>
+      )}
     </main>
   );
 };

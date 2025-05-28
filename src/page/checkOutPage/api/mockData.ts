@@ -3,14 +3,14 @@ import { CartItem, CustomerInfo, PaymentMethod } from '../types';
 // Mock cart items
 export const mockCartItems: CartItem[] = [
   {
-    id: '1',
+    id: 1,
     name: 'LCD Monitor',
     price: 6500000,
     imageUrl: 'https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/ANoiMXcUhk.png',
     quantity: 1
   },
   {
-    id: '2',
+    id: 2,
     name: 'H1 Gamepad',
     price: 6500000,
     imageUrl: 'https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/AyPHp2o8PB.png',
@@ -33,12 +33,12 @@ export const mockCustomerInfo: CustomerInfo = {
 // Mock payment methods
 export const mockPaymentMethods: PaymentMethod[] = [
   {
-    id: 'bank',
+    id: 1,
     name: 'Ngân hàng',
     selected: true
   },
   {
-    id: 'cash',
+    id: 2,
     name: 'Tiền mặt',
     selected: false
   }

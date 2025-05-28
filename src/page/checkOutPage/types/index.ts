@@ -1,6 +1,6 @@
 // Define types for our checkout data
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   price: number;
   imageUrl: string;
@@ -28,7 +28,7 @@ export interface OrderSummary {
 }
 
 export interface PaymentMethod {
-  id: string;
+  id: number;
   name: string;
   selected: boolean;
 }

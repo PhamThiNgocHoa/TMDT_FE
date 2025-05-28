@@ -4,12 +4,12 @@ export interface ProductImage {
 }
 
 export interface Product {
-    id: string; // Dùng string để tương thích với URL hoặc database key
+    id: number; // Dùng string để tương thích với URL hoặc database key
     name: string;
     category: string;
 
     images: ProductImage[];         // Đa ảnh
-    imageUrl?: string;              // Ảnh chính (nếu cần)
+    img?: string;              // Ảnh chính (nếu cần)
 
     price: number;                  // Giá số
     originalPrice?: number;         // Giá gốc số (optional)
@@ -26,7 +26,7 @@ export interface Product {
     reviewCount?: number;          // Alias cho `reviews`
 
     inStock?: boolean;             // Tồn kho (mặc định true nếu không có)
-    isNew?: boolean;               // Sản phẩm mới
+    productNew?: boolean;               // Sản phẩm mới
 
     colors?: string[];             // Danh sách màu
     sizes?: string[];              // Danh sách kích thước

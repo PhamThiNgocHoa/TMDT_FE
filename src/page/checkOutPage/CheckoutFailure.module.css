@@ -1,0 +1,79 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 20px;
+    max-width: 320px;
+    margin: 30px auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.iconFailure {
+    margin-bottom: 16px;
+    width: 48px;  /* nhỏ hơn nếu là icon svg hoặc ảnh */
+    height: 48px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.message {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 24px;
+    line-height: 1.4;
+}
+
+.retryButton {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.retryButton:hover {
+    opacity: 0.9;
+}
+
+/* Responsive cho tablet và mobile */
+@media (max-width: 480px) {
+    .container {
+        max-width: 280px;
+        padding: 16px 12px;
+        margin: 20px auto;
+    }
+
+    .iconFailure {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 12px;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .message {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .retryButton {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}

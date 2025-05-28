@@ -1,19 +1,31 @@
-.flash-sale-section {
-    margin: 60px 0;
+:root {
+    --timer-value-font: clamp(1.25rem, 4vw, 2rem);
+    --timer-label-font: clamp(0.625rem, 1.5vw, 0.75rem);
+    --nav-btn-size: clamp(2rem, 4vw, 2.875rem);
+    --gap-md: clamp(0.5rem, 2vw, 1.5rem);
+    --gap-sm: clamp(0.25rem, 1vw, 0.625rem);
+    --padding-btn: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 4vw, 1.5rem);
+    --font-btn: clamp(0.875rem, 2vw, 1rem);
+}
 
+.flash-sale-section {
+    margin: 4rem 0;
 }
 
 .flash-sale-header {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 40px;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
 }
 
 .countdown-timer {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--gap-sm);
+    flex-wrap: wrap;
 }
 
 .timer-unit {
@@ -24,16 +36,16 @@
 
 .timer-value {
     font-family: Inter, var(--default-font-family);
-    font-size: 32px;
+    font-size: var(--timer-value-font);
     font-weight: 700;
-    line-height: 30px;
+    line-height: 1.2;
     color: #0e0e0e;
 }
 
 .timer-label {
-    font-size: 12px;
+    font-size: var(--timer-label-font);
     font-weight: 500;
-    color:#0e0e0e;
+    color: #0e0e0e;
     opacity: 0.8;
 }
 
@@ -41,27 +53,27 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin-top: -15px;
+    gap: 0.5rem;
+    margin-top: -0.75rem;
 }
 
 .timer-separator::before,
 .timer-separator::after {
     content: "";
-    width: 4px;
-    height: 4px;
-    background-color:#0e0e0e;
+    width: 0.25rem;
+    height: 0.25rem;
+    background-color: #0e0e0e;
     border-radius: 50%;
 }
 
 .navigation-buttons {
     display: flex;
-    gap: 8px;
+    gap: var(--gap-sm);
 }
 
 .nav-btn {
-    width: 46px;
-    height: 46px;
+    width: var(--nav-btn-size);
+    height: var(--nav-btn-size);
     border-radius: 50%;
     background-color: #ded2d2;
     color: #0e0e0e;
@@ -70,7 +82,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+    font-size: var(--font-btn);
 }
 
 .nav-btn:hover {
@@ -80,37 +93,38 @@
 
 .products-slider {
     display: flex;
-    gap: 30px;
+    gap: var(--gap-md);
     overflow-x: auto;
-    padding-bottom: 20px;
+    padding-bottom: 1rem;
     scrollbar-width: thin;
 }
 
 .products-slider::-webkit-scrollbar {
-    height: 6px;
+    height: 0.375rem;
 }
 
 .products-slider::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
+    border-radius: 0.375rem;
 }
 
 .view-all-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 60px;
+    margin-top: 4rem;
 }
+
 .view-all-button {
     background-color: #db4444;
     color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
+    padding: var(--padding-btn);
+    border-radius: 0.5rem;
+    font-size: var(--font-btn);
     font-weight: 500;
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--gap-sm);
 }

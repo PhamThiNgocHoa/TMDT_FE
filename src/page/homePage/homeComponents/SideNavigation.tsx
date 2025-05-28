@@ -1,13 +1,17 @@
 import React from "react";
 import "../../../assets/css/homeStyles/sideNavigation.css";
 import { Link } from "react-router-dom";
-
-interface NavItem {
-  label: string;
-  path: string;
+let categories: { id: number; name: string; path?: string }[] | undefined;
+let useCategory: any;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  useCategory = require("../../../hooks/useCategory").default;
+  categories = useCategory().categories;
+} catch (e) {
+  categories = undefined;
 }
 
-const navigationItems: NavItem[] = [
+const staticNavigationItems = [
   { label: "Laptop", path: "/laptop" },
   { label: "Laptop Gaming", path: "/laptop-gaming" },
   { label: "PC GVN", path: "/pc-gvn" },
@@ -20,12 +24,19 @@ const navigationItems: NavItem[] = [
 ];
 
 const SideNavigation: React.FC = () => {
+  let navItems =
+    categories && categories.length > 0
+      ? categories.map((cat: any) => ({
+          label: cat.name,
+          path: cat.path || "#",
+        }))
+      : staticNavigationItems;
   return (
     <aside className="side-navigation">
       <div className="container">
         <nav className="side-nav">
           <ul className="side-nav-list">
-            {navigationItems.map((item, index) => (
+            {navItems.map((item, index) => (
               <li key={index} className="side-nav-item">
                 <Link to={item.path} className="side-nav-link">
                   <span>{item.label}</span>

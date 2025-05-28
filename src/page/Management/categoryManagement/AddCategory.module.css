@@ -1,0 +1,102 @@
+.container {
+    padding: 1.25rem; /* ~20px */
+    font-family: Arial, sans-serif;
+    max-width: 37.5rem; /* 600px */
+    margin: 1.25rem auto; /* 20px */
+    border: 1px solid #ddd;
+    border-radius: 0.5rem; /* 8px */
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    width: 90%; /* chiếm 90% chiều ngang cha, để co dãn */
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 1.25rem; /* 20px */
+    color: #333;
+    font-size: 1.5rem; /* khoảng 24px */
+}
+
+.formGroup {
+    margin-bottom: 0.9375rem; /* 15px */
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 0.3125rem; /* 5px */
+    font-weight: bold;
+    color: #555;
+    font-size: 1rem; /* 16px */
+}
+
+.input {
+    width: 100%;
+    padding: 0.625rem; /* 10px */
+    border: 1px solid #ccc;
+    border-radius: 0.25rem; /* 4px */
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.625rem; /* 10px */
+    margin-top: 1.25rem; /* 20px */
+}
+
+.submitButton,
+.cancelButton {
+    padding: 0.625rem 1.25rem; /* 10px 20px */
+    border: none;
+    border-radius: 0.25rem; /* 4px */
+    cursor: pointer;
+    font-size: 1rem; /* 16px */
+    transition: background-color 0.3s ease;
+}
+
+.submitButton {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.submitButton:hover {
+    background-color: #4cae4c;
+}
+
+.cancelButton {
+    background-color: #d9534f;
+    color: white;
+}
+
+.cancelButton:hover {
+    background-color: #c9302c;
+}
+
+.error {
+    color: #d9534f;
+    margin-bottom: 0.9375rem; /* 15px */
+    text-align: center;
+    font-size: 0.9375rem; /* 15px */
+}
+
+/* Responsive - nhỏ hơn 480px thì container full width, giảm margin và padding */
+@media (max-width: 480px) {
+    .container {
+        max-width: 100%;
+        padding: 1rem;
+        margin: 1rem 0.5rem;
+    }
+
+    .submitButton,
+    .cancelButton {
+        font-size: 0.875rem; /* 14px */
+        padding: 0.5rem 1rem;
+    }
+
+    .buttonGroup {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

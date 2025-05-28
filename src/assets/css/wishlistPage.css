@@ -1,0 +1,194 @@
+.wishlist-page {
+    padding: 40px 0;
+    max-width: 1200px; /* Match container width from header/promobanner */
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif; /* Or your project's default font */
+}
+
+.wishlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee; /* Optional separator */
+    padding-bottom: 20px;
+}
+
+.wishlist-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.move-all-button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.move-all-button:hover {
+    background-color: #f9f9f9;
+}
+
+.wishlist-items-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Adjusted min width for slightly wider cards */
+    gap: 25px; /* Increased gap */
+}
+
+.wishlist-item {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* For positioning remove button/badges */
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Slightly stronger initial shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add shadow to transition */
+}
+
+.wishlist-item:hover {
+    transform: translateY(-7px); /* More pronounced hover effect */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15); /* Stronger hover shadow */
+}
+
+.wishlistItemImageContainer {
+    position: relative;
+    width: 100%;
+    padding-top: 75%; /* Adjust aspect ratio (4:3 or similar, adjust as needed) */
+    overflow: hidden;
+}
+
+.wishlistItemImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container */
+}
+
+.item-badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 2; /* Above image */
+}
+
+.discount-badge, .new-badge {
+    background-color: #ff0000; /* Red for discount */
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    width: fit-content; /* Shrink to content */
+    text-transform: uppercase;
+}
+
+.new-badge {
+     background-color: #00b000; /* Green for new */
+}
+
+.wishlistRemoveButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.9); /* Less transparent white */
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 20px; /* Slightly larger icon */
+    color: #d32f2f; /* Red color for remove icon */
+    z-index: 2;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.wishlistRemoveButton:hover {
+    background-color: #f5f5f5; /* Lighter on hover */
+    color: #e57373; /* Lighter red on hover */
+}
+
+.wishlistItemInfo {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1; /* Allow info to take available space */
+}
+
+.wishlistItemName {
+    font-size: 17px; /* Slightly larger font size */
+    font-weight: 600; /* Bolder font weight */
+    color: #333;
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if name is too long */
+}
+
+.wishlistItemPrices {
+     display: flex;
+    align-items: baseline; /* Align to baseline */
+    gap: 10px; /* Increased gap */
+}
+
+.wishlistItemDiscountedPrice {
+    font-size: 16px; /* Slightly larger */
+    font-weight: 700; /* Bolder */
+    color: #ff0000; /* Red color for discounted price */
+}
+
+.wishlistItemOriginalPrice {
+     font-size: 14px; /* Slightly larger */
+    color: #888; /* Gray color for original price */
+    text-decoration: line-through;
+}
+
+/* Add to cart button below info */
+.wishlist-add-to-cart-container {
+    padding: 10px 15px 15px;
+    text-align: center;
+}
+
+.wishlist-add-to-cart-button {
+    width: 100%;
+    padding: 12px 0; /* Increased padding */
+    background-color: #000; /* Black button */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px; /* Slightly larger font size */
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.wishlist-add-to-cart-button:hover {
+    background-color: #333; /* Darker on hover */
+}
+
+.wishlist-empty {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #888;
+}
+
+/* Add styles for rating if you include it */
+/* .wishlistItemRating { ... } */ 

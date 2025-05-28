@@ -24,7 +24,7 @@ const tabs = [
 const orders = [
   // Dữ liệu mẫu, bạn có thể thay bằng fetch thực tế
   {
-    id: "302012",
+    id: 302012,
     product: "iPhone 11 Pro",
     img: "https://cdn.tgdd.vn/Products/Images/42/190322/iphone-11-pro-max-green-600x600.jpg",
     note: "Không có",
@@ -35,7 +35,7 @@ const orders = [
     products: 3,
   },
   {
-    id: "302013",
+    id: 302013,
     product: "iPhone 11 Pro",
     img: "https://cdn.tgdd.vn/Products/Images/42/190322/iphone-11-pro-max-green-600x600.jpg",
     note: "Không có",
@@ -46,7 +46,7 @@ const orders = [
     products: 3,
   },
   {
-    id: "302014",
+    id: 302014,
     product: "iPhone 11 Pro",
     img: "https://cdn.tgdd.vn/Products/Images/42/190322/iphone-11-pro-max-green-600x600.jpg",
     note: "Không có",

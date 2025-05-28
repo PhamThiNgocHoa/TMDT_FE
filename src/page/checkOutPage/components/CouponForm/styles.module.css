@@ -1,59 +1,98 @@
+/* Container form nhập coupon */
 .couponForm {
   display: flex;
   align-items: flex-end;
-  gap: 16px;
+  gap: 1rem; /* 16px */
   width: 100%;
-  margin-top: 32px;
+  max-width: 100%;
+  margin-top: 2rem; /* 32px */
+  flex-wrap: wrap; /* để xuống dòng khi nhỏ */
+  box-sizing: border-box;
 }
 
+/* Khung input coupon */
 .couponInput {
   position: relative;
-  width: 300px;
-  height: 56px;
-  border: 1px solid #000000;
+  width: 260px;  /* nhỏ hơn 300px */
+  height: 48px;  /* nhỏ hơn 56px */
+  border: 1px solid #000;
   border-radius: 4px;
   overflow: hidden;
+  box-sizing: border-box;
+  flex-grow: 1; /* để co dãn */
+  min-width: 160px; /* giới hạn nhỏ nhất */
 }
 
+/* Input text */
 .input {
   width: 100%;
   height: 100%;
-  padding: 0 16px;
+  padding: 0 1rem; /* 16px */
   font-family: Poppins, sans-serif;
-  font-size: 16px;
+  font-size: 14px; /* nhỏ hơn 16px */
   font-weight: 400;
-  line-height: 24px;
-  color: #000000;
+  line-height: 20px; /* nhỏ hơn 24px */
+  color: #000;
   border: none;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .input::placeholder {
   color: rgba(0, 0, 0, 0.5);
 }
 
+/* Nút áp dụng coupon */
 .applyButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 165px;
-  height: 56px;
+  width: 140px; /* nhỏ hơn 165px */
+  height: 48px; /* nhỏ hơn 56px */
   background-color: #db4444;
   border-radius: 4px;
   border: none;
   cursor: pointer;
   font-family: Poppins, sans-serif;
-  font-size: 16px;
+  font-size: 14px; /* nhỏ hơn 16px */
   font-weight: 500;
-  line-height: 24px;
+  line-height: 20px; /* nhỏ hơn 24px */
   color: #f9f9f9;
   transition: background-color 0.2s;
+  user-select: none;
+  box-sizing: border-box;
 }
 
-.applyButton:hover {
+.applyButton:hover:not(:disabled) {
   background-color: #c53030;
 }
 
 .applyButton:disabled {
   background-color: #f0a0a0;
   cursor: not-allowed;
+}
+
+/* Responsive cho tablet và mobile */
+@media (max-width: 600px) {
+  .couponForm {
+    gap: 0.75rem; /* 12px */
+  }
+
+  .couponInput {
+    width: 100%;
+    min-width: unset;
+    height: 44px;
+  }
+
+  .input {
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .applyButton {
+    width: 100%;
+    height: 44px;
+    font-size: 13px;
+    line-height: 18px;
+  }
 }

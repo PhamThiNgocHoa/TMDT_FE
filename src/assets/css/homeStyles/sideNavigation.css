@@ -1,21 +1,21 @@
 .side-navigation {
   position: absolute;
-  top: 182px;
+  top: 160px;
   left: 0;
-  width: 212px;
-  padding-left: 10%;
+  width: clamp(160px, 20vw, 212px);
+  padding-left: 5%;
   z-index: 10;
-  background-color: #f0f0f0;
+  background-color: #f9f9f9;
   border-right: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
 }
 
 .side-nav {
-  padding: 16px 0;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .side-nav-list {
@@ -24,16 +24,16 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .side-nav-item {
   display: flex;
-  height: 52px;
+  height: 44px;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  font-size: 20px;
+  padding: 0.5rem 1rem;
+  font-size: clamp(0.9375rem, 1vw, 1.125rem); /* ~15–18px */
   font-weight: 500;
   border-radius: 8px;
   color: #333;
@@ -45,18 +45,18 @@
 
 .side-nav-item:hover {
   background-color: #f60404;
-  color: #090909;
+  color: #fff;
   transform: translateX(4px);
 }
 
 .side-nav-item.active {
   background-color: #ffecec;
   color: #db4444;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .dropdown-icon {
-  font-size: 14px;
+  font-size: 0.75rem;
   color: #999;
   transition: transform 0.3s;
 }
