@@ -144,6 +144,11 @@
   box-shadow: 0 2px 8px rgba(215, 38, 61, 0.08);
   color: #d7263d;
 }
+.custom-category-item.active {
+  border: 2px solid #ff9800;
+  color: #ff9800;
+  background: #fff7e6;
+}
 .custom-category-icon {
   font-size: 2rem;
   margin-bottom: 8px;

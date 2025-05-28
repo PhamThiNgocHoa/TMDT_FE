@@ -1,28 +1,28 @@
-import {ProductImage} from "../../page/homePage/types/product";
-import {RatingResponse} from "./RatingResponse";
-import {ProductColorResponse} from "./ProductColorResponse";
-import {ProductSizeResponse} from "./ProductSizeResponse";
-import {ProductImageResponse} from "./ProductImageResponse";
+import { ProductImage } from "../../page/homePage/types/product";
+import { RatingResponse } from "./RatingResponse";
+import { ProductColorResponse } from "./ProductColorResponse";
+import { ProductSizeResponse } from "./ProductSizeResponse";
+import { ProductImageResponse } from "./ProductImageResponse";
 
 export interface ProductResponse {
-    id: number;
-    name: string;
-    category: string;
+  id: number;
+  name: string;
+  category: string;
 
-    images: ProductImage[];
-    img?: string;
+  images: ProductImage[];
+  img?: string;
 
-    price: number;
-    originalPrice?: number;
-    discountPercentage?: number;
-    discount?: string;
+  price: number;
+  originalPrice?: number;
+  discountPercentage?: number;
+  discount?: string;
 
-    description?: string;
-    ratings?: RatingResponse[];
-    inStock?: boolean;
-    productNew?: boolean;
+  description?: string;
+  ratings?: RatingResponse[];
+  inStock?: boolean;
+  productNew?: boolean;
 
-    productColors: ProductColorResponse[];
-    productSizes: ProductSizeResponse[];
-    productImages: ProductImageResponse[];
+  productColors: ProductColorResponse[];
+  productSizes: ProductSizeResponse[];
+  productImages: ProductImageResponse[];
 }

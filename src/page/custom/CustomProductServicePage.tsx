@@ -139,7 +139,13 @@ const CustomSidebar = () => (
   </aside>
 );
 
-const CustomCategorySection = () => (
+const CustomCategorySection = ({
+  selectedCategory,
+  setSelectedCategory,
+}: {
+  selectedCategory: string;
+  setSelectedCategory: (cat: string) => void;
+}) => (
   <section className="custom-category-section">
     <SectionHeader
       label="Sản phẩm xách tay/custom"
@@ -157,7 +163,13 @@ const CustomCategorySection = () => (
     </div>
     <div className="custom-category-list">
       {customCategories.map((cat, idx) => (
-        <div className="custom-category-item" key={idx}>
+        <div
+          className={`custom-category-item${
+            selectedCategory === cat.label ? " active" : ""
+          }`}
+          key={idx}
+          onClick={() => setSelectedCategory(cat.label)}
+        >
           <div className="custom-category-icon">{iconMap[cat.icon]}</div>
           <div className="custom-category-label">{cat.label}</div>
         </div>
@@ -377,15 +389,152 @@ const CustomBenefitsSection = () => (
   </section>
 );
 
+const CustomServiceList = () => (
+  <section className="custom-service-list-section">
+    <SectionHeader label="Dịch vụ custom" title="Custom phím cơ" />
+    <div style={{ textAlign: "right", marginBottom: 16 }}>
+      <a
+        href="#"
+        style={{ color: "#d7263d", fontWeight: 500, fontSize: "1rem" }}
+      >
+        Xem chính sách cho Custom bàn phím cơ
+      </a>
+    </div>
+    <div className="custom-product-list">
+      {/* Thay bằng dữ liệu thực tế nếu có */}
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/1.jpg" alt="Lót foam phím cơ" />
+        <div className="custom-product-name">Lót foam phím cơ</div>
+        <div className="custom-product-price">30.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/2.jpg" alt="PE mod" />
+        <div className="custom-product-name">PE mod</div>
+        <div className="custom-product-price">20.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/3.jpg" alt="Tape mod" />
+        <div className="custom-product-name">Tape mod</div>
+        <div className="custom-product-price">15.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/4.jpg" alt="Stab mod" />
+        <div className="custom-product-name">Stab mod</div>
+        <div className="custom-product-price">90.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/5.jpg" alt="Lube switch" />
+        <div className="custom-product-name">Lube switch</div>
+        <div className="custom-product-price">3.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/6.jpg" alt="Recoat/Resonade sơn" />
+        <div className="custom-product-name">Recoat/Resonade sơn</div>
+        <div className="custom-product-price">400.000₫ - 1.200.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <Link
+        to="/custom-product/khac-ten-chu-ky"
+        className="custom-product-card"
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <img src="https://i.imgur.com/7.jpg" alt="Khắc tên/chữ ký" />
+        <div className="custom-product-name">Khắc tên/chữ ký</div>
+        <div className="custom-product-price">300.000₫ - 650.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </Link>
+    </div>
+  </section>
+);
+
+const CustomMouseServiceList = () => (
+  <section className="custom-service-list-section">
+    <SectionHeader label="Dịch vụ custom" title="Custom chuột" />
+    <div style={{ textAlign: "right", marginBottom: 16 }}>
+      <a
+        href="#"
+        style={{ color: "#d7263d", fontWeight: 500, fontSize: "1rem" }}
+      >
+        Xem chính sách cho Custom chuột
+      </a>
+    </div>
+    <div className="custom-product-list">
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/8.jpg" alt="Thay switch chuột" />
+        <div className="custom-product-name">Thay switch chuột</div>
+        <div className="custom-product-price">100.000₫ - 350.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/9.jpg" alt="Thay feet chuột" />
+        <div className="custom-product-name">Thay feet chuột</div>
+        <div className="custom-product-price">35.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/10.jpg" alt="Coating chuột" />
+        <div className="custom-product-name">Coating chuột</div>
+        <div className="custom-product-price">250.000₫ - 750.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+      <div className="custom-product-card">
+        <img src="https://i.imgur.com/11.jpg" alt="Vẽ hình custom lên chuột" />
+        <div className="custom-product-name">Vẽ hình custom lên chuột</div>
+        <div className="custom-product-price">450.000₫ - 950.000₫</div>
+        <div className="custom-product-rating">
+          ★★★★★ <span className="custom-product-reviews">(65)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 const CustomProductServicePage = () => {
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("Bàn phím cơ");
+
   return (
     <div className="custom-page-layout">
       <CustomSidebar />
       <main className="custom-main-content">
         <PromoBanner />
-        <CustomCategorySection />
-        <TopHotProductsSection />
-        <FeaturedProductsSection />
+        <CustomCategorySection
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        {selectedCategory !== "Dịch vụ custom" && <TopHotProductsSection />}
+        {selectedCategory !== "Dịch vụ custom" && <FeaturedProductsSection />}
+        {selectedCategory === "Dịch vụ custom" && (
+          <>
+            <CustomServiceList />
+            <CustomMouseServiceList />
+          </>
+        )}
         <CustomBenefitsSection />
       </main>
     </div>
