@@ -1,89 +1,80 @@
-import React, { useState } from 'react';
-import '../../../assets/css/homeStyles/productCard.css';
-import { useWishlist } from '../../../context/WishlistContext';
+import React, { useState } from "react";
+import "../../../assets/css/homeStyles/productCard.css";
+import { useWishlist } from "../../../context/WishlistContext";
 import formatToVND from "../../../hooks/formatToVND";
 import { ProductResponse } from "../../../models/response/ProductResponse";
 
 interface ProductCardProps {
-    product: ProductResponse;
-    onProductClick: (productId: number) => void;
+  product: ProductResponse;
+  onProductClick: (productId: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick, }) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onProductClick,
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { addOrRemoveFromWishlist, isInWishlist } = useWishlist();
 
-    const isFavorited = isInWishlist(product.id);
+  const isFavorited = isInWishlist(product.id);
 
-    const handleWishlistClick = (event: React.MouseEvent) => {
-        event.stopPropagation();
-        addOrRemoveFromWishlist(product.id);
-    };
+  const handleWishlistClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    addOrRemoveFromWishlist(product.id);
+  };
 
-    return (
-        <article
-            className={`product-card ${isHovered ? 'hovered' : ''}`}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={() => onProductClick(product.id)}
-        >
-            <div className="product-image-container">
-                {product.discount && parseFloat(product.discount) > 0 && (
-                    <div className="discount-badge">
-                        -{product.discount}
-                    </div>
-                )}
+  return (
+    <article
+      className={`product-card ${isHovered ? "hovered" : ""}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => onProductClick(product.id)}
+    >
+      <div className="product-image-container">
+        {product.discount && parseFloat(product.discount) > 0 && (
+          <div className="discount-badge">-{product.discount}</div>
+        )}
 
-                {product.productNew && (
-                    <div className="new-badge">
-                        NEW
-                    </div>
-                )}
+        {product.productNew && <div className="new-badge">NEW</div>}
 
-                <div className="product-actions">
-                    <button
-                        className={`action-btn wishlist-btn ${isFavorited ? 'favorited' : ''}`}
-                        onClick={handleWishlistClick}
-                    >
-                        <span className="icon">❤️</span>
-                    </button>
-                    <button className="action-btn quickview-btn">
-                        <span className="icon">👁️</span>
-                    </button>
-                </div>
+        <div className="product-actions">
+          <button
+            className={`action-btn wishlist-btn ${
+              isFavorited ? "favorited" : ""
+            }`}
+            onClick={handleWishlistClick}
+          >
+            <span className="icon">❤️</span>
+          </button>
+          <button className="action-btn quickview-btn">
+            <span className="icon">👁️</span>
+          </button>
+        </div>
 
-                <img
-                    src={product.img}
-                    alt={product.name}
-                    className="product-image"
-                />
+        <img src={product.img} alt={product.name} className="product-image" />
 
-                {isHovered && (
-                    <div className="add-to-cart-container">
-                        <button className="add-to-cart-btn">
-                            Thêm vào giỏ hàng
-                        </button>
-                    </div>
-                )}
-            </div>
+        {isHovered && (
+          <div className="add-to-cart-container">
+            <button className="add-to-cart-btn">Thêm vào giỏ hàng</button>
+          </div>
+        )}
+      </div>
 
-            <div className="product-info">
-                <h3 className="product-name">{product.name}</h3>
+      <div className="product-info">
+        <h3 className="product-name">{product.name}</h3>
 
-                <div className="product-price">
-                    <span className="current-price">
-                        {formatToVND(product.price)}
-                    </span>
+        <div className="product-price">
+          <span className="current-price">{formatToVND(product.price)}</span>
 
-                    {formatToVND(product.originalPrice ?? 0) && (
-                        <span className="original-price">
-                            {formatToVND(product.originalPrice ?? 0)}
-                        </span>
-                    )}
-                </div>
-            </div>
-        </article>
-    );
+          {formatToVND(product.originalPrice ?? 0) && (
+            <span className="original-price">
+              {formatToVND(product.originalPrice ?? 0)}
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
 };
 
 export default ProductCard;
