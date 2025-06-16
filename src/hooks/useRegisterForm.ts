@@ -18,7 +18,6 @@ export const useRegisterForm = () => {
     const [isPhoneValid, setIsPhoneValid] = useState(true);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
 
-    // Kiểm tra tên người dùng đã tồn tại hay chưa
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             if (username.length >= 2) {

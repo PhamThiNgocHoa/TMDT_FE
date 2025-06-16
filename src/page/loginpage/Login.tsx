@@ -12,7 +12,6 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleLogins = async () => {
-        // Kiểm tra thông tin đầu vào
         if (!username || !password) {
             return Swal.fire({
                 icon: 'warning',
@@ -22,10 +21,8 @@ const Login = () => {
         }
 
         try {
-            // Gọi hàm login từ hook useCustomer
             const response = await handleLogin(username, password);
 
-            // Kiểm tra mã trạng thái từ response (axios trả về status, không phải ok)
             if (response && response.success) {
                 Swal.fire({
                     icon: 'success',
@@ -34,7 +31,6 @@ const Login = () => {
                     showConfirmButton: false,
                 }).then(() => navigate('/home'));
             } else {
-                // Nếu không thành công, hiển thị thông báo lỗi
                 Swal.fire({
                     icon: 'error',
                     title: 'Đăng nhập thất bại',
@@ -42,7 +38,6 @@ const Login = () => {
                 });
             }
         } catch (error) {
-            // Xử lý lỗi nếu có sự cố với kết nối
             console.error('Lỗi kết nối:', error);
             Swal.fire({
                 icon: 'error',
