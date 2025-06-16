@@ -10,7 +10,6 @@ export const SearchBar = () => {
     const [showResults, setShowResults] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    // Thực hiện gọi API tìm kiếm sản phẩm
     const performSearch = async (term: string) => {
         if (term.trim() === '') {
             setSearchResults([]);
@@ -31,7 +30,6 @@ export const SearchBar = () => {
         }
     };
 
-    // Debounce input để tránh gọi API liên tục
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             performSearch(searchTerm);

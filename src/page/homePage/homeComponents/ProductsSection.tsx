@@ -7,18 +7,7 @@ import useProduct from "../../../hooks/useProduct";
 
 const ProductsSection: React.FC = () => {
     const navigate = useNavigate();
-    const {fetchGetListProduct, products} = useProduct();
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await fetchGetListProduct();
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        fetchData();
-
-    }, [fetchGetListProduct]);
+    const {products} = useProduct();
 
     const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);

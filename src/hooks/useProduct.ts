@@ -64,7 +64,7 @@ function useProduct() {
         };
 
         fetchData();
-    }, [getProductSale]);
+    }, []);
 
 
     const fetchListFindByName = async (name: string): Promise<ProductResponse[]> => {

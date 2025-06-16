@@ -1,4 +1,3 @@
-import {Product} from "../../../models/Product";
 import ApiService from "../ApiService";
 import {Category} from "../../../models/Category";
 import {ProductResponse} from "../../../models/response/ProductResponse";
