@@ -6,7 +6,6 @@ import { ProductGallery } from "./ProductGallery";
 import { ProductInfo } from "./ProductInfo";
 import ProductReviewsSection from "./ProductReviewsSection";
 import { RelatedProducts } from "./RelatedProducts";
-import { relatedProducts } from "./mockData";
 
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -42,11 +41,6 @@ export default function ProductDetailsPage() {
   if (error) return <div>{error}</div>;
   if (!products) return <div>Không tìm thấy sản phẩm</div>;
 
-  // const breadcrumbItems = [
-  //     { label: 'Home', path: '/' },
-  //     { label: product.category, path: `/${product.category.toLowerCase()}` },
-  //     { label: product.name, path: '' },
-  // ];
 
   return (
     <main className={styles.productDetailspage}>
@@ -66,7 +60,7 @@ export default function ProductDetailsPage() {
 
         <ProductReviewsSection />
 
-        <RelatedProducts products={relatedProducts} />
+        <RelatedProducts products={products} />
       </section>
     </main>
   );

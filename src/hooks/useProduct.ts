@@ -23,26 +23,12 @@ function useProduct() {
         throw new Error(message);
     };
 
-    const fetchGetListProduct = async (): Promise<ProductResponse[]> => {
-        setLoading(true);
-        try {
-            const data = await getListProduct();
-            setProducts(data);
-            return data;
-        } catch (error) {
-            handleError(error);
-            return [];
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const fetchGetProductById = async (id: number): Promise<ProductResponse | undefined> => {
         setLoading(true);
         try {
             const data = await getProductById(id);
-            console.log(data);
-            return data;  // chỉ trả về, không set state trong hook
+            setProducts(data ? [data] : []);
+            return data;
         } catch (error) {
             handleError(error);
             return undefined;
@@ -55,8 +41,10 @@ function useProduct() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const product = await getListProduct();
                 const data = await getProductSale();
                 setSaleProducts(data);
+                setProducts(product)
 
             } catch (error) {
                 console.log(error);
@@ -83,7 +71,6 @@ function useProduct() {
         products,
         error,
         loading,
-        fetchGetListProduct,
         fetchGetProductById,
         setProducts,
         saleProducts, setSaleProducts,

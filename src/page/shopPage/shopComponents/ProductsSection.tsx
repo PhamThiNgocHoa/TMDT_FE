@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from 'react';
-
-interface Product {
-    id: number;
-    name: string;
-    img: string;
-    price: number;
-    originalPrice?: number;
-    discount?: string;
-    productNew?: boolean;
-    inStock: boolean;
-    rating: number;
-    brand: string;
-}
+import React, {useEffect, useState} from 'react';
+import useProduct from "../../../hooks/useProduct";
+import useCategory from "../../../hooks/useCategory";
 
 interface Filters {
     inStock: boolean | null;
     priceRange: { min: number; max: number };
     rating: number;
-    brand: string;
+    categoryName: string;
 }
 
 interface SelectedFilters {
@@ -25,39 +14,23 @@ interface SelectedFilters {
 }
 
 const ProductsSection: React.FC = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const {products, setProducts} = useProduct();
+    const {categories} = useCategory();
     const [visibleProducts, setVisibleProducts] = useState<number>(16);
     const [filters, setFilters] = useState<Filters>({
         inStock: null,
-        priceRange: { min: 0, max: 1000000 },
+        priceRange: {min: 0, max: 1000000},
         rating: 1,
-        brand: ''
+        categoryName: ''
     });
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
     const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(false); // State kiểm soát việc ẩn/hiện filters
 
-    // Hàm xử lý khi nhấn "Xem thêm"
     const handleLoadMore = () => {
         setVisibleProducts(prev => prev + 16);
     };
 
-    useEffect(() => {
-        const dummyProducts: Product[] = Array.from({ length: 50 }, (_, index) => ({
-            id: index + 1,
-            name: `Sản phẩm ${index + 1}`,
-            img: 'https://via.placeholder.com/250x250',
-            price: 500000 + index * 10000,
-            originalPrice: 600000 + index * 10000,
-            discount: '10%',
-            productNew: index % 2 === 0,
-            inStock: index % 2 === 0,
-            rating: Math.floor(Math.random() * 5) + 1,
-            brand: index % 2 === 0 ? 'Brand A' : 'Brand B'
-        }));
-
-        setProducts(dummyProducts);
-    }, []);
 
     const applyFilters = () => {
         const filtered = products.filter(product => {
@@ -65,8 +38,8 @@ const ProductsSection: React.FC = () => {
                 (filters.inStock === null || product.inStock === filters.inStock) &&
                 product.price >= filters.priceRange.min &&
                 product.price <= filters.priceRange.max &&
-                product.rating >= filters.rating &&
-                (filters.brand === '' || product.brand === filters.brand)
+                // product.ratings >= filters.rating &&
+                (filters.categoryName === '' || product.categoryName === filters.categoryName)
             );
         });
         return filtered;
@@ -91,17 +64,17 @@ const ProductsSection: React.FC = () => {
     const handleResetFilters = () => {
         setFilters({
             inStock: null,
-            priceRange: { min: 0, max: 1000000 },
+            priceRange: {min: 0, max: 1000000},
             rating: 1,
-            brand: ''
+            categoryName: ''
         });
         setSelectedFilters({});
         setIsFiltered(false);
     };
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'min' | 'max') => {
-        const newPriceRange = { ...filters.priceRange, [type]: parseInt(e.target.value) };
-        setFilters(prev => ({ ...prev, priceRange: newPriceRange }));
+        const newPriceRange = {...filters.priceRange, [type]: parseInt(e.target.value)};
+        setFilters(prev => ({...prev, priceRange: newPriceRange}));
     };
 
     const filteredProducts = isFiltered ? applyFilters() : products;
@@ -143,7 +116,7 @@ const ProductsSection: React.FC = () => {
                                 onClick={() => handleFilterChange('rating', rating)}
                             >
                                 {[...Array(rating)].map((_, index) => (
-                                    <span key={index} style={{ color: 'gold', fontSize: '20px' }}>
+                                    <span key={index} style={{color: 'gold', fontSize: '20px'}}>
                                         ★
                                     </span>
                                 ))}
@@ -152,17 +125,18 @@ const ProductsSection: React.FC = () => {
                     </div>
 
                     <div className="filter-group">
-                        <h4>Hãng</h4>
-                        {['Brand A', 'Brand B'].map(brand => (
+                        <h4>Danh mục</h4>
+                        {categories.map(category => (
                             <button
-                                key={brand}
-                                className={`filter-btn ${filters.brand === brand ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('brand', brand)}
+                                key={category.id}
+                                className={`filter-btn ${filters.categoryName === category.name ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('categoryName', category.name)}
                             >
-                                {brand}
+                                {category.name}
                             </button>
                         ))}
                     </div>
+
 
                     <div className="filter-group">
                         <h4>Lọc theo Giá</h4>
@@ -201,7 +175,7 @@ const ProductsSection: React.FC = () => {
                                     <span key={filterKey} className="selected-filter-item">
                                         {filterKey === 'inStock' ? (value ? 'Còn hàng' : 'Hết hàng') :
                                             filterKey === 'rating' ? `${value} sao` :
-                                                filterKey === 'brand' ? value :
+                                                filterKey === 'categoryName' ? value :
                                                     ''}
                                     </span>
                                 );
@@ -230,7 +204,7 @@ const ProductsSection: React.FC = () => {
                                         -{product.discount}
                                     </div>
                                 )}
-                                <img src={product.img} alt={product.name} className="product-image" />
+                                <img src={product.img} alt={product.name} className="product-image"/>
                             </div>
 
                             <div className="product-info">
