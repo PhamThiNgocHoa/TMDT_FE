@@ -15,6 +15,7 @@ interface SelectedFilters {
 
 const ProductsSection: React.FC = () => {
     const {products, setProducts} = useProduct();
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | ''>(''); // '' = không sắp xếp
     const {categories} = useCategory();
     const [visibleProducts, setVisibleProducts] = useState<number>(16);
     const [filters, setFilters] = useState<Filters>({
@@ -33,17 +34,24 @@ const ProductsSection: React.FC = () => {
 
 
     const applyFilters = () => {
-        const filtered = products.filter(product => {
+        let filtered = products.filter(product => {
             return (
                 (filters.inStock === null || product.inStock === filters.inStock) &&
                 product.price >= filters.priceRange.min &&
                 product.price <= filters.priceRange.max &&
-                // product.ratings >= filters.rating &&
                 (filters.categoryName === '' || product.categoryName === filters.categoryName)
             );
         });
+
+        if (sortOrder === 'asc') {
+            filtered.sort((a, b) => a.price - b.price);
+        } else if (sortOrder === 'desc') {
+            filtered.sort((a, b) => b.price - a.price);
+        }
+
         return filtered;
     };
+
 
     const handleFilterChange = (filterType: string, value: any) => {
         setFilters(prev => ({
@@ -164,7 +172,33 @@ const ProductsSection: React.FC = () => {
                                 />
                             </label>
                         </div>
+
+                        <div className="sort-options"
+                             style={{display: 'flex', alignItems: 'center', gap: '12px', margin: '20px 0'}}>
+                            <label htmlFor="sortPrice" style={{fontWeight: 'bold', fontSize: '16px'}}>
+                                Sắp xếp theo giá:
+                            </label>
+                            <select
+                                id="sortPrice"
+                                value={sortOrder}
+                                onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc' | '')}
+                                style={{
+                                    padding: '8px 12px',
+                                    fontSize: '14px',
+                                    borderRadius: '6px',
+                                    border: '1px solid #ccc',
+                                    outline: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <option value="">Không sắp xếp</option>
+                                <option value="asc">Tăng dần</option>
+                                <option value="desc">Giảm dần</option>
+                            </select>
+                        </div>
+
                     </div>
+
 
                     <div className="selected-filters">
                         <div><h3>Tiêu chí đã chọn:</h3></div>

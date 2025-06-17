@@ -5,6 +5,8 @@ import SectionHeader from "../../page/homePage/homeComponents/SectionHeader";
 import { topProducts } from "../../page/homePage/data/products";
 import { Link } from "react-router-dom";
 import formatToVND from "../../hooks/formatToVND";
+import useCategory from "../../hooks/useCategory";
+import useProduct from "../../hooks/useProduct";
 
 const sidebarMenu = [
   { label: "Bàn phím", active: false },
@@ -23,6 +25,7 @@ const customCategories = [
   { icon: "headphone", label: "Tai nghe" },
   { icon: "custom", label: "Dịch vụ custom" },
 ];
+
 
 const iconMap: Record<string, React.ReactNode> = {
   keyboard: (
@@ -236,76 +239,80 @@ const FilterBox = ({
 
 const TopHotProductsSection = () => {
   const [filterOpen, setFilterOpen] = useState(false);
+  const {products} = useProduct();
   return (
-    <section className="custom-top-hot-section">
-      <div className="custom-filter-row" style={{ position: "relative" }}>
-        <button
-          className="custom-filter-btn"
-          onClick={() => setFilterOpen(!filterOpen)}
-        >
+      <section className="custom-top-hot-section">
+        <div className="custom-filter-row" style={{position: "relative"}}>
+          <button
+              className="custom-filter-btn"
+              onClick={() => setFilterOpen(!filterOpen)}
+          >
           <span role="img" aria-label="filter">
             ⚙️
           </span>{" "}
-          Bộ lọc
-        </button>
-        <FilterBox open={filterOpen} onClose={() => setFilterOpen(false)} />
-      </div>
-      <div className="custom-top-hot-header">
-        <SectionHeader label="Tháng này" title="Top Sản Phẩm Hot" />
-        <button className="custom-view-all small">Xem Tất Cả</button>
-      </div>
-      <div className="custom-product-list">
-        {topProducts.slice(0, 5).map((p) => (
-          <Link
-            to={`/product/${p.id}`}
-            key={p.id}
-            className="custom-product-card"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <div className="custom-product-img">
-              <img src={p.img} alt={p.name} />
-              <div className="custom-product-icons">
-                <span>♥</span>
-                <span>👁</span>
-              </div>
-            </div>
-            <div className="custom-product-name">{p.name}</div>
-            <div className="custom-product-price">{formatToVND(p.price)}</div>
-            <div className="custom-product-rating">
-              {"★".repeat(Math.round(5))}
-              <span className="custom-product-reviews">(10)</span>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
+            Bộ lọc
+          </button>
+          <FilterBox open={filterOpen} onClose={() => setFilterOpen(false)}/>
+        </div>
+        <div className="custom-top-hot-header">
+          <SectionHeader label="Tháng này" title="Top Sản Phẩm Hot"/>
+          <button className="custom-view-all small">Xem Tất Cả</button>
+        </div>
+        <div className="custom-product-list">
+          {products
+              .filter((p) => p.hot === true)
+              .slice(0, 5)
+              .map((p) => (
+                  <Link
+                      to={`/product/${p.id}`}
+                      key={p.id}
+                      className="custom-product-card"
+                      style={{textDecoration: "none", color: "inherit"}}
+                  >
+                    <div className="custom-product-img">
+                      <img src={p.img} alt={p.name}/>
+                      <div className="custom-product-icons">
+                        <span>♥</span>
+                        <span>👁</span>
+                      </div>
+                    </div>
+                    <div className="custom-product-name">{p.name}</div>
+                    <div className="custom-product-price">{formatToVND(p.price)}</div>
+                    <div className="custom-product-rating">
+                      {"★".repeat(Math.round(5))}
+                      <span className="custom-product-reviews">(10)</span>
+                    </div>
+                  </Link>
+              ))}
+        </div>
+      </section>
   );
 };
 
 const FeaturedProductsSection = () => (
-  <section className="custom-featured-section">
-    <div className="custom-featured-header">
-      <SectionHeader label="Sản phẩm" title="Các sản phẩm tiêu biểu" />
-      <div className="custom-featured-nav">
-        <button className="custom-category-arrow">
-          <span>&larr;</span>
-        </button>
-        <button className="custom-category-arrow">
-          <span>&rarr;</span>
-        </button>
+    <section className="custom-featured-section">
+      <div className="custom-featured-header">
+        <SectionHeader label="Sản phẩm" title="Các sản phẩm tiêu biểu"/>
+        <div className="custom-featured-nav">
+          <button className="custom-category-arrow">
+            <span>&larr;</span>
+          </button>
+          <button className="custom-category-arrow">
+            <span>&rarr;</span>
+          </button>
+        </div>
       </div>
-    </div>
-    <div className="custom-featured-list">
-      {topProducts.slice(0, 8).map((p) => (
-        <Link
-          to={`/product/${p.id}`}
-          key={p.id}
-          className="custom-product-card"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <div className="custom-product-img">
-            <img src={p.img} alt={p.name} />
-            <div className="custom-product-icons">
+      <div className="custom-featured-list">
+        {topProducts.slice(0, 8).map((p) => (
+            <Link
+                to={`/product/${p.id}`}
+                key={p.id}
+                className="custom-product-card"
+                style={{textDecoration: "none", color: "inherit"}}
+            >
+              <div className="custom-product-img">
+                <img src={p.img} alt={p.name}/>
+                <div className="custom-product-icons">
               <span>♥</span>
               <span>👁</span>
             </div>
