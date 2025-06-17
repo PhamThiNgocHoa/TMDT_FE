@@ -11,7 +11,6 @@ export const getListProduct = async (): Promise<ProductResponse[]> => {
     return result.data;
 
 };
-
 export const searchProduct = async (name: string): Promise<ProductResponse[]> => {
     const result = await ApiService.get(`/api/product/search?name=${encodeURIComponent(name)}`, false);
     return result.data;

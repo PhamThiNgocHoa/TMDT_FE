@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useRef } from 'react';
 import styles from './ProductDetailsPage.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
