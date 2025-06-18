@@ -7,7 +7,8 @@ import { ProductImageResponse } from "./ProductImageResponse";
 export interface ProductResponse {
   id: number;
   name: string;
-  category: string;
+  categoryId: number;
+  categoryName: string;
 
   images: ProductImage[];
   img?: string;
@@ -20,6 +21,7 @@ export interface ProductResponse {
   description?: string;
   ratings?: RatingResponse[];
   inStock?: boolean;
+  hot?: boolean;
   productNew?: boolean;
 
   productColors: ProductColorResponse[];

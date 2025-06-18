@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Customer} from "../models/Customer";
 import {authenticate, login, register} from "../server/api/authentication/auth.post";
 import {checkUsername, getQuantity, getUser} from "../server/api/customers/customer.get";
@@ -70,6 +70,20 @@ function useCustomer() {
             setLoading(false);
         }
     };
+=======
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const userData = await getUser();
+                setUser(userData);
+            } catch (err) {
+                handleError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const fetchQuantity = async (userId: number) => {
         setLoading(true);

@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './ProductDetailsPage.module.css';
-import {ProductImage} from "../homePage/types/product";
 import {ProductImageResponse} from "../../models/response/ProductImageResponse";
 
 interface ProductGalleryProps {

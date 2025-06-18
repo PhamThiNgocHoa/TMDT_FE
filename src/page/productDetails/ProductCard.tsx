@@ -1,15 +1,14 @@
-"use client";
-
+// ProductCard.tsx
 import React, { useState } from 'react';
 import styles from './ProductDetailsPage.module.css';
-import {Product} from "../homePage/types/product";
+import { ProductResponse } from "../../models/response/ProductResponse";
 
 interface ProductCardProps {
-    product: Product;
+    product: ProductResponse;
     onProductClick: (productId: number) => void;
 }
 
-export const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
@@ -26,8 +25,8 @@ export const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
                     </div>
                 )}
                 <img
-                    src={product.images[0].url}
-                    alt={product.images[0].alt}
+                    src={product.images?.[0]?.url || ''}
+                    alt={product.images?.[0]?.alt || ''}
                     className={styles.productImage}
                 />
                 <div className={styles.cardActions}>
@@ -48,11 +47,9 @@ export const ProductCard = ({ product, onProductClick }: ProductCardProps) => {
                     <span className={styles.currentPrice}>{product.price}</span>
                     <span className={styles.originalPrice}>{product.originalPrice}</span>
                 </div>
-                <div className={styles.ratingContainer}>
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/8cda283d174f19b5b1547fe96a68a3e9596ab80e?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29" alt="Rating" className={styles.ratingStars} />
-                    <span className={styles.reviewCount}>({product.reviews})</span>
-                </div>
             </div>
         </article>
     );
 };
+
+export default ProductCard;
