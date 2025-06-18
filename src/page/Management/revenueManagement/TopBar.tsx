@@ -46,7 +46,7 @@ export function TopBar() {
                 <div className={styles.user2}>
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/d9489724afda4db4c0fcd3345c257e93cd0abccb?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29" className={styles.img14} alt="User avatar" />
                     <div className={styles.name}>
-                        <span className={styles.feyzIbrahim}>Thanh Dao</span>
+                        <span className={styles.feyzIbrahim}>Admin member</span>
                         <span className={styles.admin}>Admin</span>
                     </div>
                     <button
