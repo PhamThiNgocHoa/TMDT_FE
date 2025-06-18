@@ -22,6 +22,8 @@ export interface ProductResponse {
   ratings?: RatingResponse[];
   inStock?: boolean;
   hot?: boolean;
+  featured?: boolean;
+  type?: string;
   productNew?: boolean;
 
   productColors: ProductColorResponse[];
