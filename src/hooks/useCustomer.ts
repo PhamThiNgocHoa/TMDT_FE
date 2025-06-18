@@ -70,7 +70,6 @@ function useCustomer() {
             setLoading(false);
         }
     };
-=======
     useEffect(() => {
         const fetchUser = async () => {
             try {
