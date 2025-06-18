@@ -125,8 +125,16 @@
 .custom-category-list {
   display: flex;
   gap: 18px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+overflow-x: auto;
+scrollbar-width: none;
+-ms-overflow-style: none;
 }
+
+.custom-category-list::-webkit-scrollbar {
+  display: none;
+}
+
 .custom-category-item {
   background: #fff;
   border: 1.5px solid #eee;
