@@ -8,6 +8,7 @@ import {changePassword} from "../server/api/customers/customer.patch";
 import {updateCustomer} from "../server/api/customers/customer.put";
 import {IntrospectRequest} from "../models/request/IntrospectRequest";
 import {CustomerResponse} from "../models/response/CustomerResponse";
+import { logout } from "../server/api/authentication/auth.post";
 
 function useCustomer() {
     const [users, setUsers] = useState<Customer[]>([]);
@@ -26,11 +27,34 @@ function useCustomer() {
         setLoading(true);
         try {
             const userData = await login(username, password);
+
+            if (userData?.token && userData?.user?.id) {
+                localStorage.setItem("authToken", userData.token);
+                localStorage.setItem("customerId", userData.user.id.toString());
+            }
+
+
             setUsers(userData);
             return userData;
         } catch (err) {
             handleError(err);
         } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleLogout = async () => {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+
+        setLoading(true);
+        try {
+            await logout(); // gọi API POST /api/auth/logout
+        } catch (err) {
+            console.error("Lỗi khi gọi API logout:", err);
+        } finally {
+            localStorage.removeItem("authToken"); // Xóa token
+            setUser(null); // reset state user nếu có
             setLoading(false);
         }
     };
@@ -143,6 +167,7 @@ function useCustomer() {
         error,
         loading,
         handleLogin,
+        handleLogout,
         fetchUser,
         fetchQuantity,
         quantity,
