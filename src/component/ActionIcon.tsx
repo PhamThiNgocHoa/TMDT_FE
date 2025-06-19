@@ -55,18 +55,15 @@ export const ActionIcons = () => {
 
     const handleMenuItemClick = (action: string) => {
         console.log(`Account action clicked: ${action}`);
-        // Implement navigation or other logic for each menu item
-        setShowAccountDropdown(false); // Hide dropdown after click
+        setShowAccountDropdown(false);
     };
 
     const handleCartItemClick = (itemId: string) => {
         console.log(`Cart item clicked: ${itemId}`);
-        // Implement navigation to product details or cart page
-        setShowCartDropdown(false); // Hide dropdown after click
+        setShowCartDropdown(false);
     };
 
     const handleWishlistClick = () => {
-        // Navigate to the Wishlist page
         navigate('/wishlistPage');
     };
 

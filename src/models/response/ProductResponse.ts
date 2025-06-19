@@ -9,15 +9,12 @@ export interface ProductResponse {
   name: string;
   categoryId: number;
   categoryName: string;
-
   images: ProductImage[];
   img?: string;
-
   price: number;
   originalPrice?: number;
   discountPercentage?: number;
   discount?: string;
-
   description?: string;
   ratings?: RatingResponse[];
   inStock?: boolean;
@@ -25,7 +22,6 @@ export interface ProductResponse {
   featured?: boolean;
   type?: string;
   productNew?: boolean;
-
   productColors: ProductColorResponse[];
   productSizes: ProductSizeResponse[];
   productImages: ProductImageResponse[];
