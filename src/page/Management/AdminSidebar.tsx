@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './PostManagement.module.css';
+import styles from './postManagement/PostManagement.module.css';
 // import { usePathname } from 'next/navigation'; // Assuming you are using Next.js for routing
 
 export function AdminSidebar() {
