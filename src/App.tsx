@@ -108,10 +108,7 @@ const HeaderFooterControl = () => {
           path="/management/customerManagement/add"
           element={<AddCustomer />}
         />
-        <Route
-          path="/management/customerManagement/edit/:Id"
-          element={<EditCustomer />}
-        />
+        <Route path="/management/customerManagement/edit/:Id" element={<EditCustomer />} />
         <Route path="/management/revenue" element={<RevenueManagement />} />
         <Route
           path="/management/revenueManagement/add"
