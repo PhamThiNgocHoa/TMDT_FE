@@ -1,14 +1,15 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './EditCustomer.module.css';
-import { useParams, useNavigate } from 'react-router-dom';
-import { AdminSidebar } from './AdminSidebar';
-import { Header } from './components/Header';
+import {useParams, useNavigate} from 'react-router-dom';
+import {AdminSidebar} from './AdminSidebar';
+import {Header} from './components/Header';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // ✅ Thêm dòng này
 
 export function EditCustomer() {
     const navigate = useNavigate();
-    const { Id: customerId } = useParams(); // chú ý dùng đúng tên "Id" vì ở App.tsx là ":Id"
+    const {Id: customerId} = useParams();
 
     const [fullname, setFullname] = useState('');
     const [username, setUsername] = useState('');
@@ -37,9 +38,13 @@ export function EditCustomer() {
                 const code = err.response?.data?.code;
 
                 if (status === 401 || code === 4202) {
-                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    await Swal.fire({
+                        icon: 'warning',
+                        title: 'Phiên đăng nhập hết hạn',
+                        text: 'Vui lòng đăng nhập lại.',
+                    });
                     localStorage.removeItem("authToken");
-                    window.location.href = "/login";
+                    navigate("/login");
                 } else {
                     setError('Không tìm thấy khách hàng hoặc lỗi khi tải dữ liệu.');
                     console.error('❌ Lỗi khi load khách hàng:', {
@@ -54,12 +59,15 @@ export function EditCustomer() {
         };
 
         fetchCustomer();
-    }, [customerId]);
+    }, [customerId, navigate]);
 
     const handleSave = async () => {
         if (!fullname || !username || !email) {
-            alert('Vui lòng nhập đầy đủ thông tin bắt buộc!');
-            return;
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Thiếu thông tin',
+                text: 'Vui lòng nhập đầy đủ thông tin bắt buộc!',
+            });
         }
 
         try {
@@ -87,17 +95,27 @@ export function EditCustomer() {
 
             console.log("✅ Phản hồi từ server khi cập nhật:", response.data);
 
-            alert('✅ Đã cập nhật thông tin khách hàng!');
-            navigate('/management/customerManagement');
+            await Swal.fire({
+                icon: 'success',
+                title: 'Cập nhật thành công!',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+
+            navigate('/management/customer');
         } catch (err: any) {
             const status = err.response?.status;
             const code = err.response?.data?.code;
             const message = err.response?.data?.message || err.message;
 
             if (status === 401 || code === 4202) {
-                alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Phiên đăng nhập hết hạn',
+                    text: 'Vui lòng đăng nhập lại.',
+                });
                 localStorage.removeItem("authToken");
-                window.location.href = "/login";
+                navigate("/login");
             } else {
                 console.error("❌ Lỗi khi cập nhật:", {
                     status,
@@ -109,7 +127,11 @@ export function EditCustomer() {
                     url: err.config?.url,
                 });
 
-                alert('Không thể cập nhật khách hàng: ' + message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi khi cập nhật',
+                    text: message,
+                });
             }
         } finally {
             setLoading(false);
@@ -130,13 +152,14 @@ export function EditCustomer() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar/>
             <div className={styles.body}>
-                <Header />
+                <Header/>
                 <div className={styles.editPostHeader}>
                     <h2>Chỉnh sửa thông tin khách hàng</h2>
                     <div className={styles.headerActions}>
-                        <button className={`${styles.button} ${styles.secondaryButton}`} onClick={handleCancel}>Hủy</button>
+                        <button className={`${styles.button} ${styles.secondaryButton}`} onClick={handleCancel}>Hủy
+                        </button>
                         <button className={`${styles.button} ${styles.primaryButton}`} onClick={handleSave}>Lưu</button>
                     </div>
                 </div>

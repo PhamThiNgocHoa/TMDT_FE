@@ -1,9 +1,10 @@
 import React from 'react';
-import styles from '../RevenueManagement.module.css';
-import { useRevenues } from '../context/RevenueContext';
+import styles from '../OrderManagement.module.css';
+import { useOrders } from '../context/OrderContext';
 
 export const Pagination: React.FC = () => {
-    const { total, pagination, setPagination } = useRevenues();
+    const { total, pagination, setPagination } = useOrders();
+
     const totalPages = Math.ceil(total / (pagination.limit || 10));
     const currentPage = pagination.page || 1;
 
@@ -15,22 +16,21 @@ export const Pagination: React.FC = () => {
 
     const renderPageButtons = () => {
         const pages = [];
-        // Display a limited number of page buttons around the current page
-        const maxButtons = 5; // Maximum number of page buttons to display
+        const maxButtons = 5;
         const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
         const endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
         if (startPage > 1) {
-             pages.push(
-                 <button 
-                     key={1} 
-                     className={styles.paginationPageButton}
-                     onClick={() => handlePageChange(1)}
-                 >1</button>
-             );
-             if (startPage > 2) {
-                 pages.push(<span key="ellipsis-start">...</span>);
-             }
+            pages.push(
+                <button
+                    key={1}
+                    className={styles.paginationPageButton}
+                    onClick={() => handlePageChange(1)}
+                >1</button>
+            );
+            if (startPage > 2) {
+                pages.push(<span key="ellipsis-start">...</span>);
+            }
         }
 
         for (let i = startPage; i <= endPage; i++) {
@@ -45,18 +45,18 @@ export const Pagination: React.FC = () => {
             );
         }
 
-         if (endPage < totalPages) {
-             if (endPage < totalPages - 1) {
-                 pages.push(<span key="ellipsis-end">...</span>);
-             }
-             pages.push(
-                 <button 
-                     key={totalPages} 
-                     className={styles.paginationPageButton}
-                     onClick={() => handlePageChange(totalPages)}
-                 >{totalPages}</button>
-             );
-         }
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                pages.push(<span key="ellipsis-end">...</span>);
+            }
+            pages.push(
+                <button
+                    key={totalPages}
+                    className={styles.paginationPageButton}
+                    onClick={() => handlePageChange(totalPages)}
+                >{totalPages}</button>
+            );
+        }
 
         return pages;
     };
@@ -70,7 +70,7 @@ export const Pagination: React.FC = () => {
                 Hiển thị {startItem}-{endItem} trên tổng số {total}
             </div>
             <div className={styles.paginationControls}>
-                <button 
+                <button
                     className={styles.paginationButton}
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -78,7 +78,7 @@ export const Pagination: React.FC = () => {
                     <i className="fas fa-arrow-left"></i>
                 </button>
                 {renderPageButtons()}
-                <button 
+                <button
                     className={styles.paginationButton}
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
@@ -88,4 +88,4 @@ export const Pagination: React.FC = () => {
             </div>
         </div>
     );
-}; 
+};

@@ -45,7 +45,7 @@ const CategoryManagement: React.FC = () => {
     }
 
     return (
-        <div className={styles.postManagement}> {/* Use the same class name as RevenueManagement */}
+        <div className={styles.postManagement}> {/* Use the same class name as OrdersManagement */}
             <AdminSidebar /> {/* Include AdminSidebar */}
             <div className={styles.body}> {/* Main content body */}
                 <Header/>

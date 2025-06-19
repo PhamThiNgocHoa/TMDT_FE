@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './RevenueManagement.module.css';
+import styles from './OrderManagement.module.css';
 // import { usePathname } from 'next/navigation'; // Assuming you are using Next.js for routing
 
 export function AdminSidebar() {
@@ -11,7 +11,7 @@ export function AdminSidebar() {
             { name: 'Trang chủ', icon: 'fas fa-home', path: '/admin' },
             { name: 'Sản phẩm', icon: 'fas fa-box-open', path: '/admin/products' },
             { name: 'Danh mục', icon: 'fas fa-tags', path: '/management/category' },
-            { name: 'Đơn hàng', icon: 'fas fa-shopping-cart', path: '/admin/orders' },
+            { name: 'Đơn hàng', icon: 'fas fa-shopping-cart', path: '/management/orders' },
             { name: 'Voucher', icon: 'fas fa-ticket-alt', path: '/admin/vouchers' },
             { name: 'Bài viết', icon: 'fas fa-pencil-alt', path: '/postManagement' },
             { name: 'Doanh thu', icon: 'fas fa-chart-line', path: '/management/revenue' },

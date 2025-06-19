@@ -1,7 +1,7 @@
 import React from 'react';
 import { useCategory } from '../context/CategoryContext';
 // Import category-specific CSS if needed, or use general table styles
-// import styles from './RevenueTable.module.css';
+// import styles from './OrderTable.module.css';
 
 interface CategoryTableProps {
     // Add any props needed, e.g., for handling edit/delete actions
