@@ -1,80 +1,80 @@
 "use client";
 import React, { useEffect, useMemo, useState } from 'react';
-import styles from '../RevenueManagement.module.css';
-import { useRevenues } from '../context/RevenueContext'; // giả sử dùng useRevenues cho doanh thu
+import styles from '../OrderManagement.module.css';
+import { useOrders } from '../context/OrderContext';
 import { useNavigate } from 'react-router-dom';
 
-export const RevenueTable: React.FC = () => {
+export const OrderTable: React.FC = () => {
     const {
-        revenues,
+        orders,
         loading,
         error,
-        fetchRevenues,
-        deleteRevenue,
-        selectedRevenues,
-        setSelectedRevenues
-    } = useRevenues();
+        fetchOrders,
+        deleteOrder,
+        selectedOrders,
+        setSelectedOrders
+    } = useOrders();
 
     const navigate = useNavigate();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [revenueToDeleteId, setRevenueToDeleteId] = useState<string | null>(null);
+    const [orderToDeleteId, setOrderToDeleteId] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchRevenues();
-    }, [fetchRevenues]);
+        fetchOrders();
+    }, [fetchOrders]);
 
-    const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.checked) {
-            const allIds = revenues.map(r => r.id.toString());
-            setSelectedRevenues(allIds);
-        } else {
-            setSelectedRevenues([]);
-        }
+    const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedOrders(
+            e.target.checked ? orders.map(o => o.id.toString()) : []
+        );
     };
 
-    const handleSelectRevenue = (id: string) => {
-        setSelectedRevenues(prev =>
+    const handleSelectOrder = (id: string) => {
+        setSelectedOrders(prev =>
             prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
         );
     };
 
-    const isRevenueSelected = (id: string) => selectedRevenues.includes(id);
-
-    const handleDeleteSelected = () => {
-        if (window.confirm(`Bạn có chắc chắn muốn xóa (${selectedRevenues.length}) mục đã chọn?`)) {
-            selectedRevenues.forEach(id => deleteRevenue(id));
-        }
-    };
-
     const isAllSelected = useMemo(
-        () => revenues.length > 0 && selectedRevenues.length === revenues.length,
-        [revenues, selectedRevenues]
+        () => orders.length > 0 && selectedOrders.length === orders.length,
+        [orders, selectedOrders]
     );
 
     const isIndeterminate = useMemo(
-        () => selectedRevenues.length > 0 && selectedRevenues.length < revenues.length,
-        [revenues, selectedRevenues]
+        () => selectedOrders.length > 0 && selectedOrders.length < orders.length,
+        [orders, selectedOrders]
     );
 
-    const handleEditClick = (revenue: { id: number }) => {
-        navigate(`/management/revenueManagement/edit/${revenue.id}`);
+    const handleEditClick = (order: { id: number }) => {
+        navigate(`/management/orderManagement/edit/${order.id}`);
     };
 
     const handleShowDeleteConfirm = (id: string) => {
-        setRevenueToDeleteId(id);
+        setOrderToDeleteId(id);
         setShowDeleteConfirm(true);
     };
 
     const handleCancelDelete = () => {
-        setRevenueToDeleteId(null);
+        setOrderToDeleteId(null);
         setShowDeleteConfirm(false);
     };
 
     const handleConfirmDelete = () => {
-        if (revenueToDeleteId) {
-            deleteRevenue(revenueToDeleteId);
-            setRevenueToDeleteId(null);
+        if (orderToDeleteId) {
+            deleteOrder(orderToDeleteId);
+            setOrderToDeleteId(null);
             setShowDeleteConfirm(false);
+        }
+    };
+
+    const statusLabel = (status: string) => {
+        switch (status) {
+            case "PENDING": return "Chờ xử lý";
+            case "PENDING_PAYMENT": return "Chờ thanh toán";
+            case "DELIVERED": return "Đã giao";
+            case "CANCELLED": return "Đã hủy";
+            case "SHIPPED": return "Đang giao";
+            default: return status;
         }
     };
 
@@ -98,10 +98,14 @@ export const RevenueTable: React.FC = () => {
 
     return (
         <div className={styles.tableContainer}>
-            {selectedRevenues.length > 0 && (
+            {selectedOrders.length > 0 && (
                 <div className={styles.bulkActions}>
-                    <span className={styles.selectedCount}>Đã chọn {selectedRevenues.length} mục</span>
-                    <button className={styles.deleteSelectedBtn} onClick={handleDeleteSelected}>
+                    <span className={styles.selectedCount}>Đã chọn {selectedOrders.length} mục</span>
+                    <button className={styles.deleteSelectedBtn} onClick={() => {
+                        if (window.confirm(`Xóa ${selectedOrders.length} đơn hàng?`)) {
+                            selectedOrders.forEach(id => deleteOrder(id));
+                        }
+                    }}>
                         <i className="fas fa-trash"></i> Xóa đã chọn
                     </button>
                 </div>
@@ -119,47 +123,45 @@ export const RevenueTable: React.FC = () => {
                             }}
                         />
                     </th>
-                    <th>Tên khách hàng</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Tình trạng</th>
-                    <th>Ngày</th>
+                    <th>Khách hàng</th>
+                    <th>Địa chỉ</th>
+                    <th>SĐT</th>
+                    <th>Trạng thái</th>
                     <th>Thao tác</th>
                 </tr>
                 </thead>
                 <tbody>
-                {revenues.length === 0 && !loading && (
+                {orders.length === 0 && !loading && (
                     <tr>
-                        <td colSpan={7} className={styles.noData}>Không có dữ liệu.</td>
+                        <td colSpan={6} className={styles.noData}>Không có dữ liệu.</td>
                     </tr>
                 )}
-                {revenues.map((revenue) => (
-                    <tr key={revenue.id}>
+                {orders.map((order) => (
+                    <tr key={order.id}>
                         <td>
                             <input
                                 type="checkbox"
-                                checked={isRevenueSelected(revenue.id.toString())}
-                                onChange={() => handleSelectRevenue(revenue.id.toString())}
+                                checked={selectedOrders.includes(order.id.toString())}
+                                onChange={() => handleSelectOrder(order.id.toString())}
                             />
                         </td>
-                        <td>{revenue.customerName}</td>
-                        <td>{revenue.productName}</td>
-                        <td>{revenue.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                        <td>{order.fullname}</td>
+                        <td>{order.address}</td>
+                        <td>{order.phone}</td>
                         <td>
-                                <span className={`${styles.status} ${styles[revenue.status === 'paid' ? 'paid' : 'debt']}`}>
-                                    {revenue.status === 'paid' ? 'Đã thanh toán' : 'Nợ'}
+                                <span className={`${styles.status} ${styles[order.status.toLowerCase()]}`}>
+                                    {statusLabel(order.status)}
                                 </span>
                         </td>
-                        <td>{new Date(revenue.date).toLocaleDateString('vi-VN')}</td>
                         <td>
                             <div className={styles.actions}>
-                                <button className={styles.editBtn} onClick={() => handleEditClick(revenue)}>
+                                <button className={styles.editBtn} onClick={() => handleEditClick(order)}>
                                     <i className="fas fa-edit"></i>
                                 </button>
-                                <button className={styles.viewBtn} onClick={() => console.log('View revenue:', revenue.id)}>
+                                <button className={styles.viewBtn} onClick={() => console.log('View order:', order.id)}>
                                     <i className="fas fa-eye"></i>
                                 </button>
-                                <button className={styles.deleteBtn} onClick={() => handleShowDeleteConfirm(revenue.id.toString())}>
+                                <button className={styles.deleteBtn} onClick={() => handleShowDeleteConfirm(order.id.toString())}>
                                     <i className="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -169,11 +171,10 @@ export const RevenueTable: React.FC = () => {
                 </tbody>
             </table>
 
-            {/* Modal xác nhận xóa */}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>
-                        <h3>Xóa mục doanh thu?</h3>
+                        <h3>Xóa đơn hàng?</h3>
                         <p>Bạn có chắc chắn muốn xóa mục này không?</p>
                         <div className={styles.modalActions}>
                             <button className={`${styles.button} ${styles.secondaryButton}`} onClick={handleCancelDelete}>Hủy</button>

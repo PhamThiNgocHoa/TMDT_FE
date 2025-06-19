@@ -4,6 +4,7 @@ import { AdminSidebar } from './AdminSidebar';
 import { Header } from './components/Header';
 import { addCustomer } from './services/customerService';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export function AddCustomer() {
     const [fullName, setFullName] = useState('');
@@ -16,14 +17,20 @@ export function AddCustomer() {
 
     const handleSave = async () => {
         if (!fullName || !username || !email || !password) {
-            alert('Họ tên, Tên đăng nhập, Email và Mật khẩu là bắt buộc!');
-            return;
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Thiếu thông tin',
+                text: 'Họ tên, Tên đăng nhập, Email và Mật khẩu là bắt buộc!',
+            });
         }
 
         const token = localStorage.getItem('authToken');
         if (!token) {
-            alert('Vui lòng đăng nhập lại để thực hiện thao tác này.');
-            return;
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Chưa đăng nhập',
+                text: 'Vui lòng đăng nhập lại để thực hiện thao tác này.',
+            });
         }
 
         const customerData = {
@@ -38,20 +45,38 @@ export function AddCustomer() {
             setLoading(true);
             console.log("📦 Dữ liệu gửi đi:", customerData);
             await addCustomer(customerData);
-            alert('✅ Thêm người dùng thành công!');
-            navigate('/management/customerManagement');
+            await Swal.fire({
+                icon: 'success',
+                title: 'Thêm người dùng thành công!',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            navigate('/management/customer');
         } catch (err: any) {
-            console.error('❌ Chi tiết lỗi:', err.response?.data || err.message);
-            alert('Không thể thêm người dùng: ' + (err.response?.data?.message || err.message));
+            console.error('Chi tiết lỗi:', err.response?.data || err.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Thêm người dùng thất bại',
+                text: err.response?.data?.message || err.message || 'Đã có lỗi xảy ra.',
+            });
         } finally {
             setLoading(false);
         }
     };
 
     const handleCancel = () => {
-        if (window.confirm('Bạn có chắc muốn hủy?')) {
-            navigate('/management/customer');
-        }
+        Swal.fire({
+            title: 'Bạn có chắc muốn hủy?',
+            text: 'Mọi thay đổi sẽ không được lưu.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Quay lại',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate('/management/customer');
+            }
+        });
     };
 
     return (
@@ -64,6 +89,7 @@ export function AddCustomer() {
                 </div>
 
                 <div className={styles.formSection}>
+                    {/* Các ô input giữ nguyên */}
                     <div className={styles.formGroup}>
                         <label className={styles.label}>Họ và Tên *</label>
                         <input

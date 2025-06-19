@@ -15,7 +15,7 @@ const PostManagement: React.FC = () => {
     const navigate = useNavigate(); // Get navigate function
 
     const handleAddPostClick = () => {
-        // Replace '/admin/posts/add' with the actual route for the AddRevenue screen
+        // Replace '/admin/posts/add' with the actual route for the AddOrders screen
         navigate('/postManagement/add');
     };
 

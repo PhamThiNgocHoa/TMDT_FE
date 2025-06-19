@@ -37,10 +37,10 @@ import CustomerManagement from "./page/Management/customerManagement/CustomerMan
 import { AddCustomer } from "./page/Management/customerManagement/AddCustomer";
 import { EditCustomer } from "./page/Management/customerManagement/EditCustomer";
 import { CustomerProvider } from "./page/Management/customerManagement/context/CustomerContext";
-import RevenueManagement from "./page/Management/revenueManagement/RevenueManagement";
-import { AddRevenue } from "./page/Management/revenueManagement/AddRevenue";
-import { EditRevenue } from "./page/Management/revenueManagement/EditRevenue";
-import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
+import OrderManagement from "./page/Management/orderManagement/OrderManagement";
+import { AddOrder } from "./page/Management/orderManagement/AddOrder";
+import { EditOrder } from "./page/Management/orderManagement/EditOrder";
+import { OrderProvider } from "./page/Management/orderManagement/context/OrderContext";
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
@@ -51,11 +51,11 @@ const App = () => {
       <WishlistProvider>
         <CategoryProvider>
           <CustomerProvider>
-            <RevenueProvider>
+            <OrderProvider>
               <Router>
                 <HeaderFooterControl />
               </Router>
-            </RevenueProvider>
+            </OrderProvider>
           </CustomerProvider>
         </CategoryProvider>
       </WishlistProvider>
@@ -71,7 +71,7 @@ const HeaderFooterControl = () => {
     "/postManagement",
     "/management/category",
     "/management/customer",
-    "/management/revenue",
+    "/management/orders",
   ];
   return (
     <>
@@ -109,14 +109,14 @@ const HeaderFooterControl = () => {
           element={<AddCustomer />}
         />
         <Route path="/management/customerManagement/edit/:Id" element={<EditCustomer />} />
-        <Route path="/management/revenue" element={<RevenueManagement />} />
+        <Route path="/management/orders" element={<OrderManagement />} />
         <Route
-          path="/management/revenueManagement/add"
-          element={<AddRevenue />}
+          path="/management/ordersManagement/add"
+          element={<AddOrder />}
         />
         <Route
-          path="/management/revenueManagement/edit/:id"
-          element={<EditRevenue />}
+          path="/management/ordersManagement/edit/:id"
+          element={<EditOrder />}
         />
         {/* Các route custom từ nhánh khải */}
         <Route path="/custom" element={<CustomProductServicePage />} />
