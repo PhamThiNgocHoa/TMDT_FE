@@ -11,7 +11,6 @@ interface CustomServiceListProps {
 const CustomServiceList: React.FC<CustomServiceListProps> = ({ categoryName }) => {
     const { products } = useProduct();
 
-    // Lọc sản phẩm theo category và type là Custom
     const serviceProducts = products.filter(
         (p) => p.categoryName === categoryName && p.type === "Custom"
     );

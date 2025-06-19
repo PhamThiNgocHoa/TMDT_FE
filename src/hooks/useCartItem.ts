@@ -5,9 +5,8 @@ import {deleteCartItem} from "../server/api/cartItem/cartItem.delete";
 import {useState} from "react";
 import {CartItemResponse} from "../models/response/CartItemResponse";
 
-// Hàm sử dụng trong custom hook để quản lý giỏ hàng
 function useCartItem() {
-    const [cartItems, setCartItems] = useState<CartItemResponse[]>([]); // Lưu giỏ hàng trong state
+    const [cartItems, setCartItems] = useState<CartItemResponse[]>([]);
 
     const getCartItems = async () => {
         return [];

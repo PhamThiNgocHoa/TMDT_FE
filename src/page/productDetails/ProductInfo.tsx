@@ -1,24 +1,107 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import styles from './ProductDetailsPage.module.css';
-import {ProductDeliveryInfo} from './ProductDeliveryInfo';
-import {ProductResponse} from "../../models/response/ProductResponse";
+import { ProductDeliveryInfo } from './ProductDeliveryInfo';
+import { ProductResponse } from '../../models/response/ProductResponse';
+import formatToVND from '../../hooks/formatToVND';
 
 interface ProductInfoProps {
     product: ProductResponse;
 }
 
-export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
+export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
     const [quantity, setQuantity] = useState(1);
+    const [selectedPosition, setSelectedPosition] = useState("Trên giữa");
+    const [selectedHeight, setSelectedHeight] = useState("12.5");
     const [selectedSize, setSelectedSize] = useState<string>(
-        product.productSizes && product.productSizes.length > 0 ? product.productSizes[0].size : ''
+        product.productSizes?.[0]?.size || ''
     );
     const [selectedColor, setSelectedColor] = useState<string>(
-        product.productColors && product.productColors.length > 0 ? product.productColors[0].color : ''
+        product.productColors?.[0]?.color || ''
     );
 
     return (
         <div className={styles.productInfo}>
-            <h1 className={styles.productTitle}>{product.name}</h1>
+            <h1 className={styles.productTitle} style={{marginTop: "-40px"}}>
+                {product.name}
+            </h1>
+
+            {(product.type === 'Custom' || product.type === 'Handbook-custom') && (
+                <>
+                    <div style={{marginBottom: 18, color: '#222', fontSize: 15}}>
+                        Gói khắc tên/chữ ký dành cho bàn phím cơ của bạn. Đối với bàn phím cơ được gửi từ khách hàng,
+                        chính sách
+                        vận chuyển/bảo hành sẽ có sự khác biệt. Vui lòng xem trong mục Vận chuyển và Bảo hành ở phía
+                        dưới
+                    </div>
+
+                    <div style={{marginBottom: 16}}>
+                        <div style={{fontWeight: 600, marginBottom: 8}}>Vị trí</div>
+                        <div style={{display: "flex", gap: 12}}>
+                            {["Trên trái", "Trên giữa", "Trên phải"].map((pos) => (
+                                <button
+                                    key={pos}
+                                    onClick={() => setSelectedPosition(pos)}
+                                    style={{
+                                        padding: "8px 22px",
+                                        borderRadius: 8,
+                                        border: selectedPosition === pos ? "2px solid #d7263d" : "1.5px solid #ccc",
+                                        background: selectedPosition === pos ? "#fff0f0" : "#fff",
+                                        color: selectedPosition === pos ? "#d7263d" : "#222",
+                                        fontWeight: 600,
+                                        fontSize: 15,
+                                        cursor: "pointer",
+                                        transition: "all 0.2s",
+                                    }}
+                                >
+                                    {pos}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{marginBottom: 16}}>
+                        <div style={{fontWeight: 600, marginBottom: 8}}>Chiều cao</div>
+                        <div style={{display: "flex", gap: 12}}>
+                            {["7.5", "10", "12.5", "15", "17.5"].map((h) => (
+                                <button
+                                    key={h}
+                                    onClick={() => setSelectedHeight(h)}
+                                    style={{
+                                        padding: "8px 18px",
+                                        borderRadius: 8,
+                                        border: selectedHeight === h ? "2px solid #d7263d" : "1.5px solid #ccc",
+                                        background: selectedHeight === h ? "#fff0f0" : "#fff",
+                                        color: selectedHeight === h ? "#d7263d" : "#222",
+                                        fontWeight: 600,
+                                        fontSize: 15,
+                                        cursor: "pointer",
+                                        transition: "all 0.2s",
+                                    }}
+                                >
+                                    {h}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div style={{marginBottom: 16}}>
+                        <div style={{fontWeight: 600, marginBottom: 8}}>Ghi chú:</div>
+                        <textarea
+                            placeholder=""
+                            style={{
+                                border: "1.5px solid #ccc",
+                                borderRadius: 8,
+                                padding: "10px 12px",
+                                width: "100%",
+                                fontSize: 15,
+                                minHeight: 48,
+                                resize: "vertical",
+                                fontWeight: 500,
+                            }}
+                        />
+                    </div>
+                </>
+            )}
 
             <div className={styles.ratingContainer}>
                 <div className={styles.ratingWrapper}>
@@ -35,15 +118,13 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
                 </div>
             </div>
 
-            <p className={styles.price}>{product.price} đ</p>
+            <p className={styles.price}>{formatToVND(product.price)}</p>
 
             <p className={styles.description}>{product.description}</p>
 
-            <hr className={styles.divider}/>
-
-            <div className={styles.colorSection}>
-                <span className={styles.sectionLabel}>Màu sắc:</span>
-                {product.productColors && product.productColors.length > 0 ? (
+            {product.productColors && product.productColors.length > 0 && (
+                <div className={styles.colorSection}>
+                    <span className={styles.sectionLabel}>Màu sắc:</span>
                     <div style={{display: 'flex', gap: 10, marginTop: 8}}>
                         {product.productColors.map(colorObj => (
                             <div
@@ -62,14 +143,12 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
                             />
                         ))}
                     </div>
-                ) : (
-                    <p>Không có màu sắc</p>
-                )}
-            </div>
+                </div>
+            )}
 
-            <div className={styles.sizeOptions}>
-                <span className={styles.sectionLabel}>Kích cỡ:</span>
-                {product.productSizes && product.productSizes.length > 0 ? (
+            {product.productSizes && product.productSizes.length > 0 && (
+                <div className={styles.sizeOptions}>
+                    <span className={styles.sectionLabel}>Kích cỡ:</span>
                     <div style={{marginTop: 8}}>
                         {product.productSizes.map(sizeObj => (
                             <button
@@ -89,10 +168,8 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
                             </button>
                         ))}
                     </div>
-                ) : (
-                    <p>Không có kích cỡ</p>
-                )}
-            </div>
+                </div>
+            )}
 
             <div className={styles.actionSection}>
                 <div className={styles.quantityControl}>
