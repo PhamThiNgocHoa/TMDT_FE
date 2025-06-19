@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
-import styles from './PostManagement.module.css';
-import { usePosts } from './context/PostContext';
+import styles from './postManagement/PostManagement.module.css';
+import { usePosts } from './postManagement/context/PostContext';
 
 export function TopBar() {
     const { filters, setFilters, fetchPosts } = usePosts();

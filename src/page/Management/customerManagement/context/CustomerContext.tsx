@@ -7,7 +7,8 @@ import React, {
     Dispatch,
     SetStateAction,
 } from 'react';
-import { api, PaginationParams } from '../services/api';
+import axios from 'axios';
+import { PaginationParams } from '../services/api';
 
 interface Customer {
     id: number;
@@ -15,7 +16,7 @@ interface Customer {
     email: string;
     phone: string;
     status: 'active' | 'inactive' | 'pending';
-    createdAt: string
+    createdAt: string;
     avatar?: string;
 }
 
@@ -44,39 +45,11 @@ interface CustomerContextType {
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
 
-// Fake data
-const fakeCustomers: Customer[] = [
-    {
-        id: 1,
-        name: 'Nguyễn Văn A',
-        email: 'a@example.com',
-        phone: '0909000001',
-        status: 'active',
-        createdAt: '2024-05-01T10:00:00Z',
-    },
-    {
-        id: 2,
-        name: 'Trần Thị B',
-        email: 'b@example.com',
-        phone: '0909000002',
-        status: 'pending',
-        createdAt: '2024-05-02T12:00:00Z',
-    },
-    {
-        id: 3,
-        name: 'Lê Văn C',
-        email: 'c@example.com',
-        phone: '0909000003',
-        status: 'inactive',
-        createdAt: '2024-05-03T14:00:00Z',
-    },
-];
-
 export function CustomerProvider({ children }: { children: React.ReactNode }) {
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [total, setTotal] = useState(fakeCustomers.length);
+    const [total, setTotal] = useState(0);
     const [filters, setFilters] = useState<CustomerFilters>({
         search: '',
         status: '',
@@ -89,24 +62,35 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
     const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
 
     const fetchCustomers = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            setLoading(true);
-            setError(null);
+            const ids = [1, 2, 3, 4, 5]; // 5 người dùng đầu tiên
+            const responses = await Promise.all(
+                ids.map(id =>
+                    axios
+                        .get(`/api/admin/customer/${id}`)
+                        .then(res => res.data)
+                        .catch(() => null) // Bỏ qua nếu user không tồn tại
+                )
+            );
 
-            await new Promise(resolve => setTimeout(resolve, 500));
+            let filtered = responses.filter(c => c !== null) as Customer[];
 
-            let filtered = [...fakeCustomers];
-
+            // Lọc theo search
             if (filters.search) {
                 filtered = filtered.filter(customer =>
                     customer.name.toLowerCase().includes(filters.search!.toLowerCase())
                 );
             }
 
+            // Lọc theo trạng thái
             if (filters.status) {
                 filtered = filtered.filter(c => c.status === filters.status);
             }
 
+            // Sắp xếp
             if (filters.sort === 'newest') {
                 filtered.sort((a, b) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -114,6 +98,8 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
             }
 
             const totalFiltered = filtered.length;
+
+            // Phân trang
             const start = ((pagination.page || 1) - 1) * (pagination.limit || 10);
             const end = start + (pagination.limit || 10);
             const paginated = filtered.slice(start, end);
@@ -121,7 +107,7 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
             setCustomers(paginated);
             setTotal(totalFiltered);
         } catch (err) {
-            setError('Failed to fetch customers');
+            setError('Không thể tải danh sách người dùng');
         } finally {
             setLoading(false);
         }
@@ -130,13 +116,11 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
     const deleteCustomer = async (id: string) => {
         try {
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 500));
-            const updated = fakeCustomers.filter(c => c.id !== Number(id));
-            fakeCustomers.splice(0, fakeCustomers.length, ...updated);
+            await axios.delete(`/api/admin/customer/${id}`);
             await fetchCustomers();
             setSelectedCustomers([]);
         } catch (err) {
-            setError('Failed to delete customer');
+            setError('Xóa người dùng thất bại');
         } finally {
             setLoading(false);
         }
@@ -145,14 +129,10 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
     const updateCustomerStatus = async (id: string, status: Customer['status']) => {
         try {
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 500));
-            const updated = fakeCustomers.map(c =>
-                c.id === Number(id) ? { ...c, status } : c
-            );
-            fakeCustomers.splice(0, fakeCustomers.length, ...updated);
+            await axios.put(`/api/admin/customer/${id}`, { status });
             await fetchCustomers();
         } catch (err) {
-            setError('Failed to update customer status');
+            setError('Cập nhật trạng thái thất bại');
         } finally {
             setLoading(false);
         }
