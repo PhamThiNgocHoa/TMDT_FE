@@ -12,19 +12,16 @@ import { PaginationParams } from '../services/api';
 
 interface Customer {
     id: number;
-    name: string;
+    fullname: string;
+    username: string;
     email: string;
     phone: string;
-    status: 'active' | 'inactive' | 'pending';
-    createdAt: string;
     avatar?: string;
 }
 
 interface CustomerFilters {
     search?: string;
-    status?: '' | 'active' | 'inactive' | 'pending';
     sort?: string;
-    category?: string;
 }
 
 interface CustomerContextType {
@@ -40,7 +37,6 @@ interface CustomerContextType {
     setSelectedCustomers: Dispatch<SetStateAction<string[]>>;
     fetchCustomers: () => Promise<void>;
     deleteCustomer: (id: string) => Promise<void>;
-    updateCustomerStatus: (id: string, status: Customer['status']) => Promise<void>;
 }
 
 const CustomerContext = createContext<CustomerContextType | undefined>(undefined);
@@ -52,7 +48,6 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
     const [total, setTotal] = useState(0);
     const [filters, setFilters] = useState<CustomerFilters>({
         search: '',
-        status: '',
         sort: 'newest',
     });
     const [pagination, setPagination] = useState<PaginationParams>({
@@ -66,40 +61,31 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
         setError(null);
 
         try {
-            const ids = [1, 2, 3, 4, 5]; // 5 người dùng đầu tiên
-            const responses = await Promise.all(
-                ids.map(id =>
-                    axios
-                        .get(`/api/admin/customer/${id}`)
-                        .then(res => res.data)
-                        .catch(() => null) // Bỏ qua nếu user không tồn tại
-                )
-            );
+            const token = localStorage.getItem('authToken');
 
-            let filtered = responses.filter(c => c !== null) as Customer[];
+            if (!token) {
+                throw new Error('Bạn chưa đăng nhập');
+            }
 
-            // Lọc theo search
+            const res = await axios.get('/api/admin/customers', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const allCustomers: Customer[] = res.data?.data || [];
+
+            console.log('📦 Dữ liệu người dùng:', allCustomers);
+
+            let filtered = [...allCustomers];
+
             if (filters.search) {
                 filtered = filtered.filter(customer =>
-                    customer.name.toLowerCase().includes(filters.search!.toLowerCase())
-                );
-            }
-
-            // Lọc theo trạng thái
-            if (filters.status) {
-                filtered = filtered.filter(c => c.status === filters.status);
-            }
-
-            // Sắp xếp
-            if (filters.sort === 'newest') {
-                filtered.sort((a, b) =>
-                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                    customer.fullname.toLowerCase().includes(filters.search!.toLowerCase())
                 );
             }
 
             const totalFiltered = filtered.length;
-
-            // Phân trang
             const start = ((pagination.page || 1) - 1) * (pagination.limit || 10);
             const end = start + (pagination.limit || 10);
             const paginated = filtered.slice(start, end);
@@ -107,34 +93,27 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
             setCustomers(paginated);
             setTotal(totalFiltered);
         } catch (err) {
+            console.error('❌ Lỗi khi lấy danh sách khách hàng:', err);
             setError('Không thể tải danh sách người dùng');
         } finally {
             setLoading(false);
         }
     }, [filters, pagination]);
 
-    const deleteCustomer = async (id: string) => {
+    const deleteCustomer = async (customerId: string) => {
         try {
-            setLoading(true);
-            await axios.delete(`/api/admin/customer/${id}`);
-            await fetchCustomers();
-            setSelectedCustomers([]);
-        } catch (err) {
-            setError('Xóa người dùng thất bại');
-        } finally {
-            setLoading(false);
-        }
-    };
+            await axios.delete(`/api/admin/customer/${customerId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                }
+            });
 
-    const updateCustomerStatus = async (id: string, status: Customer['status']) => {
-        try {
-            setLoading(true);
-            await axios.put(`/api/admin/customer/${id}`, { status });
             await fetchCustomers();
-        } catch (err) {
-            setError('Cập nhật trạng thái thất bại');
-        } finally {
-            setLoading(false);
+
+            setSelectedCustomers(prev => prev.filter(id => id !== customerId));
+        } catch (error: any) {
+            console.error("❌ Lỗi khi xóa khách hàng:", error);
+            alert("Xóa khách hàng thất bại!");
         }
     };
 
@@ -153,7 +132,6 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
                 setSelectedCustomers,
                 fetchCustomers,
                 deleteCustomer,
-                updateCustomerStatus,
             }}
         >
             {children}
@@ -163,8 +141,6 @@ export function CustomerProvider({ children }: { children: React.ReactNode }) {
 
 export const useCustomers = () => {
     const context = useContext(CustomerContext);
-    if (context === undefined) {
-        throw new Error('useCustomers must be used within a CustomerProvider');
-    }
+    if (!context) throw new Error('useCustomers must be used within a CustomerProvider');
     return context;
 };

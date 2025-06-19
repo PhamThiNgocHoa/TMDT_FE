@@ -1,79 +1,119 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import styles from './EditCustomer.module.css';
-// import { useParams, useNavigate } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { AdminSidebar } from './AdminSidebar';
 import { Header } from './components/Header';
-
-const fetchFakeCustomerById = (id: number) => {
-    const customers = [
-        {
-            id: 1,
-            name: 'Nguyễn Văn A',
-            email: 'a@example.com',
-            phone: '0909000001',
-            status: 'active',
-            createdAt: '2024-05-01T10:00:00Z',
-        },
-        {
-            id: 2,
-            name: 'Trần Thị B',
-            email: 'b@example.com',
-            phone: '0909000002',
-            status: 'pending',
-            createdAt: '2024-05-02T12:00:00Z',
-        },
-        {
-            id: 3,
-            name: 'Lê Văn C',
-            email: 'c@example.com',
-            phone: '0909000003',
-            status: 'inactive',
-            createdAt: '2024-05-03T14:00:00Z',
-        },
-    ];
-
-    return customers.find(c => c.id === id) || null;
-};
+import axios from 'axios';
 
 export function EditCustomer() {
     const navigate = useNavigate();
+    const { Id: customerId } = useParams(); // chú ý dùng đúng tên "Id" vì ở App.tsx là ":Id"
 
-    const id = 1;
-
-    const [name, setName] = useState('');
+    const [fullname, setFullname] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [status, setStatus] = useState<'active' | 'inactive' | 'pending'>('active');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        setLoading(true);
-        setError(null);
-        const customer = fetchFakeCustomerById(id); // ✅ Luôn fetch bằng ID 1
-        if (customer) {
-            setName(customer.name);
-            setEmail(customer.email);
-            setPhone(customer.phone);
-            setStatus(customer.status as 'active' | 'inactive' | 'pending');
-        } else {
-            setError('Không tìm thấy khách hàng với ID này.');
-        }
-        setLoading(false);
-    }, []);
+        const fetchCustomer = async () => {
+            try {
+                const res = await axios.get(`/api/admin/customer/${customerId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
 
-    const handleSave = () => {
-        if (!name || !email || !phone) {
-            alert('Vui lòng nhập đầy đủ thông tin!');
+                const customer = res.data.data;
+                setFullname(customer.fullname || '');
+                setUsername(customer.username || '');
+                setEmail(customer.email || '');
+                setPhone(customer.phone || '');
+            } catch (err: any) {
+                const status = err.response?.status;
+                const code = err.response?.data?.code;
+
+                if (status === 401 || code === 4202) {
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/login";
+                } else {
+                    setError('Không tìm thấy khách hàng hoặc lỗi khi tải dữ liệu.');
+                    console.error('❌ Lỗi khi load khách hàng:', {
+                        message: err.message,
+                        status,
+                        data: err.response?.data
+                    });
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCustomer();
+    }, [customerId]);
+
+    const handleSave = async () => {
+        if (!fullname || !username || !email) {
+            alert('Vui lòng nhập đầy đủ thông tin bắt buộc!');
             return;
         }
 
-        console.log('Cập nhật khách hàng:', { id, name, email, phone, status });
+        try {
+            setLoading(true);
 
-        // ❗️Nếu có hệ thống lưu thật, chỗ này gọi API hoặc cập nhật context
-        alert('Đã cập nhật thông tin khách hàng!');
-        navigate('/management/customerManagement');
+            const updateData: any = {
+                fullname,
+                username,
+                email,
+                phone,
+            };
+
+            if (password.trim() !== '') {
+                updateData.password = password;
+            }
+
+            console.log("📤 Dữ liệu gửi lên server:", updateData);
+
+            const response = await axios.put(`/api/admin/customer/${customerId}`, updateData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                },
+            });
+
+            console.log("✅ Phản hồi từ server khi cập nhật:", response.data);
+
+            alert('✅ Đã cập nhật thông tin khách hàng!');
+            navigate('/management/customerManagement');
+        } catch (err: any) {
+            const status = err.response?.status;
+            const code = err.response?.data?.code;
+            const message = err.response?.data?.message || err.message;
+
+            if (status === 401 || code === 4202) {
+                alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                localStorage.removeItem("authToken");
+                window.location.href = "/login";
+            } else {
+                console.error("❌ Lỗi khi cập nhật:", {
+                    status,
+                    message,
+                    errorData: err.response?.data,
+                    headers: err.response?.headers,
+                    requestData: err.config?.data,
+                    method: err.config?.method,
+                    url: err.config?.url,
+                });
+
+                alert('Không thể cập nhật khách hàng: ' + message);
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCancel = () => {
@@ -103,16 +143,25 @@ export function EditCustomer() {
                 <div className={styles.editPostContent}>
                     <div className={styles.mainContent}>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Tên khách hàng</label>
+                            <label className={styles.label}>Họ tên *</label>
                             <input
                                 type="text"
                                 className={styles.input}
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                value={fullname}
+                                onChange={(e) => setFullname(e.target.value)}
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Email</label>
+                            <label className={styles.label}>Tên đăng nhập *</label>
+                            <input
+                                type="text"
+                                className={styles.input}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Email *</label>
                             <input
                                 type="email"
                                 className={styles.input}
@@ -130,16 +179,14 @@ export function EditCustomer() {
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Trạng thái</label>
-                            <select
-                                className={styles.select}
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value as 'active' | 'inactive' | 'pending')}
-                            >
-                                <option value="active">Đang hoạt động</option>
-                                <option value="pending">Đang chờ</option>
-                                <option value="inactive">Ngừng hoạt động</option>
-                            </select>
+                            <label className={styles.label}>Mật khẩu mới (nếu muốn đổi)</label>
+                            <input
+                                type="password"
+                                className={styles.input}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Để trống nếu không muốn đổi"
+                            />
                         </div>
                     </div>
                 </div>

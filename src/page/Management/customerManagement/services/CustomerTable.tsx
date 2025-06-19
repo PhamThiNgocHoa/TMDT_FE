@@ -11,7 +11,6 @@ export const CustomerTable: React.FC = () => {
         error,
         fetchCustomers,
         deleteCustomer,
-        updateCustomerStatus,
         selectedCustomers,
         setSelectedCustomers
     } = useCustomers();
@@ -57,9 +56,8 @@ export const CustomerTable: React.FC = () => {
         [customers, selectedCustomers]
     );
 
-    const handleEditClick = (customer: { id: number; categoryId?: number | string }) => {
-        const categoryId = customer.categoryId !== undefined ? customer.categoryId.toString() : customer.id.toString();
-        navigate(`/management/customerManagement/edit/${categoryId}`);
+    const handleEditClick = (customerId: number) => {
+        navigate(`/management/customerManagement/edit/${customerId}`);
     };
 
     const handleShowDeleteConfirm = (id: string) => {
@@ -118,22 +116,19 @@ export const CustomerTable: React.FC = () => {
                             checked={isAllSelected}
                             onChange={handleSelectAll}
                             ref={input => {
-                                if (input) {
-                                    input.indeterminate = isIndeterminate;
-                                }
+                                if (input) input.indeterminate = isIndeterminate;
                             }}
                         />
                     </th>
-                    <th>Ảnh</th>
                     <th>ID</th>
-                    <th>Tên</th>
+                    <th>Họ tên</th>
+                    <th>Tên đăng nhập</th>
                     <th>Email</th>
                     <th>Số điện thoại</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày tạo</th>
                     <th>Thao tác</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 {customers.map((customer) => (
                     <tr key={customer.id}>
@@ -144,24 +139,14 @@ export const CustomerTable: React.FC = () => {
                                 onChange={() => handleSelectCustomer(customer.id.toString())}
                             />
                         </td>
-                        <td>
-                            <img src={customer.avatar} alt={customer.name} className={styles.thumbnail} />
-                        </td>
                         <td>{customer.id}</td>
-                        <td>{customer.name}</td>
+                        <td>{customer.fullname}</td>
+                        <td>{customer.username}</td>
                         <td>{customer.email}</td>
                         <td>{customer.phone}</td>
                         <td>
-                                <span className={`${styles.status} ${styles[customer.status]}`}>
-                                    {customer.status === 'active' ? 'Đang hoạt động' :
-                                        customer.status === 'inactive' ? 'Không hoạt động' :
-                                            'Chưa xác định'}
-                                </span>
-                        </td>
-                        <td>{new Date(customer.createdAt).toLocaleDateString('vi-VN')}</td>
-                        <td>
                             <div className={styles.actions}>
-                                <button className={styles.editBtn} onClick={() => handleEditClick(customer)}>
+                                <button className={styles.editBtn} onClick={() => handleEditClick(customer.id)}>
                                     <i className="fas fa-edit"></i>
                                 </button>
                                 <button className={styles.viewBtn} onClick={() => console.log('View customer:', customer.id)}>
@@ -176,13 +161,12 @@ export const CustomerTable: React.FC = () => {
                 ))}
                 {customers.length === 0 && !loading && !error && (
                     <tr>
-                        <td colSpan={9} className={styles.noData}>Không có khách hàng nào được tìm thấy.</td>
+                        <td colSpan={8} className={styles.noData}>Không có khách hàng nào được tìm thấy.</td>
                     </tr>
                 )}
                 </tbody>
             </table>
 
-            {/* Xác nhận xoá */}
             {showDeleteConfirm && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>

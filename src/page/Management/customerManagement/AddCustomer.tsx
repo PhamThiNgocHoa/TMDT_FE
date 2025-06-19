@@ -20,6 +20,12 @@ export function AddCustomer() {
             return;
         }
 
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('Vui lòng đăng nhập lại để thực hiện thao tác này.');
+            return;
+        }
+
         const customerData = {
             fullname: fullName,
             username,
@@ -32,10 +38,10 @@ export function AddCustomer() {
             setLoading(true);
             console.log("📦 Dữ liệu gửi đi:", customerData);
             await addCustomer(customerData);
-            alert('Thêm người dùng thành công!');
+            alert('✅ Thêm người dùng thành công!');
             navigate('/management/customerManagement');
         } catch (err: any) {
-            console.error('Chi tiết lỗi:', err.response?.data || err.message);
+            console.error('❌ Chi tiết lỗi:', err.response?.data || err.message);
             alert('Không thể thêm người dùng: ' + (err.response?.data?.message || err.message));
         } finally {
             setLoading(false);
@@ -44,7 +50,7 @@ export function AddCustomer() {
 
     const handleCancel = () => {
         if (window.confirm('Bạn có chắc muốn hủy?')) {
-            navigate('/management/customerManagement');
+            navigate('/management/customer');
         }
     };
 

@@ -1,12 +1,24 @@
 import axios from 'axios';
 
+// Interface cho dữ liệu khách hàng
+export interface CustomerPayload {
+    fullname: string;
+    username: string;
+    email: string;
+    password: string;
+    phone?: string;
+}
+
+// Hàm hỗ trợ lấy token từ localStorage
 const getAuthHeaders = () => {
     const token = localStorage.getItem('authToken');
     return {
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
 };
 
+// Lấy tất cả khách hàng
 export const getAllCustomers = async () => {
     const response = await axios.get('/api/admin/customer', {
         headers: getAuthHeaders(),
@@ -14,25 +26,23 @@ export const getAllCustomers = async () => {
     return response.data;
 };
 
+// Xoá khách hàng theo ID
 export const deleteCustomer = async (id: number) => {
     return axios.delete(`/api/admin/customer/${id}`, {
         headers: getAuthHeaders(),
     });
 };
 
-export const addCustomer = async (data: any) => {
-    const token = localStorage.getItem('authToken');
-    const res = await axios.post('/api/admin/customer', data, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-        },
+// Thêm khách hàng
+export const addCustomer = async (data: CustomerPayload) => {
+    const response = await axios.post('/api/admin/customer', data, {
+        headers: getAuthHeaders(),
     });
-    return res.data;
+    return response.data;
 };
 
-
-export const updateCustomer = async (id: number, data: any) => {
+// Cập nhật khách hàng
+export const updateCustomer = async (id: number, data: Partial<CustomerPayload>) => {
     return axios.put(`/api/admin/customer/${id}`, data, {
         headers: getAuthHeaders(),
     });
