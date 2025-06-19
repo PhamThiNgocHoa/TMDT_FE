@@ -108,10 +108,7 @@ const HeaderFooterControl = () => {
           path="/management/customerManagement/add"
           element={<AddCustomer />}
         />
-        <Route
-          path="/management/customerManagement/edit/:Id"
-          element={<EditCustomer />}
-        />
+        <Route path="/management/customerManagement/edit/:Id" element={<EditCustomer />} />
         <Route path="/management/revenue" element={<RevenueManagement />} />
         <Route
           path="/management/revenueManagement/add"
@@ -121,7 +118,7 @@ const HeaderFooterControl = () => {
           path="/management/revenueManagement/edit/:id"
           element={<EditRevenue />}
         />
-        {/* Các route custom từ nhánh khai */}
+        {/* Các route custom từ nhánh khải */}
         <Route path="/custom" element={<CustomProductServicePage />} />
         <Route path="/orders" element={<OrderManagementPage />} />
         <Route

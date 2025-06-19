@@ -5,6 +5,8 @@ import { WishlistIcon } from "../assets/icons/WishListIcon";
 import { CartIcon } from "../assets/icons/CartIcon";
 import { UserIcon } from "../assets/icons/UserIcon";
 import { useNavigate } from 'react-router-dom';
+import useCustomer from "../hooks/useCustomer";
+
 
 // Fake data for cart items
 const fakeCartItems = [
@@ -36,6 +38,12 @@ export const ActionIcons = () => {
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [showCartDropdown, setShowCartDropdown] = useState(false); // State for cart dropdown visibility
     const navigate = useNavigate();
+    const { handleLogout } = useCustomer();
+
+    const handleLogoutClick = async () => {
+        await handleLogout();
+        navigate("/login");
+    };
 
     const handleMouseEnterAccount = () => {
         setShowAccountDropdown(true);
@@ -54,7 +62,9 @@ export const ActionIcons = () => {
     };
 
     const handleMenuItemClick = (action: string) => {
-        console.log(`Account action clicked: ${action}`);
+        if (action === 'manageAccount') {
+            navigate('/account');
+        }
         setShowAccountDropdown(false);
     };
 
@@ -124,7 +134,7 @@ export const ActionIcons = () => {
                 {showAccountDropdown && (
                     <div className="accountDropdown">
                         <div className="dropdownItem" onClick={() => handleMenuItemClick('manageAccount')}>
-                            <i className="fas fa-user"></i> 
+                            <i className="fas fa-user"></i>
                             <span>Manage My Account</span>
                         </div>
                         <div className="dropdownItem" onClick={() => handleMenuItemClick('myOrder')}>
@@ -139,8 +149,8 @@ export const ActionIcons = () => {
                              <i className="fas fa-star"></i> 
                             <span>My Reviews</span>
                         </div>
-                         <div className="dropdownItem" onClick={() => handleMenuItemClick('logout')}>
-                             <i className="fas fa-sign-out-alt"></i> 
+                        <div className="dropdownItem" onClick={handleLogoutClick}>
+                            <i className="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
                         </div>
                     </div>

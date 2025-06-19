@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import styles from './PostManagement.module.css';
-import { AdminSidebar } from './AdminSidebar';
+import { AdminSidebar } from '../AdminSidebar';
 // import { TopBar } from './TopBar'; // Removed TopBar as Header component replaces it
 import { Header } from './components/Header'; // Use named import
 import { TabsFilter } from './components/TabsFilter'; // Use named import

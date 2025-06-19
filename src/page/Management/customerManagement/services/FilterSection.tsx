@@ -6,10 +6,6 @@ import { useCustomers } from '../context/CustomerContext';
 export const FilterSection: React.FC = () => {
     const { filters, setFilters } = useCustomers();
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFilters({ ...filters, category: e.target.value });
-    };
-
     const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilters({ ...filters, sort: e.target.value });
     };
@@ -26,18 +22,7 @@ export const FilterSection: React.FC = () => {
                     <span>Bộ lọc</span>
                 </button>
 
-                <select
-                    className={styles.filterSelect}
-                    value={filters.category || ''}
-                    onChange={handleCategoryChange}
-                >
-                    <option value="">Tất cả danh mục</option>
-                    <option value="news">Tin tức</option>
-                    <option value="guide">Hướng dẫn</option>
-                    <option value="review">Đánh giá</option>
-                    <option value="game">Game</option>
-                    <option value="marketing">Marketing</option>
-                </select>
+                {/* Đã loại bỏ select danh mục vì không còn field category */}
 
                 <select
                     className={styles.filterSelect}
@@ -46,7 +31,6 @@ export const FilterSection: React.FC = () => {
                 >
                     <option value="newest">Mới nhất</option>
                     <option value="oldest">Cũ nhất</option>
-                    <option value="views">Lượt xem</option>
                 </select>
             </div>
         </div>
