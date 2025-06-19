@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import useProduct from "../../../hooks/useProduct";
 import useCategory from "../../../hooks/useCategory";
+import formatToVND from "../../../hooks/formatToVND";
 
 interface Filters {
     inStock: boolean | null;
     priceRange: { min: number; max: number };
-    rating: number;
-    categoryName: string;
+    categoryId: number;
+    type: string;
 }
 
 interface SelectedFilters {
@@ -20,10 +21,11 @@ const ProductsSection: React.FC = () => {
     const [visibleProducts, setVisibleProducts] = useState<number>(16);
     const [filters, setFilters] = useState<Filters>({
         inStock: null,
-        priceRange: {min: 0, max: 1000000},
-        rating: 1,
-        categoryName: ''
+        priceRange: {min: 0, max: 100000000},
+        categoryId: 0,
+        type: '',
     });
+
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
     const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(false); // State kiểm soát việc ẩn/hiện filters
@@ -39,7 +41,8 @@ const ProductsSection: React.FC = () => {
                 (filters.inStock === null || product.inStock === filters.inStock) &&
                 product.price >= filters.priceRange.min &&
                 product.price <= filters.priceRange.max &&
-                (filters.categoryName === '' || product.categoryName === filters.categoryName)
+                (filters.categoryId === 0 || product.categoryId === filters.categoryId) &&
+                (filters.type === '' || product.type === filters.type)
             );
         });
 
@@ -51,7 +54,6 @@ const ProductsSection: React.FC = () => {
 
         return filtered;
     };
-
 
     const handleFilterChange = (filterType: string, value: any) => {
         setFilters(prev => ({
@@ -72,9 +74,9 @@ const ProductsSection: React.FC = () => {
     const handleResetFilters = () => {
         setFilters({
             inStock: null,
-            priceRange: {min: 0, max: 1000000},
-            rating: 1,
-            categoryName: ''
+            priceRange: {min: 0, max: 100000000},
+            categoryId: 0,
+            type: '',
         });
         setSelectedFilters({});
         setIsFiltered(false);
@@ -114,31 +116,13 @@ const ProductsSection: React.FC = () => {
                             Hết hàng
                         </button>
                     </div>
-
-                    <div className="filter-group">
-                        <h4>Đánh Giá</h4>
-                        {[1, 2, 3, 4, 5].map((rating) => (
-                            <button
-                                key={rating}
-                                className={`filter-btn ${filters.rating === rating ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('rating', rating)}
-                            >
-                                {[...Array(rating)].map((_, index) => (
-                                    <span key={index} style={{color: 'gold', fontSize: '20px'}}>
-                                        ★
-                                    </span>
-                                ))}
-                            </button>
-                        ))}
-                    </div>
-
                     <div className="filter-group">
                         <h4>Danh mục</h4>
                         {categories.map(category => (
                             <button
                                 key={category.id}
-                                className={`filter-btn ${filters.categoryName === category.name ? 'active' : ''}`}
-                                onClick={() => handleFilterChange('categoryName', category.name)}
+                                className={`filter-btn ${filters.categoryId === category.id ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('categoryId', category.id)}
                             >
                                 {category.name}
                             </button>
@@ -150,22 +134,24 @@ const ProductsSection: React.FC = () => {
                         <h4>Lọc theo Giá</h4>
                         <div className="price-range">
                             <label>
-                                Từ: {filters.priceRange.min} VND
+                                Từ: <strong>{formatToVND(filters.priceRange.min)}</strong>
                                 <input
                                     type="range"
                                     min="0"
-                                    max="1000000"
+                                    max="100000000"
+                                    step="100000"
                                     value={filters.priceRange.min}
                                     onChange={(e) => handlePriceChange(e, 'min')}
                                     className="price-range-slider"
                                 />
                             </label>
                             <label>
-                                Đến: {filters.priceRange.max} VND
+                                Đến: <strong>{formatToVND(filters.priceRange.max)}</strong>
                                 <input
                                     type="range"
                                     min="0"
-                                    max="1000000"
+                                    max="100000000"
+                                    step="100000"
                                     value={filters.priceRange.max}
                                     onChange={(e) => handlePriceChange(e, 'max')}
                                     className="price-range-slider"
@@ -198,22 +184,53 @@ const ProductsSection: React.FC = () => {
                         </div>
 
                     </div>
-
+                    <div className="filter-group">
+                        <h4>Loại sản phẩm</h4>
+                        {['Handbook', 'Custom', 'Handbook-custom'].map((t) => (
+                            <button
+                                key={t}
+                                className={`filter-btn ${filters.type === t ? 'active' : ''}`}
+                                onClick={() => handleFilterChange('type', t)}
+                            >
+                                {t}
+                            </button>
+                        ))}
+                    </div>
 
                     <div className="selected-filters">
                         <div><h3>Tiêu chí đã chọn:</h3></div>
                         <div className="selected-filters-list">
                             {Object.keys(selectedFilters).map((filterKey) => {
                                 const value = selectedFilters[filterKey as keyof SelectedFilters];
-                                return (
-                                    <span key={filterKey} className="selected-filter-item">
-                                        {filterKey === 'inStock' ? (value ? 'Còn hàng' : 'Hết hàng') :
-                                            filterKey === 'rating' ? `${value} sao` :
-                                                filterKey === 'categoryName' ? value :
-                                                    ''}
-                                    </span>
-                                );
+
+                                if (filterKey === 'inStock') {
+                                    return (
+                                        <span key={filterKey} className="selected-filter-item">
+                                            {value ? 'Còn hàng' : 'Hết hàng'}
+                                        </span>
+                                    );
+                                }
+
+                                if (filterKey === 'categoryId') {
+                                    const category = categories.find(c => c.id === value);
+                                    return (
+                                        <span key={filterKey} className="selected-filter-item">
+                                            Danh mục: {category?.name}
+                                        </span>
+                                    );
+                                }
+
+                                if (filterKey === 'type') {
+                                    return (
+                                        <span key={filterKey} className="selected-filter-item">
+                                            Loại: {value}
+                                        </span>
+                                    )
+                                }
+
+                                return null;
                             })}
+
                         </div>
                     </div>
 

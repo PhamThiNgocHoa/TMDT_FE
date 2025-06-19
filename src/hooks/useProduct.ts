@@ -11,6 +11,7 @@ import {ProductResponse} from "../models/response/ProductResponse";
 
 function useProduct() {
     const [products, setProducts] = useState<ProductResponse[]>([]);
+    const [product, setProduct] = useState<ProductResponse>();
     const [productDetail, setProductDetail] = useState<ProductResponse | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +28,7 @@ function useProduct() {
         setLoading(true);
         try {
             const data = await getProductById(id);
-            setProducts(data ? [data] : []);
+            setProduct(data);
             return data;
         } catch (error) {
             handleError(error);
@@ -69,10 +70,12 @@ function useProduct() {
 
     return {
         products,
+        product,
         error,
         loading,
         fetchGetProductById,
         setProducts,
+        setProduct,
         saleProducts, setSaleProducts,
         fetchListFindByName,
         productDetail, setProductDetail,

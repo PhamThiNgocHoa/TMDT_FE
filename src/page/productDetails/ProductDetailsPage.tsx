@@ -10,7 +10,7 @@ import useCustomer from "../../hooks/useCustomer";
 
 export default function ProductDetailsPage() {
     const {id} = useParams<{ id: string }>();
-    const {fetchGetProductById, products, setProducts} = useProduct();
+    const {fetchGetProductById, product, products, setProduct} = useProduct();
     const {user} = useCustomer()
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -28,7 +28,7 @@ export default function ProductDetailsPage() {
             setError("");
             try {
                 const data = await fetchGetProductById(idNum);
-                setProducts(data ? [data] : []);
+                setProduct(data);
             } catch (err) {
                 setError("Không tìm thấy sản phẩm");
             } finally {
@@ -41,7 +41,7 @@ export default function ProductDetailsPage() {
 
     if (loading) return <div>Đang tải sản phẩm...</div>;
     if (error) return <div>{error}</div>;
-    if (!products) return <div>Không tìm thấy sản phẩm</div>;
+    if (!product) return <div>Không tìm thấy sản phẩm</div>;
 
 
     return (
@@ -51,17 +51,17 @@ export default function ProductDetailsPage() {
                     <div className={styles.mainContent}>
                         <article className={styles.productColumn}>
                             <div className={styles.productContent}>
-                                <ProductGallery images={products[0].productImages}/>
+                                <ProductGallery images={product.productImages}/>
                             </div>
                         </article>
                         <aside className={styles.infoColumn}>
-                            <ProductInfo product={products[0]}/>
+                            <ProductInfo product={product}/>
                         </aside>
                     </div>
                 </div>
                 {user?.id !== 0 &&(
                     <ProductReviewsSection
-                        productId={products[0].id}
+                        productId={product.id}
                         customerId={user?.id ?? 0}
                         customerName={user?.fullname ?? ""}
                     />
