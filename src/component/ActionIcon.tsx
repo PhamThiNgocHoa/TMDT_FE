@@ -70,12 +70,10 @@ export const ActionIcons = () => {
 
     const handleCartItemClick = (itemId: string) => {
         console.log(`Cart item clicked: ${itemId}`);
-        // Implement navigation to product details or cart page
-        setShowCartDropdown(false); // Hide dropdown after click
+        setShowCartDropdown(false);
     };
 
     const handleWishlistClick = () => {
-        // Navigate to the Wishlist page
         navigate('/wishlistPage');
     };
 

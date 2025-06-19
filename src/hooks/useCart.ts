@@ -32,8 +32,11 @@ export const useCart = (customerId: number | null) => {
     };
 
     useEffect(() => {
-        fetchCart();
+        if (customerId) {
+            fetchCart();
+        }
     }, [customerId]);
+
 
     return {
         cartData,
@@ -41,7 +44,7 @@ export const useCart = (customerId: number | null) => {
         error,
         fetchCart,
         setCartData,
-        totalQuantity,
+        totalQuantity, setLoading
     };
 };
 
