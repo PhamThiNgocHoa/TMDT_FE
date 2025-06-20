@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "../../assets/css/accountManagement.css";
 import useCustomer from "../../hooks/useCustomer";
 import Swal from 'sweetalert2';
+import OrderManagementPage from "./OrderManagementPage/OrderManagementPage";
 
 const AccountManagement = () => {
     const [activeTab, setActiveTab] = useState("ho-so-cua-toi");
-    const { user, fetchUser, fetchUpdateCustomer } = useCustomer();
+    const {user, fetchUser, fetchUpdateCustomer} = useCustomer();
 
     const [formData, setFormData] = useState({
         fullname: "",
@@ -39,7 +40,7 @@ const AccountManagement = () => {
     }, [user]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         setFormData((prev) => ({
             ...prev,
@@ -65,7 +66,7 @@ const AccountManagement = () => {
         }
 
         try {
-            const { confirmPassword, ...dataToSend } = formData;
+            const {confirmPassword, ...dataToSend} = formData;
 
             await fetchUpdateCustomer(user.id, dataToSend);
 
@@ -173,7 +174,9 @@ const AccountManagement = () => {
             case "phuong-thuc-thanh-toan":
                 return <div><h2>Các phương thức thanh toán</h2><p>Thông tin phương thức thanh toán ở đây.</p></div>;
             case "don-hang-cua-toi":
-                return <div><h2>Đơn hàng của tôi</h2><p>Thông tin đơn hàng ở đây.</p></div>;
+                return <div><h2>Đơn hàng của tôi</h2>
+                    <OrderManagementPage/>
+                </div>;
             case "don-hang-da-huy":
                 return <div><h2>Đơn hàng đã hủy</h2><p>Thông tin đơn hàng đã hủy ở đây.</p></div>;
             case "danh-sach-yeu-thich":
@@ -198,23 +201,37 @@ const AccountManagement = () => {
                 <div className="tab-container">
                     <h4>Quản lí tài khoản của tôi</h4>
                     <ul className="tab-account">
-                        <li className={activeTab === "ho-so-cua-toi" ? "active" : ""} onClick={() => setActiveTab("ho-so-cua-toi")}>Hồ sơ của tôi</li>
-                        <li className={activeTab === "phuong-thuc-thanh-toan" ? "active" : ""} onClick={() => setActiveTab("phuong-thuc-thanh-toan")}>Phương thức thanh toán</li>
+                        <li className={activeTab === "ho-so-cua-toi" ? "active" : ""}
+                            onClick={() => setActiveTab("ho-so-cua-toi")}>Hồ sơ của tôi
+                        </li>
+                        <li className={activeTab === "phuong-thuc-thanh-toan" ? "active" : ""}
+                            onClick={() => setActiveTab("phuong-thuc-thanh-toan")}>Phương thức thanh toán
+                        </li>
                     </ul>
                     <h4>Đơn hàng</h4>
                     <ul className="tab-account">
-                        <li className={activeTab === "don-hang-cua-toi" ? "active" : ""} onClick={() => setActiveTab("don-hang-cua-toi")}>Đơn hàng của tôi</li>
-                        <li className={activeTab === "don-hang-da-huy" ? "active" : ""} onClick={() => setActiveTab("don-hang-da-huy")}>Đơn hàng đã hủy</li>
+                        <li className={activeTab === "don-hang-cua-toi" ? "active" : ""}
+                            onClick={() => setActiveTab("don-hang-cua-toi")}>Đơn hàng của tôi
+                        </li>
+                        <li className={activeTab === "don-hang-da-huy" ? "active" : ""}
+                            onClick={() => setActiveTab("don-hang-da-huy")}>Đơn hàng đã hủy
+                        </li>
                     </ul>
                     <h4>Yêu thích</h4>
                     <ul className="tab-account">
-                        <li className={activeTab === "danh-sach-yeu-thich" ? "active" : ""} onClick={() => setActiveTab("danh-sach-yeu-thich")}>Danh sách yêu thích</li>
+                        <li className={activeTab === "danh-sach-yeu-thich" ? "active" : ""}
+                            onClick={() => setActiveTab("danh-sach-yeu-thich")}>Danh sách yêu thích
+                        </li>
                     </ul>
                 </div>
 
-                <div className="content-section">
+                <div
+                    className="content-section"
+                    style={{marginLeft: "-180px"}} // hoặc -10px tùy mức độ
+                >
                     {renderContent()}
                 </div>
+
             </div>
         </div>
     );

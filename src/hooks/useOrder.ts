@@ -14,7 +14,7 @@ import {useToken} from "./useToken";
 const useOrder = () => {
     const navigate = useNavigate();
     const [orderId, setOrderId] = useState<number | undefined>(undefined);
-    const [orders, setOrders] = useState<OrderResponse[]>();
+    const [orders, setOrders] = useState<OrderResponse[]>([]);
     const [notification, setNotification] = useState<{ message: string; type: "success" | "error" } | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
