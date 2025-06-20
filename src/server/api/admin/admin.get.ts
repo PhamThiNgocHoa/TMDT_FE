@@ -16,7 +16,8 @@ export const getOrderRevenue = async (): Promise<MonthlyRevenueResponse[]> => {
     return response.data
 }
 export const getAllOrders = async (): Promise<OrderResponse[]> => {
-    return await ApiService.get("/api/admin/order/list");
+    const response = await ApiService.get("/api/admin/order/list");
+    return response.data;
 }
 export const getOrderByStatus = async (status: OrderStatus): Promise<OrderResponse[]> => {
     return await ApiService.get(`/api/admin/${status}`);
@@ -29,7 +30,7 @@ export const getOrderRevenueAtMonthYear = async (month: string, year: string): P
     const response = await ApiService.get(`/api/admin/order/revenue/${month}/${year}`);
     return response.data;
 }
-export const getOrderRevenueAtYear= async (year: string): Promise<RevenueResponse> => {
+export const getOrderRevenueAtYear = async (year: string): Promise<RevenueResponse> => {
     const response = await ApiService.get(`/api/admin/order/order/revenue/year/${year}`);
     return response.data;
 }

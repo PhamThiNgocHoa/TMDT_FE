@@ -1,29 +1,31 @@
 .paymentMethodsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* giảm từ 24px */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 cột */
+  gap: 16px;
   width: 100%;
-  margin-top: 24px; /* giảm từ 32px */
+  margin-top: 24px;
   box-sizing: border-box;
   padding: 0 8px;
-}
-
-.bankMethod,
-.cashMethod {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 }
 
 .methodSelection {
   display: flex;
   align-items: center;
-  gap: 12px; /* giảm từ 16px */
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.methodSelection:hover {
+  background-color: #fafafa;
+  border-color: #db4444;
 }
 
 .radioButton {
-  width: 20px; /* giảm từ 24px */
+  width: 20px;
   height: 20px;
   border-radius: 50%;
   border: 2px solid #000;
@@ -35,7 +37,7 @@
 .radioButton.selected::after {
   content: '';
   position: absolute;
-  width: 10px; /* giảm từ 12px */
+  width: 10px;
   height: 10px;
   border-radius: 50%;
   background-color: #db4444;
@@ -46,9 +48,9 @@
 
 .methodName {
   font-family: Poppins, sans-serif;
-  font-size: 14px; /* giảm từ 16px */
+  font-size: 14px;
   font-weight: 400;
-  line-height: 20px; /* giảm từ 24px */
+  line-height: 20px;
   color: #000;
   white-space: nowrap;
 }
@@ -56,8 +58,9 @@
 .bankLogos {
   display: flex;
   align-items: center;
-  gap: 6px; /* giảm từ 8px */
-  flex-wrap: wrap; /* cho responsive khi nhỏ */
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: auto;
 }
 
 .bankLogo {
@@ -67,38 +70,38 @@
   flex-shrink: 0;
 }
 
-/* Logo kích thước tối ưu, giữ tỉ lệ */
 .bkashLogo {
-  width: 34px; /* giảm từ 37.8 */
-  height: 15px; /* giảm từ 16.8 */
+  width: 34px;
+  height: 15px;
   background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/V8Vg7nJQSF.png) no-repeat center;
   background-size: contain;
 }
 
 .visaLogo {
-  width: 34px; /* giảm */
+  width: 34px;
   height: 10px;
   background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/wcctVSJDOE.png) no-repeat center;
   background-size: contain;
 }
 
 .mastercardLogo {
-  width: 36px; /* giảm */
+  width: 36px;
   height: 22px;
   background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/uYW0OmNAHF.png) no-repeat center;
   background-size: contain;
 }
 
 .nagadLogo {
-  width: 36px; /* giảm */
+  width: 36px;
   height: 16px;
   background: url(https://codia-f2c.s3.us-west-1.amazonaws.com/image/2025-05-11/5CNNBhQEWi.png) no-repeat center;
   background-size: contain;
 }
 
-/* Responsive nhỏ */
+/* Responsive: 1 cột trên thiết bị nhỏ */
 @media (max-width: 480px) {
   .paymentMethodsSection {
+    grid-template-columns: 1fr;
     margin-top: 16px;
     padding: 0 4px;
     gap: 12px;
@@ -106,6 +109,7 @@
 
   .methodSelection {
     gap: 8px;
+    padding: 10px;
   }
 
   .radioButton {
@@ -132,6 +136,6 @@
   .mastercardLogo,
   .nagadLogo {
     width: auto;
-    height: 14px; /* giữ chiều cao nhỏ hơn */
+    height: 14px;
   }
 }

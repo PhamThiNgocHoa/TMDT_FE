@@ -44,6 +44,7 @@ import { OrderProvider } from "./page/Management/orderManagement/context/OrderCo
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
+import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
 
 const App = () => {
   return (
@@ -100,6 +101,7 @@ const HeaderFooterControl = () => {
           path="/management/category/edit/:categoryId"
           element={<EditCategory />}
         />
+        <Route path="/payment-return" element={<PaymentReturn/>}/>
         <Route path="/postManagement" element={<PostManagement />} />
         <Route path="/postManagement/add" element={<AddPost />} />
         <Route path="/postManagement/edit/:postId" element={<EditPost />} />

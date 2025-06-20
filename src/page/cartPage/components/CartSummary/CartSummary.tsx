@@ -4,7 +4,7 @@ import formatToVND from "../../../../hooks/formatToVND";
 import {CartResponse} from "../../../../models/response/CartResponse";
 
 interface CartSummaryProps {
-    cartData: CartResponse | null;
+    cartData: CartResponse;
 }
 const CartSummary: React.FC<CartSummaryProps> = ({ cartData }) => {
     const subtotal = cartData?.cartItems?.reduce((acc, item) => {
@@ -20,6 +20,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartData }) => {
 
     return (
         <div className={styles.summaryContainer}>
+
             <h2 className={styles.summaryTitle}>Tổng giỏ hàng</h2>
 
             <div className={styles.summaryRow}>
@@ -29,7 +30,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartData }) => {
                 </span>
             </div>
 
-            <div className={styles.divider} />
+            <div className={styles.divider}/>
 
             <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>Phí Ship:</span>
@@ -38,7 +39,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartData }) => {
                 </span>
             </div>
 
-            <div className={styles.divider} />
+            <div className={styles.divider}/>
 
             {appliedCoupon ? (
                 <div className={styles.summaryRow}>
@@ -54,7 +55,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ cartData }) => {
                 </div>
             )}
 
-            <div className={styles.divider} />
+            <div className={styles.divider}/>
 
             <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>Tổng cộng:</span>
