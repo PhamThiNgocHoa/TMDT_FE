@@ -1,32 +1,33 @@
 import React from 'react';
-import { CartItem } from '../../types';
 import styles from './styles.module.css';
+import formatToVND from "../../../../hooks/formatToVND";
+import {CartResponse} from "../../../../models/response/CartResponse";
 
 interface CartItemsProps {
-  items: CartItem[];
+    items: CartResponse | null;
 }
 
-const CartItems: React.FC<CartItemsProps> = ({ items }) => {
-  return (
-    <section className={styles.cartItemsSection}>
-      {items.map((item) => (
-        <div key={item.id} className={styles.cartItem}>
-          <div className={styles.productImage}>
-            <div 
-              className={styles.imageContainer}
-              style={{ backgroundImage: `url(${item.imageUrl})` }}
-            />
-          </div>
-          <div className={styles.productDetails}>
-            <span className={styles.productName}>{item.name}</span>
-            <span className={styles.productPrice}>
-              {new Intl.NumberFormat('vi-VN').format(item.price)} VND
+const CartItems: React.FC<CartItemsProps> = ({items}) => {
+    return (
+        <section className={styles.cartItemsSection}>
+            {items?.cartItems.map((item) => (
+                <div key={item.id} className={styles.cartItem}>
+                    <div className={styles.productImage}>
+                        <div
+                            className={styles.imageContainer}
+                            style={{backgroundImage: `url(${item.product.img})`}}
+                        />
+                    </div>
+                    <div className={styles.productDetails}>
+                        <span className={styles.productName}>{item.product.name}</span>
+                        <span className={styles.productPrice}>
+              {formatToVND(item.product.price)}
             </span>
-          </div>
-        </div>
-      ))}
-    </section>
-  );
+                    </div>
+                </div>
+            ))}
+        </section>
+    );
 };
 
 export default CartItems;

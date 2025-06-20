@@ -20,7 +20,7 @@ export interface Product {
     inStock?: boolean;
     productNew?: boolean;
 
-    colors?: string[];
-    sizes?: string[];
+    color?: string;
+    size?: string;
     featured?: boolean;
 }

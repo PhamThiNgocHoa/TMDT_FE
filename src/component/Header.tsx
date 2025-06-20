@@ -7,8 +7,13 @@ import { HeaderLogo } from "../assets/icons/HeaderLogo";
 import { NavigationLinks } from "./NavigationLinks";
 import { SearchBar } from "./SearchBar";
 import { ActionIcons } from "./ActionIcon";
+import useCart from "../hooks/useCart";
+import useCustomer from "../hooks/useCustomer";
 
 function Header() {
+    const { user } = useCustomer();
+    const userId = React.useMemo(() => user?.id ?? 0, [user?.id]);
+    const { cartData } = useCart(userId);
     return (
         <div className="headerWrapper">
             <div className="headerBanner">
@@ -23,7 +28,7 @@ function Header() {
             <HeaderLogo/>
             <NavigationLinks/>
             <SearchBar/>
-            <ActionIcons/>
+            <ActionIcons cartItems={cartData}/>
         </div>
     </header>
 </div>

@@ -1,12 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { CustomerInfo, CartItem, PaymentMethod } from '../types';
-import { 
-  fetchCartItems, 
-  fetchPaymentMethods, 
-  applyCoupon, 
-  submitOrder,
-  mockCustomerInfo 
-} from '../api/mockData';
+import React, {useState, useEffect, useMemo} from 'react';
 import CustomerForm from '../components/CustomerForm';
 import CartItems from '../components/CartItems';
 import OrderSummary from '../components/OrderSummary';
@@ -18,208 +10,170 @@ import CheckoutSuccess from '../CheckoutSuccess';
 import CheckoutFailure from '../CheckoutFailure';
 import styles from './index.module.css';
 
+import {AddressRequest} from "../../../models/request/AddressRequest";
+import {OrderMethod} from "../../../enums/OrderMethod";
+import useCustomer from "../../../hooks/useCustomer";
+import useCart from "../../../hooks/useCart";
+import useOrder from "../../../hooks/useOrder";
+
 const CheckoutPage: React.FC = () => {
-  // State for customer information
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>(mockCustomerInfo);
-  
-  // State for cart items
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  
-  // State for payment methods
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  
-  // State for coupon discount
-  const [couponDiscount, setCouponDiscount] = useState<number>(0);
-  
-  // State to track payment status: 'idle', 'success', 'failure'
-  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'failure'>('idle');
-  
-  // Loading states
-  const [isLoadingCart, setIsLoadingCart] = useState<boolean>(true);
-  const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
-  const [isSubmittingOrder, setIsSubmittingOrder] = useState<boolean>(false);
-  
-  // Notification state
-  const [notification, setNotification] = useState<{
-    show: boolean;
-    message: string;
-    type: 'success' | 'error';
-  }>({
-    show: false,
-    message: '',
-    type: 'success'
-  });
+    const {user} = useCustomer();
+    const userId = useMemo(() => user?.id ?? 0, [user?.id]);
+    const {cartData} = useCart(userId);
 
-  // Fetch cart items and payment methods on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [itemsData, methodsData] = await Promise.all([
-          fetchCartItems(),
-          fetchPaymentMethods()
+    const [customerInfo, setCustomerInfo] = useState<AddressRequest>({
+        receiver: '',
+        address: '',
+        numberPhone: '',
+        customerId: userId,
+    });
+
+    const [availablePaymentMethods, setAvailablePaymentMethods] = useState<OrderMethod[]>([]);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<OrderMethod>(OrderMethod.COD);
+    const [couponDiscount, setCouponDiscount] = useState<number>(0);
+    const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'failure'>('idle');
+    const {fetchCreateOrderAndPayment} = useOrder();
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
+    const [isSubmittingOrder, setIsSubmittingOrder] = useState<boolean>(false);
+
+    const [notification, setNotification] = useState({
+        show: false,
+        message: '',
+        type: 'success' as 'success' | 'error',
+    });
+
+    useEffect(() => {
+        setAvailablePaymentMethods([
+            OrderMethod.COD,
+            OrderMethod.VN_PAY,
         ]);
-        
-        setCartItems(itemsData);
-        setPaymentMethods(methodsData);
-      } catch (error) {
-        showNotification('Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại.', 'error');
-      } finally {
-        setIsLoadingCart(false);
-      }
+    }, []);
+
+
+    const handleCustomerInfoChange = (info: AddressRequest) => {
+        setCustomerInfo(info);
     };
-    
-    fetchData();
-  }, []);
 
-  // Handle customer info changes
-  const handleCustomerInfoChange = (info: CustomerInfo) => {
-    setCustomerInfo(info);
-  };
+    const handleSelectPaymentMethod = (method: OrderMethod) => {
+        setSelectedPaymentMethod(method);
+    };
 
-  // Handle payment method selection
-  const handleSelectPaymentMethod = (id: number) => {
-    const updatedMethods = paymentMethods.map(method => ({
-      ...method,
-      selected: method.id === id
-    }));
-    
-    setPaymentMethods(updatedMethods);
-  };
+    const handleApplyCoupon = async (code: string) => {
+        setIsApplyingCoupon(true);
+        try {
+            const discount = code === 'GIAM10' ? 10 : 0;
+            if (discount > 0) {
+                setCouponDiscount(discount);
+                showNotification('Mã giảm giá đã được áp dụng thành công!', 'success');
+            } else {
+                showNotification('Mã giảm giá không hợp lệ.', 'error');
+            }
+        } catch (e) {
+            showNotification('Lỗi khi áp dụng mã giảm giá.', 'error');
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    };
 
-  // Handle coupon application
-  const handleApplyCoupon = async (code: string) => {
-    setIsApplyingCoupon(true);
-    
-    try {
-      const result = await applyCoupon(code);
-      
-      if (result.success) {
-        setCouponDiscount(result.discount);
-        showNotification('Mã giảm giá đã được áp dụng thành công!', 'success');
-      } else {
-        showNotification('Mã giảm giá không hợp lệ hoặc đã hết hạn.', 'error');
-      }
-    } catch (error) {
-      showNotification('Đã xảy ra lỗi khi áp dụng mã giảm giá.', 'error');
-    } finally {
-      setIsApplyingCoupon(false);
-    }
-  };
+    const handleSubmitOrder = async () => {
+        if (!validateForm()) {
+            showNotification('Vui lòng điền đầy đủ thông tin bắt buộc.', 'error');
+            return;
+        }
 
-  // Handle order submission
-  const handleSubmitOrder = async () => {
-    // Validate form
-    if (!validateForm()) {
-      showNotification('Vui lòng điền đầy đủ thông tin bắt buộc.', 'error');
-      return;
-    }
-    
-    setIsSubmittingOrder(true);
-    setPaymentStatus('idle'); // Reset status before submitting
+        setIsSubmittingOrder(true);
+        setPaymentStatus('idle');
 
-    try {
-      const selectedPaymentMethod = paymentMethods.find(method => method.selected)?.id.toString() || '';
-      
-      const result = await submitOrder(
-        customerInfo,
-        cartItems,
-        selectedPaymentMethod
-      );
-      
-      if (result.success) {
-        // showNotification(`Đặt hàng thành công! Mã đơn hàng: ${result.orderId}`, 'success'); // Hide default notification
-        setPaymentStatus('success');
-      } else {
-        // showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error'); // Hide default notification
-        setPaymentStatus('failure');
-      }
-    } catch (error) {
-      // showNotification('Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.', 'error'); // Hide default notification
-      setPaymentStatus('failure');
-    } finally {
-      setIsSubmittingOrder(false);
-    }
-  };
+        try {
+            await fetchCreateOrderAndPayment(
+                {
+                    orderDetails: cartData?.cartItems.map(item => ({
+                        productId: item.product.id,
+                        quantity: item.quantity,
+                        price: item.product.price,
+                    })) ?? [],
+                    address: customerInfo.address,
+                    receiver: customerInfo.receiver,
+                    numberPhone: customerInfo.numberPhone,
+                    customerId: userId
+                },
+                selectedPaymentMethod
+            );
 
-  // Validate form
-  const validateForm = (): boolean => {
-    const { fullName, address, city, phone, email } = customerInfo;
-    return !!(fullName && address && city && phone && email);
-  };
+            setPaymentStatus('success');
+        } catch (error) {
+            console.error("Đặt hàng thất bại:", error);
+            setPaymentStatus('failure');
+        } finally {
+            setIsSubmittingOrder(false);
+        }
+    };
 
-  // Show notification
-  const showNotification = (message: string, type: 'success' | 'error') => {
-    setNotification({
-      show: true,
-      message,
-      type
-    });
-  };
 
-  // Hide notification
-  const hideNotification = () => {
-    setNotification({
-      ...notification,
-      show: false
-    });
-  };
+    const validateForm = (): boolean => {
+        const {receiver, address, numberPhone} = customerInfo;
+        return !!(receiver && address && numberPhone);
+    };
 
-  return (
-    <main className={styles.checkoutContainer}>
-      {/* Only show the notification for validation errors, not payment status */}
-      {notification.show && paymentStatus === 'idle' && (
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          onClose={hideNotification}
-        />
-      )}
-      
-      {paymentStatus === 'success' && <CheckoutSuccess />}
-      {paymentStatus === 'failure' && <CheckoutFailure />}
+    const showNotification = (message: string, type: 'success' | 'error') => {
+        setNotification({show: true, message, type});
+    };
 
-      {paymentStatus === 'idle' && (
-        <div className={styles.checkoutContent}>
-          <section className={styles.leftColumn}>
-            <CustomerForm
-              customerInfo={customerInfo}
-              onCustomerInfoChange={handleCustomerInfoChange}
-            />
-          </section>
-          
-          <section className={styles.rightColumn}>
-            {isLoadingCart ? (
-              <p>Đang tải thông tin giỏ hàng...</p>
-            ) : (
-              <>
-                <CartItems items={cartItems} />
-                
-                <OrderSummary 
-                  items={cartItems}
-                  couponDiscount={couponDiscount}
+    const hideNotification = () => {
+        setNotification(prev => ({...prev, show: false}));
+    };
+
+    return (
+        <main className={styles.checkoutContainer}>
+            {notification.show && paymentStatus === 'idle' && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={hideNotification}
                 />
-                
-                <PaymentMethods
-                  paymentMethods={paymentMethods}
-                  onSelectPaymentMethod={handleSelectPaymentMethod}
-                />
-                
-                <CouponForm
-                  onApplyCoupon={handleApplyCoupon}
-                  isLoading={isApplyingCoupon}
-                />
-                
-                <CheckoutButton
-                  onClick={handleSubmitOrder}
-                  isLoading={isSubmittingOrder}
-                />
-              </>
             )}
-          </section>
-        </div>
-      )}
-    </main>
-  );
+
+            {paymentStatus === 'success' && <CheckoutSuccess/>}
+            {paymentStatus === 'failure' && <CheckoutFailure/>}
+
+            {paymentStatus === 'idle' && (
+                <div className={styles.checkoutContent}>
+                    <section className={styles.leftColumn}>
+                        <CustomerForm
+                            customerInfo={customerInfo}
+                            onCustomerInfoChange={handleCustomerInfoChange}
+                        />
+                    </section>
+
+                    <section className={styles.rightColumn}>
+                        <>
+                            <CartItems items={cartData}/>
+
+                            <OrderSummary
+                                items={cartData}
+                            />
+
+                            <PaymentMethods
+                                paymentMethods={availablePaymentMethods}
+                                selectedMethod={selectedPaymentMethod}
+                                onSelectPaymentMethod={handleSelectPaymentMethod}
+                            />
+
+                            <CouponForm
+                                onApplyCoupon={handleApplyCoupon}
+                                isLoading={isApplyingCoupon}
+                            />
+
+                            <CheckoutButton
+                                onClick={handleSubmitOrder}
+                                isLoading={isSubmittingOrder}
+                            />
+                        </>
+                    </section>
+                </div>
+            )}
+        </main>
+    );
 };
 
 export default CheckoutPage;
