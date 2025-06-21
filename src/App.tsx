@@ -45,6 +45,7 @@ import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
 import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
+import GoogleRedirectHandler from "./page/GoogleRedirectHandler";
 
 const App = () => {
   return (
@@ -92,6 +93,7 @@ const HeaderFooterControl = () => {
         <Route path="/cart" element={<CartMain />} />
         <Route path="/loginad" element={<LoginAd />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/oauth2/redirect" element={<GoogleRedirectHandler/>} />
         <Route path="/wishlistPage" element={<WishlistPage />} />
         {/* Admin routes */}
         <Route path="/admin/*" element={<AdminDashboard />} />

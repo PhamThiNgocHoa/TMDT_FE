@@ -108,14 +108,7 @@ const Register = () => {
 
                         <button type="submit">Tạo tài khoản</button>
 
-                        <button className="btn-google" type="button">
-                            <img
-                                src={GoogleIcon}
-                                alt="Google Logo"
-                                style={{ width: '15px', height: '15px', marginRight: '10px' }}
-                            />
-                            Đăng ký bằng Google
-                        </button>
+
 
                         <div className="forgot-password">
                             Bạn đã có tài khoản? <a href="/login">Đăng nhập</a>

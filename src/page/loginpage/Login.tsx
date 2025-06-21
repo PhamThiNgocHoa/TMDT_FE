@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import '../../assets/css/login.css';
 import imglogin from '../../assets/image/imagelogin.png';
 import useCustomer from "../../hooks/useCustomer";
+import GoogleIcon from "../../assets/image/iconGoogle.png";
+import {loginWithGoogle} from "../../server/api/authentication/auth.post";
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { handleLogin } = useCustomer();
+    const {handleLogin} = useCustomer();
     const navigate = useNavigate();
 
     const handleLogins = async () => {
@@ -51,7 +53,7 @@ const Login = () => {
         <div className="login-container">
             <div className="login-content">
                 <div className="login-left">
-                    <img src={imglogin} alt="Login Illustration" />
+                    <img src={imglogin} alt="Login Illustration"/>
                 </div>
                 <div className="login-right">
                     <h2>Đăng nhập</h2>
@@ -76,6 +78,14 @@ const Login = () => {
                         </div>
                         <button type="submit" onClick={handleLogins}>
                             Đăng nhập
+                        </button>
+                        <button className="btn-google" type="submit" onClick={loginWithGoogle}>
+                            <img
+                                src={GoogleIcon}
+                                alt="Google Logo"
+                                style={{width: '15px', height: '15px', marginRight: '10px'}}
+                            />
+                            Đăng nhập bằng Google
                         </button>
                         <div className="forgot-password">
                             <a href="/forgotPass">Quên mật khẩu?</a>

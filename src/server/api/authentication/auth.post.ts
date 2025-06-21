@@ -68,4 +68,6 @@ export const checkTokenExpiration = async (token: string) => {
     }
 };
 
-
+export const loginWithGoogle = () => {
+    window.location.href = "http://localhost:8080/api/auth/login-google";
+};
