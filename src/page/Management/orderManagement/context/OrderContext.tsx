@@ -15,7 +15,15 @@ interface Order {
     fullname: string;
     address: string;
     phone: string;
-    status: "PENDING" | "PENDING_PAYMENT" | "DELIVERED" | "CANCELLED" | "SHIPPED";
+    status:
+        | "PENDING"
+        | "PENDING_PAYMENT"
+        | "SHIPPING"
+        | "CARRIER_CANCELLED"
+        | "PAYMENT_SUCCESS"
+        | "PAYMENT_FAILED"
+        | "DELIVERED"
+        | "CANCELLED";
 }
 
 interface OrderFilters {

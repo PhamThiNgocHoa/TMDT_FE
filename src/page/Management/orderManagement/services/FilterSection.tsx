@@ -15,7 +15,15 @@ export const FilterSection: React.FC = () => {
         const value = e.target.value;
         setFilters({
             ...filters,
-            status: value === '' ? undefined : value as "PENDING" | "PENDING_PAYMENT" | "SHIPPED" | "DELIVERED" | "CANCELLED"
+            status: value === '' ? undefined : value as
+                | "PENDING"
+                | "PENDING_PAYMENT"
+                | "SHIPPING"
+                | "CARRIER_CANCELLED"
+                | "PAYMENT_SUCCESS"
+                | "PAYMENT_FAILED"
+                | "DELIVERED"
+                | "CANCELLED",
         });
         fetchOrders();
     };
@@ -23,7 +31,10 @@ export const FilterSection: React.FC = () => {
     return (
         <div className={styles.filterSection}>
             <div className={styles.filters}>
-                <button className={styles.adminButtonWithIcon} onClick={() => console.log('Chọn ngày clicked')}>
+                <button
+                    className={styles.adminButtonWithIcon}
+                    onClick={() => console.log('Chọn ngày clicked')}
+                >
                     <i className="fas fa-calendar-alt"></i>
                     <span>Chọn ngày</span>
                 </button>
@@ -37,7 +48,10 @@ export const FilterSection: React.FC = () => {
                     <option value="">Tất cả trạng thái</option>
                     <option value="PENDING">Chờ xử lý</option>
                     <option value="PENDING_PAYMENT">Chờ thanh toán</option>
-                    <option value="SHIPPED">Đang giao</option>
+                    <option value="SHIPPING">Đang giao</option>
+                    <option value="CARRIER_CANCELLED">Hủy bên vận chuyển</option>
+                    <option value="PAYMENT_SUCCESS">Thanh toán thành công</option>
+                    <option value="PAYMENT_FAILED">Thanh toán thất bại</option>
                     <option value="DELIVERED">Đã giao</option>
                     <option value="CANCELLED">Đã hủy</option>
                 </select>

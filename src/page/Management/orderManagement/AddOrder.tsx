@@ -1,48 +1,125 @@
-import React, { useState } from "react";
-import styles from "./AddOrder.module.css";
-import { AdminSidebar } from "./AdminSidebar";
-import { Header } from "./components/Header";
-import axios from "axios";
+"use client";
+import React, { useState } from 'react';
+import styles from './AddOrder.module.css';
+import { AdminSidebar } from '../AdminSidebar';
+import { Header } from './components/Header';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+type OrderStatus = 
+    | "PENDING"
+    | "PENDING_PAYMENT"
+    | "SHIPPING"
+    | "CARRIER_CANCELLED"
+    | "PAYMENT_SUCCESS"
+    | "PAYMENT_FAILED"
+    | "DELIVERED"
+    | "CANCELLED"
+    | "RETURNED";
 
 export function AddOrder() {
-    const [fullname, setFullname] = useState("");
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
-    const [status, setStatus] = useState<"PENDING" | "PENDING_PAYMENT" | "SHIPPED" | "DELIVERED" | "CANCELLED">("PENDING");
+    const [fullname, setFullname] = useState('');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState<OrderStatus>('PENDING');
+    const [totalAmount, setTotalAmount] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const statusOptions = [
+        { value: 'PENDING', label: 'Đang chờ xử lý' },
+        { value: 'PENDING_PAYMENT', label: 'Đang chờ thanh toán' },
+        { value: 'SHIPPING', label: 'Đang giao hàng' },
+        { value: 'DELIVERED', label: 'Đã giao hàng' },
+        { value: 'PAYMENT_SUCCESS', label: 'Đã thanh toán' },
+        { value: 'PAYMENT_FAILED', label: 'Thanh toán thất bại' },
+        { value: 'CANCELLED', label: 'Đã hủy' },
+        { value: 'RETURNED', label: 'Đã trả hàng' }
+    ];
+
+    const canEditOrder = (status: string) => {
+        // Chỉ có thể chỉnh sửa đơn hàng ở các trạng thái: PENDING_PAYMENT, PENDING, PAYMENT_FAILED
+        return ['PENDING_PAYMENT', 'PENDING', 'PAYMENT_FAILED'].includes(status);
+    };
 
     const handleSave = async () => {
         if (!fullname || !address || !phone) {
-            alert("Vui lòng nhập đầy đủ Họ tên, Địa chỉ, và Số điện thoại.");
-            return;
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Thiếu thông tin',
+                text: 'Họ tên, địa chỉ và số điện thoại là bắt buộc!',
+            });
         }
 
-        const payload = {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Chưa đăng nhập',
+                text: 'Vui lòng đăng nhập lại để thực hiện thao tác này.',
+            });
+        }
+
+        const orderData = {
             fullname,
             address,
             phone,
+            email,
             status,
+            totalAmount: totalAmount ? parseFloat(totalAmount) : 0
         };
 
         try {
-            const response = await axios.post("/api/admin/order", payload);
-            alert("✅ Đơn hàng đã được thêm!");
-            console.log("📦 Response:", response.data);
-            handleCancel(); // reset form
-        } catch (error: any) {
-            console.error("❌ Lỗi khi tạo đơn hàng:", error);
-            alert("❌ Có lỗi xảy ra khi thêm đơn hàng.");
+            setLoading(true);
+            console.log("📦 Dữ liệu gửi đi:", orderData);
+            
+            const response = await axios.post('/api/admin/order', orderData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            console.log("✅ Phản hồi từ server:", response.data);
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Thêm đơn hàng thành công!',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            navigate('/management/orderManagement');
+        } catch (err: any) {
+            console.error('Chi tiết lỗi:', err.response?.data || err.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Thêm đơn hàng thất bại',
+                text: err.response?.data?.message || err.message || 'Đã có lỗi xảy ra.',
+            });
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleCancel = () => {
-        setFullname("");
-        setAddress("");
-        setPhone("");
-        setStatus("PENDING");
+        Swal.fire({
+            title: 'Bạn có chắc muốn hủy?',
+            text: 'Mọi thay đổi sẽ không được lưu.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Quay lại',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                navigate('/management/orderManagement');
+            }
+        });
     };
 
     return (
-        <div className={styles.addCustomerContainer}>
+        <div className={styles.addOrderContainer}>
             <AdminSidebar />
             <div className={styles.body}>
                 <Header />
@@ -52,24 +129,24 @@ export function AddOrder() {
 
                 <div className={styles.formSection}>
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Họ tên *</label>
+                        <label className={styles.label}>Họ tên khách hàng *</label>
                         <input
                             type="text"
                             className={styles.input}
                             value={fullname}
                             onChange={(e) => setFullname(e.target.value)}
-                            placeholder="Nhập họ tên người nhận"
+                            placeholder="Nhập họ tên khách hàng"
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Địa chỉ *</label>
-                        <input
-                            type="text"
-                            className={styles.input}
+                        <label className={styles.label}>Địa chỉ giao hàng *</label>
+                        <textarea
+                            className={styles.textarea}
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
                             placeholder="Nhập địa chỉ giao hàng"
+                            rows={3}
                         />
                     </div>
 
@@ -85,29 +162,58 @@ export function AddOrder() {
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label className={styles.label}>Trạng thái *</label>
+                        <label className={styles.label}>Email</label>
+                        <input
+                            type="email"
+                            className={styles.input}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Nhập email"
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Trạng thái đơn hàng</label>
                         <select
                             className={styles.select}
                             value={status}
-                            onChange={(e) =>
-                                setStatus(e.target.value as typeof status)
-                            }
+                            onChange={(e) => setStatus(e.target.value as OrderStatus)}
                         >
-                            <option value="PENDING">Chờ xử lý</option>
-                            <option value="PENDING_PAYMENT">Chờ thanh toán</option>
-                            <option value="SHIPPED">Đang giao</option>
-                            <option value="DELIVERED">Đã giao</option>
-                            <option value="CANCELLED">Đã hủy</option>
+                            {statusOptions.map(option => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
                         </select>
                     </div>
 
                     <div className={styles.formGroup}>
+                        <label className={styles.label}>Tổng tiền (VNĐ)</label>
+                        <input
+                            type="number"
+                            className={styles.input}
+                            value={totalAmount}
+                            onChange={(e) => setTotalAmount(e.target.value)}
+                            placeholder="Nhập tổng tiền"
+                            min="0"
+                        />
+                    </div>
+
+                    <div className={styles.formGroup}>
                         <div className={styles.actionButtons}>
-                            <button className={`${styles.button} ${styles.secondaryButton}`} onClick={handleCancel}>
+                            <button
+                                className={`${styles.button} ${styles.secondaryButton}`}
+                                onClick={handleCancel}
+                                disabled={loading}
+                            >
                                 Hủy
                             </button>
-                            <button className={`${styles.button} ${styles.primaryButton}`} onClick={handleSave}>
-                                Lưu
+                            <button
+                                className={`${styles.button} ${styles.primaryButton}`}
+                                onClick={handleSave}
+                                disabled={loading}
+                            >
+                                {loading ? 'Đang lưu...' : 'Lưu'}
                             </button>
                         </div>
                     </div>
