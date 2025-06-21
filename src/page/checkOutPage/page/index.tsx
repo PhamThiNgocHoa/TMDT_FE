@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import CustomerForm from '../components/CustomerForm';
 import CartItems from '../components/CartItems';
 import OrderSummary from '../components/OrderSummary';
@@ -10,16 +10,50 @@ import CheckoutSuccess from '../CheckoutSuccess';
 import CheckoutFailure from '../CheckoutFailure';
 import styles from './index.module.css';
 
-import {AddressRequest} from "../../../models/request/AddressRequest";
-import {OrderMethod} from "../../../enums/OrderMethod";
+import { AddressRequest } from "../../../models/request/AddressRequest";
+import { OrderMethod } from "../../../enums/OrderMethod";
 import useCustomer from "../../../hooks/useCustomer";
 import useCart from "../../../hooks/useCart";
 import useOrder from "../../../hooks/useOrder";
+import { useLocation } from "react-router-dom";
+import { OrderDetailRequest } from "../../../models/request/OrderDetailRequest";
 
 const CheckoutPage: React.FC = () => {
-    const {user} = useCustomer();
+    const { user } = useCustomer();
     const userId = useMemo(() => user?.id ?? 0, [user?.id]);
-    const {cartData} = useCart(userId);
+    const { cartData } = useCart(userId);
+    const location = useLocation();
+
+    const state = location.state as {
+        fromBuyNow?: boolean;
+        orderDetails?: OrderDetailRequest[];
+    };
+    console.log("state", state);
+
+    const isBuyNow = state?.fromBuyNow && state?.orderDetails?.length;
+
+    const displayItems = isBuyNow
+        ? {
+            id: 0,
+            customerId: userId,
+            cartItems: (state?.orderDetails ?? []).map((item, index) => ({
+                id: index,
+                product: {
+                    id: item.product?.id ?? item.productId,
+                    name: item.product?.name ?? 'Sản phẩm mua ngay',
+                    price: item.product?.price ?? 0,
+                    category: '',
+                    img: item.product?.img,
+                    images: [],
+                    discount: '',
+                },
+                quantity: item.quantity,
+                customization: item.customization,
+                color: item.color,
+            })),
+        }
+        : cartData;
+
 
     const [customerInfo, setCustomerInfo] = useState<AddressRequest>({
         receiver: '',
@@ -32,7 +66,7 @@ const CheckoutPage: React.FC = () => {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<OrderMethod>(OrderMethod.COD);
     const [couponDiscount, setCouponDiscount] = useState<number>(0);
     const [paymentStatus, setPaymentStatus] = useState<'idle' | 'success' | 'failure'>('idle');
-    const {fetchCreateOrderAndPayment} = useOrder();
+    const { fetchCreateOrderAndPayment } = useOrder();
     const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
     const [isSubmittingOrder, setIsSubmittingOrder] = useState<boolean>(false);
 
@@ -43,12 +77,8 @@ const CheckoutPage: React.FC = () => {
     });
 
     useEffect(() => {
-        setAvailablePaymentMethods([
-            OrderMethod.COD,
-            OrderMethod.VN_PAY,
-        ]);
+        setAvailablePaymentMethods([OrderMethod.COD, OrderMethod.VN_PAY]);
     }, []);
-
 
     const handleCustomerInfoChange = (info: AddressRequest) => {
         setCustomerInfo(info);
@@ -85,17 +115,29 @@ const CheckoutPage: React.FC = () => {
         setPaymentStatus('idle');
 
         try {
+            const orderDetails = isBuyNow
+                ? state?.orderDetails?.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                color: item.color,
+                customization: item.customization,
+                price: item.product?.price ?? 0,
+            })) ?? []
+                : cartData?.cartItems.map(item => ({
+                productId: item.product.id,
+                quantity: item.quantity,
+                price: item.product.price,
+                color: item.color,
+                customization: item.customization,
+            })) ?? [];
+
             await fetchCreateOrderAndPayment(
                 {
-                    orderDetails: cartData?.cartItems.map(item => ({
-                        productId: item.product.id,
-                        quantity: item.quantity,
-                        price: item.product.price,
-                    })) ?? [],
+                    orderDetails,
                     address: customerInfo.address,
                     receiver: customerInfo.receiver,
                     numberPhone: customerInfo.numberPhone,
-                    customerId: userId
+                    customerId: userId,
                 },
                 selectedPaymentMethod
             );
@@ -109,18 +151,17 @@ const CheckoutPage: React.FC = () => {
         }
     };
 
-
     const validateForm = (): boolean => {
-        const {receiver, address, numberPhone} = customerInfo;
+        const { receiver, address, numberPhone } = customerInfo;
         return !!(receiver && address && numberPhone);
     };
 
     const showNotification = (message: string, type: 'success' | 'error') => {
-        setNotification({show: true, message, type});
+        setNotification({ show: true, message, type });
     };
 
     const hideNotification = () => {
-        setNotification(prev => ({...prev, show: false}));
+        setNotification(prev => ({ ...prev, show: false }));
     };
 
     return (
@@ -133,8 +174,8 @@ const CheckoutPage: React.FC = () => {
                 />
             )}
 
-            {paymentStatus === 'success' && <CheckoutSuccess/>}
-            {paymentStatus === 'failure' && <CheckoutFailure/>}
+            {paymentStatus === 'success' && <CheckoutSuccess />}
+            {paymentStatus === 'failure' && <CheckoutFailure />}
 
             {paymentStatus === 'idle' && (
                 <div className={styles.checkoutContent}>
@@ -147,11 +188,9 @@ const CheckoutPage: React.FC = () => {
 
                     <section className={styles.rightColumn}>
                         <>
-                            <CartItems items={cartData}/>
+                            <CartItems items={displayItems} />
 
-                            <OrderSummary
-                                items={cartData}
-                            />
+                            <OrderSummary items={displayItems} />
 
                             <PaymentMethods
                                 paymentMethods={availablePaymentMethods}

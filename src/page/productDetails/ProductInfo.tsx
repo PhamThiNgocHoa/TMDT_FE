@@ -1,17 +1,50 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styles from './ProductDetailsPage.module.css';
-import { ProductDeliveryInfo } from './ProductDeliveryInfo';
-import { ProductResponse } from '../../models/response/ProductResponse';
+import {ProductDeliveryInfo} from './ProductDeliveryInfo';
+import {ProductResponse} from '../../models/response/ProductResponse';
 import formatToVND from '../../hooks/formatToVND';
+import {useNavigate} from "react-router-dom";
+import {OrderDetailRequest} from "../../models/request/OrderDetailRequest";
 
 interface ProductInfoProps {
     product: ProductResponse;
 }
 
-export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
+export const ProductInfo: React.FC<ProductInfoProps> = ({product}) => {
     const [quantity, setQuantity] = useState(1);
     const [selectedPosition, setSelectedPosition] = useState("Trên giữa");
     const [selectedHeight, setSelectedHeight] = useState("12.5");
+    const [note, setNote] = useState('');
+    const navigate = useNavigate();
+    const handleBuyNow = () => {
+        const customization = product.type === 'Custom' || product.type === 'Handbook-custom'
+            ? {
+                location: selectedPosition,
+                height: selectedHeight,
+                note: note,
+            }
+            : undefined;
+
+        const orderDetail: OrderDetailRequest = {
+            productId: product.id,
+            quantity,
+            color: selectedColor ?? "",
+            customization,
+            product: {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                img: product.img ?? "",
+            }
+        };
+
+        navigate("/checkout", {
+            state: {
+                fromBuyNow: true,
+                orderDetails: [orderDetail]
+            }
+        });
+    };
     const [selectedSize, setSelectedSize] = useState<string>(
         product.productSizes?.[0]?.size || ''
     );
@@ -87,6 +120,8 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                     <div style={{marginBottom: 16}}>
                         <div style={{fontWeight: 600, marginBottom: 8}}>Ghi chú:</div>
                         <textarea
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
                             placeholder=""
                             style={{
                                 border: "1.5px solid #ccc",
@@ -99,6 +134,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                                 fontWeight: 500,
                             }}
                         />
+
                     </div>
                 </>
             )}
@@ -190,7 +226,7 @@ export const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
                     </button>
                 </div>
                 <div className={styles.purchaseButtons}>
-                    <button className={styles.buyButton}>Mua ngay</button>
+                    <button className={styles.buyButton} onClick={handleBuyNow}>Mua ngay</button>
                     <button className={styles.wishlistButton}>
                         <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/39cad115df8f8fac9803aafdeef0dc52c6de105b?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
