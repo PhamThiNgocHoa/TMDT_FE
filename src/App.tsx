@@ -79,6 +79,8 @@ const HeaderFooterControl = () => {
     "/postManagement",
     "/management/category",
     "/management/customer",
+    "/management/customerManagement",
+    "/management/orderManagement",
     "/management/orders",
     "/management/revenue",
   ];
@@ -113,20 +115,35 @@ const HeaderFooterControl = () => {
         <Route path="/postManagement" element={<PostManagement />} />
         <Route path="/postManagement/add" element={<AddPost />} />
         <Route path="/postManagement/edit/:postId" element={<EditPost />} />
+        
+        {/* Customer Management Routes */}
         <Route path="/management/customer" element={<CustomerManagement />} />
         <Route
           path="/management/customerManagement/add"
           element={<AddCustomer />}
         />
-        <Route path="/management/customerManagement/edit/:Id" element={<EditCustomer />} />
-        <Route path="/management/orders" element={<OrderManagement />} />
-        <Route path="/management/ordersManagement/add" element={<AddOrder />}
+        <Route 
+          path="/management/customerManagement/edit/:Id" 
+          element={<EditCustomer />} 
         />
-        <Route path="/management/revenue" element={<RevenusManagement />} />
-        <Route
-          path="/management/ordersManagement/edit/:id"
+        
+        {/* Order Management Routes */}
+        <Route path="/management/orderManagement" element={<OrderManagement />} />
+        <Route 
+          path="/management/orderManagement/add" 
+          element={<AddOrder />}
+        />
+        <Route 
+          path="/management/orderManagement/edit/:Id" 
           element={<EditOrder />}
         />
+        
+        {/* Legacy Order Routes (for backward compatibility) */}
+        <Route path="/management/orders" element={<OrderManagement />} />
+        
+        {/* Revenue Management Routes */}
+        <Route path="/management/revenue" element={<RevenusManagement />} />
+        
         {/* Các route custom từ nhánh khải */}
         <Route path="/custom" element={<CustomProductServicePage />} />
         <Route path="/orders" element={<OrderManagementPage />} />
