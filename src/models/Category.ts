@@ -5,5 +5,5 @@ export interface Category{
     name: string;
     img: string;
     products: Product[];
-    isActive?: boolean;
+    active?: boolean;
 }

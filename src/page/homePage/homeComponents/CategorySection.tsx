@@ -8,7 +8,9 @@ const CategorySection: React.FC = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const { categories } = useCategory();
     const navigate = useNavigate();
-    const defaultActiveId = categories.find(cat => cat.isActive)?.id ?? categories[0]?.id;
+    const defaultActiveId = categories && categories.length > 0
+        ? (categories.find(cat => cat.active)?.id ?? categories[0].id)
+        : -1;
     const [activeCategoryId, setActiveCategoryId] = useState<number>(defaultActiveId);
 
     const scroll = (direction: 'left' | 'right') => {

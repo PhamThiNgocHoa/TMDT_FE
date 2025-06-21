@@ -48,6 +48,7 @@ import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
 import RevenusManagement from "./page/Management/revenueManagement/RevenusManagement";
 import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
 import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
+import GoogleRedirectHandler from "./page/GoogleRedirectHandler";
 
 
 
@@ -102,6 +103,7 @@ const HeaderFooterControl = () => {
         <Route path="/cart" element={<CartMain />} />
         <Route path="/loginad" element={<LoginAd />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/oauth2/redirect" element={<GoogleRedirectHandler/>} />
         <Route path="/wishlistPage" element={<WishlistPage />} />
         {/* Admin routes */}
         <Route path="/admin/*" element={<AdminDashboard />} />
