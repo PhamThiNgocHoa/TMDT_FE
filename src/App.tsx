@@ -44,7 +44,12 @@ import { OrderProvider } from "./page/Management/orderManagement/context/OrderCo
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
+
+import RevenusManagement from "./page/Management/revenueManagement/RevenusManagement";
+import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
 import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
+
+
 
 const App = () => {
   return (
@@ -53,9 +58,11 @@ const App = () => {
         <CategoryProvider>
           <CustomerProvider>
             <OrderProvider>
-              <Router>
-                <HeaderFooterControl />
-              </Router>
+              <RevenueProvider>
+                <Router>
+                  <HeaderFooterControl />
+                </Router>
+              </RevenueProvider>
             </OrderProvider>
           </CustomerProvider>
         </CategoryProvider>
@@ -73,6 +80,7 @@ const HeaderFooterControl = () => {
     "/management/category",
     "/management/customer",
     "/management/orders",
+    "/management/revenue",
   ];
   return (
     <>
@@ -112,10 +120,9 @@ const HeaderFooterControl = () => {
         />
         <Route path="/management/customerManagement/edit/:Id" element={<EditCustomer />} />
         <Route path="/management/orders" element={<OrderManagement />} />
-        <Route
-          path="/management/ordersManagement/add"
-          element={<AddOrder />}
+        <Route path="/management/ordersManagement/add" element={<AddOrder />}
         />
+        <Route path="/management/revenue" element={<RevenusManagement />} />
         <Route
           path="/management/ordersManagement/edit/:id"
           element={<EditOrder />}
