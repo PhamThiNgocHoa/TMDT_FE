@@ -6,3 +6,6 @@ export interface CartResponse {
     customerId: number; // Chỉ cần id khách hàng thôi, ko phải object
     cartItems: CartItemResponse[]; // sửa từ cartItem thành cartItems
 }
+export interface CartItemsOnly {
+    cartItems: CartItemResponse[];
+}
