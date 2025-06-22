@@ -2,10 +2,11 @@
 import React, {useState, useEffect} from 'react';
 import styles from './EditCustomer.module.css';
 import {useParams, useNavigate} from 'react-router-dom';
-import {AdminSidebar} from './AdminSidebar';
 import {Header} from './components/Header';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // ✅ Thêm dòng này
+import Swal from 'sweetalert2';
+import useCustomer from "../../../hooks/useCustomer";
+import {AdminSidebar} from "../AdminSidebar"; // ✅ Thêm dòng này
 
 export function EditCustomer() {
     const navigate = useNavigate();
@@ -18,6 +19,7 @@ export function EditCustomer() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const {user} = useCustomer();
 
     useEffect(() => {
         const fetchCustomer = async () => {
@@ -152,7 +154,7 @@ export function EditCustomer() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar/>
+            <AdminSidebar user={user}/>
             <div className={styles.body}>
                 <Header/>
                 <div className={styles.editPostHeader}>

@@ -12,8 +12,9 @@ import useCustomer from "../hooks/useCustomer";
 
 function Header() {
     const { user } = useCustomer();
-    const userId = React.useMemo(() => user?.id ?? 0, [user?.id]);
-    const { cartData } = useCart(userId);
+    const userId = React.useMemo(() => user?.id, [user?.id]);
+
+    const { cartData } = useCart(userId ?? 0);
     return (
         <div className="headerWrapper">
             <div className="headerBanner">
@@ -28,7 +29,7 @@ function Header() {
             <HeaderLogo/>
             <NavigationLinks/>
             <SearchBar/>
-            <ActionIcons cartItems={cartData}/>
+            <ActionIcons cartItems={cartData} user={user}/>
         </div>
     </header>
 </div>

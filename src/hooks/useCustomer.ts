@@ -165,6 +165,8 @@ function useCustomer() {
     return {
         user,
         users,
+        setUsers,
+        setUser,
         error,
         loading,
         handleLogin,

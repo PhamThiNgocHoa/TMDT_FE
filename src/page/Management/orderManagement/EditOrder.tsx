@@ -7,6 +7,7 @@ import { Header } from "./components/Header";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { OrderStatus, OrderStatusDisplayName } from "../../../enums/OrderStatus";
+import useCustomer from "../../../hooks/useCustomer";
 
 interface OrderData {
     id: number;
@@ -26,6 +27,7 @@ interface OrderData {
 export function EditOrder() {
     const navigate = useNavigate();
     const { Id: orderId } = useParams();
+    const {user} = useCustomer();
 
     const [orderData, setOrderData] = useState<OrderData>({
         id: 0,
@@ -203,7 +205,7 @@ export function EditOrder() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <div className={styles.editPostHeader}>

@@ -9,9 +9,11 @@ import { OrderTable } from './services/OrderTable';
 import { Pagination } from './Pagination';
 import { OrderProvider } from './context/OrderContext';
 import { useNavigate } from 'react-router-dom';
+import useCustomer from "../../../hooks/useCustomer";
 
 const OrderManagementContent: React.FC = () => {
     const navigate = useNavigate();
+    const {user} = useCustomer();
 
     const handleAddOrderClick = () => {
         navigate('/management/orderManagement/add');
@@ -25,7 +27,7 @@ const OrderManagementContent: React.FC = () => {
 
     return (
         <div className={styles.orderManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <header className={styles.adminTitle}>

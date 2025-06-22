@@ -5,6 +5,7 @@ import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header';
 import HomepageCharts from './components/HomepageCharts';
 import { HomepageProvider, useHomepage } from './context/HomepageContext';
+import useCustomer from "../../../hooks/useCustomer";
 
 const HomepageOverview: React.FC = () => {
     const {
@@ -74,6 +75,7 @@ const HomepageOverview: React.FC = () => {
 
 const HomepageManagementContent: React.FC = () => {
     const { homepageStats } = useHomepage();
+    const {user} = useCustomer();
 
     // Hàm xuất báo cáo trang chủ
     const exportHomepageReport = () => {
@@ -106,7 +108,7 @@ const HomepageManagementContent: React.FC = () => {
 
     return (
         <div className={styles.postManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <header className={styles.adminTitle}>

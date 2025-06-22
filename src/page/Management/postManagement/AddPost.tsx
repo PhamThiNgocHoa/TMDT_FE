@@ -3,6 +3,7 @@ import styles from './AddPost.module.css';
 import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header'; // Import Header
 import { api } from './services/api';
+import useCustomer from "../../../hooks/useCustomer";
 
 export function AddPost() {
     const [title, setTitle] = useState('');
@@ -14,6 +15,7 @@ export function AddPost() {
     const [author, setAuthor] = useState('Admin');
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
+    const {user} = useCustomer();
 
     const handleSaveDraft = async () => {
         if (!title || !content) {
@@ -89,7 +91,7 @@ export function AddPost() {
 
     return (
         <div className={styles.addPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
             <Header />
             <div className={styles.addPostHeader}>

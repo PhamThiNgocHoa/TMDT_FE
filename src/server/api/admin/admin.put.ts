@@ -6,7 +6,7 @@ import ApiService from "../ApiService";
 import {OrderEditReques} from "../../../models/request/OrderEditReques";
 import {OrderStatus} from "../../../enums/OrderStatus";
 
-export const updateCustomer = async (customer: Customer): Promise<CustomerResponse> => {
+export const updateCustomer = async (id: number, customer: Customer): Promise<CustomerResponse> => {
     return ApiService.put("/api/admin/customer", customer);
 }
 

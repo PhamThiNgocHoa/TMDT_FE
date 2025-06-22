@@ -9,9 +9,11 @@ import { Header } from "../postManagement/components/Header";
 import { CategoryResponseDTO } from '../../../models/response/CategoryResponseDTO';
 import { getListProduct } from '../../../server/api/product/product.get';
 import { ProductResponse } from '../../../models/response/ProductResponse';
+import useCustomer from "../../../hooks/useCustomer";
 
 const CategoryManagement: React.FC = () => {
     const context = useContext(CategoryContext);
+    const {user} = useCustomer();
     if (!context) throw new Error('CategoryContext not found');
     const { categories, loading, error, fetchCategories, deleteCategory } = context;
     const navigate = useNavigate();
@@ -80,7 +82,7 @@ const CategoryManagement: React.FC = () => {
     if (loading && (categories || []).length === 0) {
         return (
             <div className={styles.postManagement}>
-                <AdminSidebar />
+                <AdminSidebar user={user} />
                 <div className={styles.body}>
                     <div className={styles.loadingContainer}>
                         <div className={styles.loadingSpinner}></div>
@@ -93,7 +95,7 @@ const CategoryManagement: React.FC = () => {
 
     return (
         <div className={styles.postManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 

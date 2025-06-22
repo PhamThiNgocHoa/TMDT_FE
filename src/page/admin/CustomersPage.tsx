@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { AdminSidebar } from "../Management/postManagement/AdminSidebar";
 import { Header } from "../Management/postManagement/components/Header";
 import styles from "../Management/postManagement/PostManagement.module.css";
+import {AdminSidebar} from "../Management/AdminSidebar";
+import useCustomer from "../../hooks/useCustomer";
 
 type Customer = {
   id: string;
@@ -93,6 +94,7 @@ const CustomersPage = () => {
   const [customers] = useState<Customer[]>(initialCustomers);
   const [activeTab, setActiveTab] = useState(0);
   const [selected, setSelected] = useState<number[]>([]);
+  const {user} = useCustomer();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -120,7 +122,7 @@ const CustomersPage = () => {
 
   return (
     <div className={styles.postManagement}>
-      <AdminSidebar />
+      <AdminSidebar user={user} />
       <div className={styles.body}>
         <Header />
         <header className={styles.adminTitle}>

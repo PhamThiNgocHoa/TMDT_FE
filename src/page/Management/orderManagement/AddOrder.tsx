@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { OrderStatus, OrderStatusDisplayName } from '../../../enums/OrderStatus';
+import useCustomer from "../../../hooks/useCustomer";
 
 export function AddOrder() {
     const [fullname, setFullname] = useState('');
@@ -17,6 +18,7 @@ export function AddOrder() {
     const [totalAmount, setTotalAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const {user} = useCustomer();
 
     const statusOptions = [
         { value: OrderStatus.PENDING, label: OrderStatusDisplayName[OrderStatus.PENDING] },
@@ -110,7 +112,7 @@ export function AddOrder() {
 
     return (
         <div className={styles.addOrderContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <div className={styles.headerSection}>

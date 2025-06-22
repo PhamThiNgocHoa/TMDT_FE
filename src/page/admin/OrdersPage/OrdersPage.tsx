@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../Management/postManagement/PostManagement.module.css";
-import { AdminSidebar } from "../../Management/postManagement/AdminSidebar";
 import { Header } from "../../Management/postManagement/components/Header";
-import { FaEye } from "react-icons/fa";
+import {AdminSidebar} from "../../Management/AdminSidebar";
+import useCustomer from "../../../hooks/useCustomer";
 
 const STATUS_LIST = [
   { label: "Tất cả", value: "all" },
@@ -591,6 +591,8 @@ const OrdersPage = () => {
   const [pageSize, setPageSize] = useState(10);
   const [showDetail, setShowDetail] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
+    const {user} = useCustomer();
+
 
   // Filter logic
   const filteredOrders = useMemo(() => {
@@ -618,7 +620,7 @@ const OrdersPage = () => {
 
   return (
     <div className={styles.postManagement}>
-      <AdminSidebar />
+      <AdminSidebar user={user} />
       <div className={styles.body}>
         <Header />
         <header className={styles.adminTitle}>

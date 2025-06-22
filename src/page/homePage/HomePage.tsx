@@ -8,6 +8,7 @@ import SideNavigation from './homeComponents/SideNavigation';
 import PromoBanner from './homeComponents/PromoBanner';
 import TopProductsSection from './homeComponents/TopProductsSection';
 import styles from "../../assets/css/homeStyles/homePage.module.css";
+import useCustomer from "../../hooks/useCustomer";
 
 
 const HomePage: React.FC = () => {
