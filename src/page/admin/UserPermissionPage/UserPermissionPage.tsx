@@ -15,6 +15,7 @@ import styles from "../../Management/postManagement/PostManagement.module.css";
 import { Header } from "../../Management/postManagement/components/Header";
 import {AdminSidebar} from "../../Management/AdminSidebar";
 import useCustomer from "../../../hooks/useCustomer";
+import {CustomerTable} from "./CustomerTable";
 
 export interface User {
   id: string;
@@ -911,16 +912,7 @@ export default function UserPermissionPage() {
             search={search}
             setSearch={setSearch}
           />
-          <UserTable
-            users={paginatedUsers}
-            selected={selected}
-            setSelected={setSelected}
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
-            onEdit={handleEdit}
-            onView={handleView}
-            onDelete={handleDelete}
-          />
+          <CustomerTable/>
           <Pagination
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

@@ -5,6 +5,7 @@ import formatToVND from "../../../hooks/formatToVND";
 import {ProductResponse} from "../../../models/response/ProductResponse";
 import useCartItem from "../../../hooks/useCartItem";
 import useCustomer from "../../../hooks/useCustomer";
+import Swal from "sweetalert2";
 
 interface ProductCardProps {
     product: ProductResponse;
@@ -28,6 +29,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     };
     const handleAddToCart = async (event: React.MouseEvent) => {
         event.stopPropagation();
+        if (user?.role === 'ADMIN' || user?.role === 'STAFF') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Thêm sản phẩm thất bại',
+            });
+            return;
+        }
         try {
             await fetchSaveCartItem({
                 cartId: user?.cartId ?? 0,
@@ -35,10 +43,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 quantity: 1,
                 color: "",
             });
-            alert("Đã thêm vào giỏ hàng!");
+            Swal.fire({
+                icon: 'success',
+                title: 'Thêm sản phẩm thành công.',
+                timer: 1500,
+                showConfirmButton: false,
+            });
         } catch (err) {
-            console.error("Thêm vào giỏ hàng thất bại:", err);
-            alert("Lỗi khi thêm vào giỏ hàng.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Thêm sản phẩm thất bại',
+            });
         }
     };
 

@@ -81,7 +81,7 @@ const CustomerManagementContent: React.FC = () => {
                 <div className={styles.content}>
                     <TabsFilter />
                     <FilterSection />
-                    <CustomerTable />
+                    <CustomerTable  />
                     <Pagination />
                 </div>
             </div>
