@@ -5,6 +5,7 @@ import { useOrders } from '../context/OrderContext';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { OrderStatus, OrderStatusDisplayName } from '../../../../enums/OrderStatus';
 
 interface OrderDetail {
     id: number;
@@ -264,27 +265,17 @@ export const OrderTable: React.FC = () => {
     };
 
     const statusLabel = (status: string) => {
-        switch (status) {
-            case "PENDING": return "Đang chờ xử lý";
-            case "PENDING_PAYMENT": return "Đang chờ thanh toán";
-            case "SHIPPING": return "Đang giao hàng";
-            case "DELIVERED": return "Đã giao hàng";
-            case "PAYMENT_SUCCESS": return "Đã thanh toán";
-            case "PAYMENT_FAILED": return "Thanh toán thất bại";
-            case "CANCELLED": return "Đã hủy";
-            case "RETURNED": return "Đã trả hàng";
-            default: return status;
-        }
+        return OrderStatusDisplayName[status as OrderStatus] || status;
     };
 
     const canDeleteOrder = (status: string) => {
         // Chỉ có thể xóa đơn hàng ở các trạng thái: PENDING_PAYMENT, PENDING, PAYMENT_FAILED, CANCELLED
-        return ['PENDING_PAYMENT', 'PENDING', 'PAYMENT_FAILED', 'CANCELLED'].includes(status);
+        return [OrderStatus.PENDING_PAYMENT, OrderStatus.PENDING, OrderStatus.PAYMENT_FAILED, OrderStatus.CANCELLED].includes(status as OrderStatus);
     };
 
     const canEditOrder = (status: string) => {
         // Chỉ có thể chỉnh sửa đơn hàng ở các trạng thái: PENDING_PAYMENT, PENDING, PAYMENT_FAILED
-        return ['PENDING_PAYMENT', 'PENDING', 'PAYMENT_FAILED'].includes(status);
+        return [OrderStatus.PENDING_PAYMENT, OrderStatus.PENDING, OrderStatus.PAYMENT_FAILED].includes(status as OrderStatus);
     };
 
     const formatCurrency = (value: any): string => {

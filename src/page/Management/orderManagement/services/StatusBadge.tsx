@@ -1,63 +1,37 @@
 import React from 'react';
 import styles from '../OrderManagement.module.css';
+import { OrderStatus, OrderStatusDisplayName } from '../../../../enums/OrderStatus';
 
 type StatusBadgeProps = {
-    status:
-        | "PENDING"
-        | "PENDING_PAYMENT"
-        | "SHIPPING"
-        | "CARRIER_CANCELLED"
-        | "PAYMENT_SUCCESS"
-        | "PAYMENT_FAILED"
-        | "DELIVERED"
-        | "CANCELLED";
+    status: OrderStatus;
 };
 
 export function StatusBadge({ status }: StatusBadgeProps) {
     const getStatusStyles = () => {
         switch (status) {
-            case "PENDING":
+            case OrderStatus.PENDING:
                 return styles.statusPending;
-            case "PENDING_PAYMENT":
+            case OrderStatus.PENDING_PAYMENT:
                 return styles.statusPendingPayment;
-            case "SHIPPING": // Đổi SHIPPED -> SHIPPING
+            case OrderStatus.SHIPPING:
                 return styles.statusShipped;
-            case "CARRIER_CANCELLED":
-                return styles.statusCancelled; // Dùng chung style cancelled
-            case "PAYMENT_SUCCESS":
+            case OrderStatus.PAYMENT_SUCCESS:
                 return styles.statusSuccess;
-            case "PAYMENT_FAILED":
+            case OrderStatus.PAYMENT_FAILED:
                 return styles.statusCancelled;
-            case "DELIVERED":
+            case OrderStatus.DELIVERED:
                 return styles.statusDelivered;
-            case "CANCELLED":
+            case OrderStatus.CANCELLED:
                 return styles.statusCancelled;
+            case OrderStatus.RETURNED:
+                return styles.statusCancelled; // Dùng chung style cancelled
             default:
                 return styles.statusDefault;
         }
     };
 
     const getStatusText = () => {
-        switch (status) {
-            case "PENDING":
-                return "Chờ xử lý";
-            case "PENDING_PAYMENT":
-                return "Chờ thanh toán";
-            case "SHIPPING":
-                return "Đang giao";
-            case "CARRIER_CANCELLED":
-                return "Hủy bởi nhà vận chuyển";
-            case "PAYMENT_SUCCESS":
-                return "Thanh toán thành công";
-            case "PAYMENT_FAILED":
-                return "Thanh toán thất bại";
-            case "DELIVERED":
-                return "Đã giao";
-            case "CANCELLED":
-                return "Đã hủy";
-            default:
-                return "Không xác định";
-        }
+        return OrderStatusDisplayName[status];
     };
 
     return (

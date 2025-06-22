@@ -9,26 +9,19 @@ import React, {
 } from "react";
 import axios from "axios";
 import { PaginationParams } from "../services/api";
+import { OrderStatus } from "../../../../enums/OrderStatus";
 
 interface Order {
     id: number;
     fullname: string;
     address: string;
     phone: string;
-    status:
-        | "PENDING"
-        | "PENDING_PAYMENT"
-        | "SHIPPING"
-        | "CARRIER_CANCELLED"
-        | "PAYMENT_SUCCESS"
-        | "PAYMENT_FAILED"
-        | "DELIVERED"
-        | "CANCELLED";
+    status: OrderStatus;
 }
 
 interface OrderFilters {
     search?: string;
-    status?: Order["status"];
+    status?: OrderStatus;
     sort?: string;
     category?: string;
 }
@@ -46,7 +39,7 @@ interface OrderContextType {
     setSelectedOrders: Dispatch<SetStateAction<string[]>>;
     fetchOrders: () => Promise<void>;
     deleteOrder: (id: string) => Promise<void>;
-    updateOrderStatus: (id: string, status: Order["status"]) => Promise<void>;
+    updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
@@ -89,7 +82,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
 
             const mappedOrders: Order[] = rawData.map((item: any) => ({
                 id: item.id,
-                fullname: item.customerDTO?.fullname || "Không rõ",
+                fullname: item.receiver || "Không rõ",
                 address: item.address || "",
                 phone: item.numberPhone || "",
                 status: item.status,
@@ -147,7 +140,7 @@ export function OrderProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const updateOrderStatus = async (id: string, status: Order["status"]) => {
+    const updateOrderStatus = async (id: string, status: OrderStatus) => {
         setLoading(true);
         setError(null);
         try {

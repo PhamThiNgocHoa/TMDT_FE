@@ -2,6 +2,7 @@
 import React from 'react';
 import styles from '../OrderManagement.module.css';
 import { useOrders } from '../context/OrderContext';
+import { OrderStatus, OrderStatusDisplayName } from '../../../../enums/OrderStatus';
 
 export const FilterSection: React.FC = () => {
     const { filters, setFilters, fetchOrders } = useOrders();
@@ -15,15 +16,7 @@ export const FilterSection: React.FC = () => {
         const value = e.target.value;
         setFilters({
             ...filters,
-            status: value === '' ? undefined : value as
-                | "PENDING"
-                | "PENDING_PAYMENT"
-                | "SHIPPING"
-                | "CARRIER_CANCELLED"
-                | "PAYMENT_SUCCESS"
-                | "PAYMENT_FAILED"
-                | "DELIVERED"
-                | "CANCELLED",
+            status: value === '' ? undefined : value as OrderStatus,
         });
         fetchOrders();
     };
@@ -46,14 +39,14 @@ export const FilterSection: React.FC = () => {
                     onChange={handleStatusChange}
                 >
                     <option value="">Tất cả trạng thái</option>
-                    <option value="PENDING">Chờ xử lý</option>
-                    <option value="PENDING_PAYMENT">Chờ thanh toán</option>
-                    <option value="SHIPPING">Đang giao</option>
-                    <option value="CARRIER_CANCELLED">Hủy bên vận chuyển</option>
-                    <option value="PAYMENT_SUCCESS">Thanh toán thành công</option>
-                    <option value="PAYMENT_FAILED">Thanh toán thất bại</option>
-                    <option value="DELIVERED">Đã giao</option>
-                    <option value="CANCELLED">Đã hủy</option>
+                    <option value={OrderStatus.PENDING}>{OrderStatusDisplayName[OrderStatus.PENDING]}</option>
+                    <option value={OrderStatus.PENDING_PAYMENT}>{OrderStatusDisplayName[OrderStatus.PENDING_PAYMENT]}</option>
+                    <option value={OrderStatus.SHIPPING}>{OrderStatusDisplayName[OrderStatus.SHIPPING]}</option>
+                    <option value={OrderStatus.PAYMENT_SUCCESS}>{OrderStatusDisplayName[OrderStatus.PAYMENT_SUCCESS]}</option>
+                    <option value={OrderStatus.PAYMENT_FAILED}>{OrderStatusDisplayName[OrderStatus.PAYMENT_FAILED]}</option>
+                    <option value={OrderStatus.DELIVERED}>{OrderStatusDisplayName[OrderStatus.DELIVERED]}</option>
+                    <option value={OrderStatus.CANCELLED}>{OrderStatusDisplayName[OrderStatus.CANCELLED]}</option>
+                    <option value={OrderStatus.RETURNED}>{OrderStatusDisplayName[OrderStatus.RETURNED]}</option>
                 </select>
 
                 <select
