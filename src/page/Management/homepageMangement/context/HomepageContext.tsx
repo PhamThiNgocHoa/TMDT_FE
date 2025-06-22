@@ -46,24 +46,17 @@ export const HomepageProvider = ({ children }: { children: React.ReactNode }) =>
 
             const headers = { Authorization: `Bearer ${token}` };
 
-            // Gửi request
+            // ✅ Gửi request lấy đúng danh sách
             const [resProducts, resCategories, resOrders, resCustomers] = await Promise.all([
-                axios.get(`/api/admin/products`, { headers }),
-                axios.get(`/api/admin/categories`, { headers }),
-                axios.get(`/api/admin/orders`, { headers }),
+                axios.get(`/api/product/list`, { headers }),
+                axios.get(`/api/category/list`, { headers }),
+                axios.get(`/api/admin/order/list`, { headers }),
                 axios.get(`/api/admin/customers`, { headers })
             ]);
 
-            // 🔵 Tổng sản phẩm
             setTotalProducts(resProducts.data.data ? resProducts.data.data.length : 0);
-
-            // 🔵 Tổng danh mục
-            setTotalCategories(resCategories.data.data ? resCategories.data.data.length : 0);
-
-            // 🔵 Tổng đơn hàng
+            setTotalCategories(resCategories.data ? resCategories.data.length : 0);
             setTotalOrders(resOrders.data.data ? resOrders.data.data.length : 0);
-
-            // 🔵 Tổng khách hàng
             setTotalCustomers(resCustomers.data.data ? resCustomers.data.data.length : 0);
 
         } catch (error: any) {
@@ -82,7 +75,7 @@ export const HomepageProvider = ({ children }: { children: React.ReactNode }) =>
         totalProducts,
         totalCategories,
         totalOrders,
-        totalCustomers
+        totalCustomers,
     };
 
     return (
@@ -107,4 +100,4 @@ export const useHomepage = () => {
     const context = useContext(HomepageContext);
     if (!context) throw new Error("useHomepage must be used within a HomepageProvider");
     return context;
-}; 
+};
