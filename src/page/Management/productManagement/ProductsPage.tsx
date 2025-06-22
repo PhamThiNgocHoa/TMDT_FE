@@ -12,6 +12,7 @@ import { getListCategory } from '../../../server/api/category/category.get';
 import { CategoryResponseDTO } from '../../../models/response/CategoryResponseDTO';
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import useCustomer from "../../../hooks/useCustomer";
 
 const tabs = [
   "Tất cả sản phẩm",
@@ -229,10 +230,11 @@ const ProductsPage = () => {
         : [...selected, idx]
     );
   };
+  const {user} = useCustomer();
 
   return (
     <div className="postManagement">
-      <AdminSidebar />
+      <AdminSidebar  user={user}/>
       <div className="body" style={{ marginLeft: '17.5rem', padding: '0 1.5rem 1.5rem 1.5rem', minHeight: '100vh', background: '#f7f8fa' }}>
         <header className="products-header-row" style={{marginBottom: 20, maxWidth: 950, marginLeft: 'auto', marginRight: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', minHeight: 60}}>
           <div style={{display: 'flex', flexDirection: 'column', gap: 8, flex: 1}}>
