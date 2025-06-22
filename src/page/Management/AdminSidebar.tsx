@@ -9,7 +9,7 @@ export function AdminSidebar() {
     const menuItems = [
         { section: 'DANH MỤC', items: [
             { name: 'Trang chủ', icon: 'fas fa-home', path: '/admin' },
-            { name: 'Sản phẩm', icon: 'fas fa-box-open', path: '/admin/products' },
+            { name: 'Sản phẩm', icon: 'fas fa-box-open', path: '/management/product' },
             { name: 'Danh mục', icon: 'fas fa-tags', path: '/management/category' },
             { name: 'Đơn hàng', icon: 'fas fa-shopping-cart', path: '/management/orders' },
             { name: 'Voucher', icon: 'fas fa-ticket-alt', path: '/admin/vouchers' },

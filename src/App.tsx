@@ -44,13 +44,11 @@ import { OrderProvider } from "./page/Management/orderManagement/context/OrderCo
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
-
 import RevenusManagement from "./page/Management/revenueManagement/RevenusManagement";
 import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
 import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
 import GoogleRedirectHandler from "./page/GoogleRedirectHandler";
-
-
+import ProductsPage from "./page/Management/productManagement/ProductsPage";
 
 const App = () => {
   return (
@@ -84,6 +82,7 @@ const HeaderFooterControl = () => {
     "/management/orderManagement",
     "/management/orders",
     "/management/revenue",
+    "/management/product",
   ];
   return (
     <>
@@ -153,6 +152,7 @@ const HeaderFooterControl = () => {
           path="/custom-product/:slug"
           element={<CustomProductDetailPage />}
         />
+        <Route path="/management/product" element={<ProductsPage />} />
       </Routes>
       {!adminPaths.some((path) => location.pathname.startsWith(path)) && (
         <Footer />

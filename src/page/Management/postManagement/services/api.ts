@@ -11,6 +11,8 @@ export interface Post {
     author: string;
     views: number;
     tags?: string[];
+    productId?: number;
+    metaDescription?: string;
 }
 
 export interface PostFilters {
@@ -70,5 +72,10 @@ export const api = {
 
     async updatePostStatus(id: string, status: Post['status']): Promise<void> {
         return await ApiService.patch(`/api/posts/${id}/status`, { status });
+    },
+
+    async getPostsByProductId(productId: number): Promise<Post[]> {
+        const res = await ApiService.get(`/api/posts?productId=${productId}`);
+        return res.data || [];
     }
 };

@@ -3,6 +3,8 @@ import styles from './AddPost.module.css';
 import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header'; // Import Header
 import { api } from './services/api';
+import useProduct from '../../../hooks/useProduct';
+import { ProductResponse } from '../../../models/response/ProductResponse';
 
 export function AddPost() {
     const [title, setTitle] = useState('');
@@ -14,6 +16,21 @@ export function AddPost() {
     const [author, setAuthor] = useState('Admin');
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
+    const [productSearch, setProductSearch] = useState('');
+    const [selectedProduct, setSelectedProduct] = useState<ProductResponse | null>(null);
+    const { products, fetchListFindByName } = useProduct();
+    const [filteredProducts, setFilteredProducts] = useState<ProductResponse[]>([]);
+
+    const handleProductSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setProductSearch(value);
+        if (value.trim() === '') {
+            setFilteredProducts([]);
+            return;
+        }
+        const result = await fetchListFindByName(value);
+        setFilteredProducts(result);
+    };
 
     const handleSaveDraft = async () => {
         if (!title || !content) {
@@ -31,6 +48,7 @@ export function AddPost() {
                 author,
                 views: 0,
                 tags,
+                productId: selectedProduct?.id,
             });
         alert('Lưu nháp thành công!');
             // TODO: chuyển hướng nếu muốn
@@ -55,6 +73,7 @@ export function AddPost() {
                 author,
                 views: 0,
                 tags,
+                productId: selectedProduct?.id,
             });
         alert('Đăng bài thành công!');
             // TODO: chuyển hướng nếu muốn
@@ -204,6 +223,35 @@ export function AddPost() {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                    <div className={styles.sidebarSection}>
+                        <label className={styles.label}>Chọn sản phẩm liên quan</label>
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm sản phẩm..."
+                            value={productSearch}
+                            onChange={handleProductSearch}
+                            className={styles.input}
+                        />
+                        {productSearch && filteredProducts.length > 0 && (
+                            <ul style={{ maxHeight: 150, overflow: 'auto', border: '1px solid #eee', margin: 0, padding: 0 }}>
+                                {filteredProducts.map((p) => (
+                                    <li
+                                        key={p.id}
+                                        style={{ cursor: 'pointer', background: selectedProduct?.id === p.id ? '#eee' : '#fff', padding: 4, listStyle: 'none' }}
+                                        onClick={() => { setSelectedProduct(p); setProductSearch(p.name); setFilteredProducts([]); }}
+                                    >
+                                        {p.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        {selectedProduct && (
+                            <div style={{ marginTop: 8 }}>
+                                Đã chọn: <b>{selectedProduct.name}</b>
+                                <button type="button" style={{ marginLeft: 8 }} onClick={() => { setSelectedProduct(null); setProductSearch(''); }}>Bỏ chọn</button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
