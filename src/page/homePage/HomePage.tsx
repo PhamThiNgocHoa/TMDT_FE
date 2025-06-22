@@ -14,8 +14,8 @@ const HomePage: React.FC = () => {
     return (
         <div className={styles.homepage}>
             <PromoBanner/>
+            <SideNavigation/>
             <main className={styles.main}>
-                <SideNavigation/>
                 <div className={styles.container}>
                     <FlashSaleSection/>
                     <CategorySection/>

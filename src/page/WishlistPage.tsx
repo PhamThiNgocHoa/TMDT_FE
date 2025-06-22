@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useWishlist } from "../context/WishlistContext";
 import "../assets/css/wishlistPage.css"; // CSS for this page
+import Shimmer from "../component/Shimmer";
 
 // Assuming you have a way to fetch full product details by ID
 // This is a placeholder function using fake data
@@ -49,7 +50,12 @@ const WishlistPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="wishlist-loading">Đang tải danh sách yêu thích...</div>
+      <div className="wishlist-page">
+        <h2>Danh sách sản phẩm yêu thích</h2>
+        <div className="wishlist-items-list">
+          <Shimmer type="product-card" count={6} />
+        </div>
+      </div>
     );
   }
 

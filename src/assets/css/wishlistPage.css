@@ -97,7 +97,12 @@
 }
 
 .new-badge {
-     background-color: #00b000; /* Green for new */
+    background-color: #00b000;
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius: 2px;
+    transform: translateX(+50px);
+    height: 15px;
 }
 
 .wishlistRemoveButton {

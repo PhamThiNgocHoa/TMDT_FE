@@ -1,13 +1,28 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "../PostManagement.module.css";
 import { usePosts } from "../context/PostContext";
 
 export const Header: React.FC = () => {
-  const { filters, setFilters } = usePosts();
+  const { filters, setFilters, fetchPosts } = usePosts();
+
+  // Debounce search để tránh gọi API quá nhiều
+  const debouncedFetch = useCallback(
+    (() => {
+      let timeoutId: NodeJS.Timeout;
+      return (searchValue: string) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(async () => {
+          setFilters({ ...filters, search: searchValue });
+          await fetchPosts();
+        }, 500); // Delay 500ms
+      };
+    })(),
+    [filters, setFilters, fetchPosts]
+  );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters({ ...filters, search: e.target.value });
-    // Fetching will be triggered by useEffect in PostContext
+    const value = e.target.value;
+    debouncedFetch(value);
   };
 
   return (

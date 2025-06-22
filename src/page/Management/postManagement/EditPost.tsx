@@ -3,6 +3,7 @@ import styles from './EditPost.module.css'; // Use EditOrders styles
 import { useParams, useNavigate } from 'react-router-dom';
 import {AdminSidebar} from "../AdminSidebar";
 import {Header} from "./components/Header"; // Import hooks for routing
+import { api } from './services/api';
 
 // Assuming a function to fetch fake post data by ID
 // In a real app, this would be an API call
@@ -44,43 +45,47 @@ export function EditPost() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log('Current postId in useEffect:', postId); // Added log
         if (postId) {
             setLoading(true);
-            setError(null); // Clear previous errors
-            // Simulate fetching data
-            const postData = fetchFakePostById(Number(postId));
-            if (postData) {
+            setError(null);
+            api.getPostById(Number(postId)).then(postData => {
                 setTitle(postData.title);
                 setContent(postData.content);
                 setStatus(postData.status);
-                setMetaDescription(postData.metaDescription);
-                // setThumbnail(postData.thumbnail); // Handle thumbnail loading if needed
-                setPublishDate(postData.publishDate);
+                setMetaDescription(''); // Nếu có field metaDescription thì lấy từ postData
+                setPublishDate(postData.createdAt);
                 setAuthor(postData.author);
-                setTags(postData.tags);
-             } else {
-                setError('Không tìm thấy bài viết với ID này.'); // More specific error
-             }
+                setTags(postData.tags || []);
+                setLoading(false);
+            }).catch(() => {
+                setError('Không tìm thấy bài viết với ID này.');
              setLoading(false);
+            });
         } else {
-             // Handle case where postId is not provided in URL
-             console.log('postId is missing in URL.'); // Added log
-             setError('Không có ID bài viết được cung cấp trong đường dẫn.'); // Error for missing ID
-             setLoading(false); // Ensure loading is false
+            setError('Không có ID bài viết được cung cấp trong đường dẫn.');
+            setLoading(false);
         }
-    }, [postId]); // Dependency array includes postId
+    }, [postId]);
 
-    const handleSaveChanges = () => {
-        console.log('Saving changes...', { postId, title, content, status, metaDescription, thumbnail, publishDate, author, tags });
-        // Add save changes logic here (e.g., API call PUT/PATCH)
+    const handleSaveChanges = async () => {
         if (!title || !content) {
             alert('Tiêu đề và nội dung không được để trống!');
             return;
         }
+        try {
+            await api.updatePost(Number(postId), {
+                title,
+                content,
+                status: status.toLowerCase() as 'published' | 'draft' | 'pending' | 'rejected',
+                author,
+                tags,
+                // Bổ sung các trường khác nếu cần
+            });
         alert('Cập nhật bài viết thành công!');
-        // In a real app, you might navigate back to the list after a successful save:
-        // navigate('/postManagement');
+            // TODO: chuyển hướng nếu muốn
+        } catch (err) {
+            alert('Lỗi khi cập nhật bài viết!');
+        }
     };
     const navigate = useNavigate(); // Define navigate at the top level
 

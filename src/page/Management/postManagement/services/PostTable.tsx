@@ -8,6 +8,12 @@ export const PostTable: React.FC = () => {
     const { posts, loading, error, fetchPosts, deletePost, updatePostStatus, selectedPosts, setSelectedPosts } = usePosts();
     const navigate = useNavigate();
 
+    // Debug logs
+    console.log('PostTable - posts:', posts);
+    console.log('PostTable - loading:', loading);
+    console.log('PostTable - error:', error);
+    console.log('PostTable - posts length:', posts?.length);
+
     // State for delete confirmation popup
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [postToDeleteId, setPostToDeleteId] = useState<string | null>(null);

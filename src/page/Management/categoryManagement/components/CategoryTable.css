@@ -1,0 +1,319 @@
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 6px;
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.categoryTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+}
+
+.categoryTable thead th {
+    background: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.categoryTable tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.categoryTable tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.categoryTable tbody tr:last-child {
+    border-bottom: none;
+}
+
+.categoryTable tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+}
+
+.idColumn {
+    width: 80px;
+}
+
+.idCell {
+    text-align: center;
+}
+
+.idBadge {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 30px;
+}
+
+.nameColumn {
+    min-width: 200px;
+}
+
+.categoryInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.categoryName {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.categoryDescription {
+    color: #666;
+    font-size: 12px;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.statusColumn {
+    width: 120px;
+}
+
+.statusCell {
+    text-align: center;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.activeStatus {
+    background: #d4edda;
+    color: #155724;
+}
+
+.inactiveStatus {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.productsColumn {
+    width: 120px;
+}
+
+.productsCell {
+    text-align: center;
+}
+
+.productsCount {
+    background: #f8f9fa;
+    color: #666;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.actionsColumn {
+    width: 120px;
+}
+
+.actionsCell {
+    text-align: center;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.editButton,
+.deleteButton {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.editButton {
+    background: #28a745;
+    color: white;
+}
+
+.editButton:hover:not(:disabled) {
+    background: #218838;
+}
+
+.deleteButton {
+    background: #dc3545;
+    color: white;
+}
+
+.deleteButton:hover:not(:disabled) {
+    background: #c82333;
+}
+
+.editButton:disabled,
+.deleteButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.editButton svg,
+.deleteButton svg {
+    width: 14px;
+    height: 14px;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loadingContainer,
+.errorContainer,
+.emptyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.loadingSpinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+.errorIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.emptyIcon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.loadingContainer p,
+.errorContainer p {
+    color: #666;
+    font-size: 16px;
+    margin: 0;
+}
+
+.errorContainer p {
+    color: #dc3545;
+}
+
+.emptyContainer h3 {
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.emptyContainer p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .tableWrapper {
+        border-radius: 4px;
+    }
+
+    .categoryTable thead th,
+    .categoryTable tbody td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .idColumn {
+        width: 60px;
+    }
+    
+    .nameColumn {
+        min-width: 150px;
+    }
+    
+    .productsColumn {
+        width: 100px;
+    }
+    
+    .actionsColumn {
+        width: 100px;
+    }
+
+    .actionButtons {
+        gap: 6px;
+    }
+
+    .editButton,
+    .deleteButton {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .categoryTable thead th,
+    .categoryTable tbody td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .categoryName {
+        font-size: 13px;
+    }
+    
+    .idBadge {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+
+    .productsCount {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+} 

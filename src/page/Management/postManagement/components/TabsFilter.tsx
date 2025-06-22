@@ -19,7 +19,8 @@ export const TabsFilter: React.FC = () => {
     return posts.filter(post => post.status === status).length;
   };
 
-  const handleTab = async (status: "" | "published" | "pending" | "draft" | "rejected") => {    setFilters({ ...filters, status  });
+  const handleTab = async (status: "" | "published" | "pending" | "draft" | "rejected") => {
+    setFilters({ ...filters, status });
     await fetchPosts();
   };
 

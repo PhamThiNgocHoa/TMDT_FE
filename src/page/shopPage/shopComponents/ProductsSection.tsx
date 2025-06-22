@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import useProduct from "../../../hooks/useProduct";
 import useCategory from "../../../hooks/useCategory";
 import formatToVND from "../../../hooks/formatToVND";
+import { useLocation } from 'react-router-dom';
+import Shimmer from '../../../component/Shimmer';
 
 interface Filters {
     inStock: boolean | null;
@@ -15,7 +17,7 @@ interface SelectedFilters {
 }
 
 const ProductsSection: React.FC = () => {
-    const {products, setProducts} = useProduct();
+    const {products, setProducts, loading} = useProduct();
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | ''>(''); // '' = không sắp xếp
     const {categories} = useCategory();
     const [visibleProducts, setVisibleProducts] = useState<number>(16);
@@ -30,20 +32,50 @@ const ProductsSection: React.FC = () => {
     const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(false); // State kiểm soát việc ẩn/hiện filters
 
+    const location = useLocation();
+    // Lấy query param spec và value
+    const searchParams = new URLSearchParams(location.search);
+    const specId = searchParams.get('spec');
+    const specValue = searchParams.get('value');
+    const categoryIdFromUrl = searchParams.get('category');
+
+    // Tự động set filter categoryId khi có category trên URL
+    useEffect(() => {
+        if (categoryIdFromUrl) {
+            const categoryId = parseInt(categoryIdFromUrl);
+            if (!isNaN(categoryId)) {
+                setFilters(prev => ({
+                    ...prev,
+                    categoryId: categoryId
+                }));
+                setSelectedFilters(prev => ({
+                    ...prev,
+                    categoryId: categoryId
+                }));
+            }
+        }
+    }, [categoryIdFromUrl]);
+
     const handleLoadMore = () => {
         setVisibleProducts(prev => prev + 16);
     };
 
-
     const applyFilters = () => {
         let filtered = products.filter(product => {
-            return (
+            let match = (
                 (filters.inStock === null || product.inStock === filters.inStock) &&
                 product.price >= filters.priceRange.min &&
                 product.price <= filters.priceRange.max &&
                 (filters.categoryId === 0 || product.categoryId === filters.categoryId) &&
                 (filters.type === '' || product.type === filters.type)
             );
+            // Lọc theo specification nếu có trên URL
+            if (specId && specValue && product.productSpecifications) {
+                match = match && product.productSpecifications.some(
+                    s => String(s.specificationId) === String(specId) && String(s.value) === String(specValue)
+                );
+            }
+            return match;
         });
 
         if (sortOrder === 'asc') {
@@ -87,7 +119,7 @@ const ProductsSection: React.FC = () => {
         setFilters(prev => ({...prev, priceRange: newPriceRange}));
     };
 
-    const filteredProducts = isFiltered ? applyFilters() : products;
+    const filteredProducts = applyFilters();
 
     const toggleFilters = () => {
         setIsFiltersVisible(prev => !prev); // Đổi trạng thái ẩn/hiện filters
@@ -246,7 +278,9 @@ const ProductsSection: React.FC = () => {
             )}
 
             <div className="products-grid">
-                {filteredProducts.length > 0 ? (
+                {loading ? (
+                  <Shimmer type="product-card" count={8} />
+                ) : filteredProducts.length > 0 ? (
                     filteredProducts.slice(0, visibleProducts).map((product) => (
                         <div key={product.id} className="product-card">
                             <div className="product-image-container">
