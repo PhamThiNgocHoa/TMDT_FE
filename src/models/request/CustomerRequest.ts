@@ -1,12 +1,11 @@
-export interface Customer {
-    id?: number;
+export interface CustomerRequest {
     fullname: string;
     email: string;
     phone: string;
     username: string;
-    password?: string;
+    password: string;
+    status?: string;
     role?: string;
-    resetCode?: string;
 
 }
 

@@ -1,25 +1,33 @@
 "use client";
 import React from 'react';
 import styles from './CustomerManagement.module.css';
-import { AdminSidebar } from './AdminSidebar';
 import { Header } from './components/Header';
 import { TabsFilter } from './components/TabsFilter';
 import { FilterSection } from './services/FilterSection';
 import { CustomerTable } from './services/CustomerTable';
 import { Pagination } from './Pagination';
-import { CustomerProvider, useCustomers } from './context/CustomerContext';
 import { useNavigate } from 'react-router-dom';
+import {useCustomerManagement} from "../../../hooks/useCustomerManagement";
+import {useToken} from "../../../hooks/useToken";
+import useCustomer from "../../../hooks/useCustomer";
+import {AdminSidebar} from "../AdminSidebar";
 
 const CustomerManagementContent: React.FC = () => {
     const navigate = useNavigate();
-    const { customers } = useCustomers(); // Lấy danh sách khách hàng từ context
-
+    const {user} = useCustomer();
+    const token = useToken();
+    const { customers } = useCustomerManagement(token, user?.role);
     const handleAddCustomerClick = () => {
         navigate('/management/customerManagement/add');
     };
 
     // Hàm xuất file CSV
     const exportToCSV = () => {
+        if (!Array.isArray(customers)) {
+            console.error("customers is not an array:", customers);
+            return;
+        }
+
         const headers = ['ID', 'Họ tên', 'Tên đăng nhập', 'Email', 'Số điện thoại'];
         const rows = customers.map(c => [
             c.id,
@@ -42,9 +50,10 @@ const CustomerManagementContent: React.FC = () => {
         document.body.removeChild(link);
     };
 
+
     return (
         <div className={styles.postManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <header className={styles.adminTitle}>
@@ -80,12 +89,9 @@ const CustomerManagementContent: React.FC = () => {
     );
 };
 
-// Bọc toàn bộ bằng CustomerProvider
 const CustomerManagement: React.FC = () => {
     return (
-        <CustomerProvider>
             <CustomerManagementContent />
-        </CustomerProvider>
     );
 };
 

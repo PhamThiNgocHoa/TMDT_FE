@@ -12,8 +12,9 @@ import {
 } from "react-icons/fa";
 import "./UserPermissionPage.css";
 import styles from "../../Management/postManagement/PostManagement.module.css";
-import { AdminSidebar } from "../../Management/postManagement/AdminSidebar";
 import { Header } from "../../Management/postManagement/components/Header";
+import {AdminSidebar} from "../../Management/AdminSidebar";
+import useCustomer from "../../../hooks/useCustomer";
 
 export interface User {
   id: string;
@@ -833,6 +834,7 @@ export default function UserPermissionPage() {
   const [search, setSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [users, setUsers] = useState<User[]>(initialUsers);
+  const {user} = useCustomer();
   const pageSize = 10;
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -887,7 +889,7 @@ export default function UserPermissionPage() {
 
   return (
     <div className={styles.postManagement}>
-      <AdminSidebar />
+      <AdminSidebar user={user} />
       <div className={styles.body}>
         <Header />
         <header className={styles.adminTitle}>
