@@ -10,10 +10,11 @@ import { CategoryResponseDTO } from '../../../models/response/CategoryResponseDT
 import { getListProduct } from '../../../server/api/product/product.get';
 import { ProductResponse } from '../../../models/response/ProductResponse';
 import useCustomer from "../../../hooks/useCustomer";
+import Swal from "sweetalert2"; // 👈 import Swal
 
 const CategoryManagement: React.FC = () => {
     const context = useContext(CategoryContext);
-    const {user} = useCustomer();
+    const { user } = useCustomer();
     if (!context) throw new Error('CategoryContext not found');
     const { categories, loading, error, fetchCategories, deleteCategory } = context;
     const navigate = useNavigate();
@@ -23,7 +24,6 @@ const CategoryManagement: React.FC = () => {
 
     useEffect(() => {
         fetchCategories();
-        // Fetch all products
         getListProduct().then(setProducts);
     }, [fetchCategories]);
 
@@ -32,20 +32,38 @@ const CategoryManagement: React.FC = () => {
     };
 
     const handleEditCategory = (categoryId: number) => {
-        console.log('Edit categoryId:', categoryId);
         navigate(`/management/category/edit/${categoryId}`);
     };
 
     const handleDeleteCategory = async (categoryId: number) => {
-        if (window.confirm(`Bạn có chắc chắn muốn xóa danh mục này? Hành động này không thể hoàn tác.`)) {
+        // ✅ Hiển thị Swal xác nhận
+        const result = await Swal.fire({
+            title: "Bạn có chắc chắn?",
+            text: "Hành động này không thể hoàn tác!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy",
+        });
+
+        if (result.isConfirmed) {
             setIsDeleting(categoryId);
             try {
                 await deleteCategory(categoryId);
-                console.log(`Category ${categoryId} deleted successfully.`);
-                // Refetch products after delete
-                getListProduct().then(setProducts);
+                await getListProduct().then(setProducts); // refetch
+                Swal.fire({
+                    icon: "success",
+                    title: "Đã xóa!",
+                    text: "Danh mục đã được xóa thành công.",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
             } catch (err) {
-                console.error('Error deleting category:', err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi!",
+                    text: "Xóa danh mục thất bại.",
+                });
             } finally {
                 setIsDeleting(null);
             }
@@ -64,7 +82,7 @@ const CategoryManagement: React.FC = () => {
                 cat.id.toString(),
                 cat.name,
                 cat.description || '',
-                cat.active ? 'Kích hoạt' : 'Không kích hoạt'
+                cat.active ? 'Kích hoạt' : 'Không kích hoạt',
             ])
         ].map(row => row.join(',')).join('\n');
 
@@ -98,8 +116,6 @@ const CategoryManagement: React.FC = () => {
             <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
-                
-                {/* Header Section */}
                 <header className={styles.adminTitle}>
                     <div className={styles.title}>
                         <h1 className={styles.text}>Quản lý Danh mục</h1>
@@ -110,7 +126,7 @@ const CategoryManagement: React.FC = () => {
                         </nav>
                     </div>
                     <div className={styles.right2}>
-                        <button 
+                        <button
                             className={styles.adminButtonWithIcon}
                             onClick={handleExport}
                             disabled={(categories || []).length === 0}
@@ -125,9 +141,7 @@ const CategoryManagement: React.FC = () => {
                     </div>
                 </header>
 
-                {/* Content Section */}
                 <div className={styles.content}>
-                    {/* Search Section */}
                     <div className={styles.searchSection}>
                         <div className={styles.searchContainer}>
                             <i className="fas fa-search"></i>
@@ -154,21 +168,16 @@ const CategoryManagement: React.FC = () => {
                         )}
                     </div>
 
-                    {/* Error Display */}
                     {error && (
                         <div className={styles.errorContainer}>
                             <i className="fas fa-exclamation-triangle"></i>
                             <p>Lỗi: {error}</p>
-                            <button 
-                                onClick={() => fetchCategories()}
-                                className={styles.retryButton}
-                            >
+                            <button onClick={() => fetchCategories()} className={styles.retryButton}>
                                 Thử lại
                             </button>
                         </div>
                     )}
 
-                    {/* Table Container */}
                     <div className={styles.tableContainer}>
                         <CategoryTable
                             categories={filteredCategories}
@@ -184,4 +193,4 @@ const CategoryManagement: React.FC = () => {
     );
 };
 
-export default CategoryManagement; 
+export default CategoryManagement;
