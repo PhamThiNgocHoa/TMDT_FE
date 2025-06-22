@@ -9,7 +9,6 @@ const HomePage: React.FC = () => {
         <div className="homepage">
             <PromoBanner />
             <main className="main">
-                <SideNavigation />
                 <div>
                     <ProductsSection />
                 </div>

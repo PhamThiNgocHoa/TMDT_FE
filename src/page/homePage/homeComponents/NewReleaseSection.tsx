@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SectionHeader from './SectionHeader';
 import '../../../assets/css/homeStyles/newReleaseSection.css';
+import Shimmer from '../../../component/Shimmer';
 
 const NewReleaseSection: React.FC = () => {
+    const [loading, setLoading] = useState(false); // Có thể thay bằng loading từ API
+
+    if (loading) {
+        return (
+            <section className="section new-release-section">
+                <SectionHeader
+                    label="Đề xuất"
+                    title="Mới ra mắt"
+                />
+                <div className="new-release-grid">
+                    <Shimmer type="card" count={4} />
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="section new-release-section">
             <SectionHeader

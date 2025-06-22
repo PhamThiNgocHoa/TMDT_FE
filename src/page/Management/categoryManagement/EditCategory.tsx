@@ -1,141 +1,265 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import styles from './EditCategory.module.css'; // Create this CSS module
-// import { useCategory } from '../context/CategoryContext'; // Use context later for fetching/editing
-
-// Define the shape of a category item (should match the Category interface in context)
-interface Category {
-    id: number;
-    name: string;
-    // Add other category properties here
-}
-
-// Simulate fetching a category by ID
-const fetchCategoryById = async (id: number): Promise<Category | undefined> => {
-    // This should fetch from your actual data source or context
-    // For now, using mock data similar to the context
-    const mockCategories: Category[] = [
-        { id: 1, name: 'Electronics' },
-        { id: 2, name: 'Books' },
-        { id: 3, name: 'Clothing' },
-    ];
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve(mockCategories.find(cat => cat.id === id));
-        }, 500); // Simulate network delay
-    });
-};
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CategoryRequestDTO } from '../../../models/request/CategoryRequestDTO';
+import styles from './AddCategory.module.css';
+import { CategoryContext } from './context/CategoryContext';
+import { getCategoryById } from '../../../server/api/category/category.get';
 
 const EditCategory: React.FC = () => {
-    const { categoryId } = useParams<{ categoryId: string }>();
-    const categoryIdNumber = categoryId ? parseInt(categoryId, 10) : NaN;
     const navigate = useNavigate();
-    const [category, setCategory] = useState<Category | null>(null);
-    const [categoryName, setCategoryName] = useState('');
-    // Add state for other category fields
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { id } = useParams<{ id: string }>();
+    const { updateCategory, loading, error } = useContext(CategoryContext)!;
+    const [formData, setFormData] = useState<CategoryRequestDTO>({
+        name: '',
+        description: '',
+        img: '',
+        active: true,
+    });
+    const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
 
     useEffect(() => {
-        const loadCategory = async () => {
-            if (!categoryId) {
-                setError('Category ID is missing.');
-                setLoading(false);
-                return;
-            }
+        const fetchCategory = async () => {
+            setIsLoading(true);
+            setNotFound(false);
             try {
-                const data = await fetchCategoryById(categoryIdNumber);                if (data) {
-                    setCategory(data);
-                    setCategoryName(data.name);
-                    // Set state for other fields
-                } else {
-                    setError(`Category with ID ${categoryId} not found.`);
+                if (!id) {
+                    console.error('Thiếu id trên URL!');
+                    setNotFound(true);
+                    return;
                 }
-            } catch (err: any) {
-                setError(err.message || 'Failed to load category.');
+                console.log('ID param:', id);
+                const category = await getCategoryById(Number(id));
+                console.log('Category fetched:', category);
+                if (!category || category.id === undefined || category.id === null) {
+                    setNotFound(true);
+                } else {
+                    setFormData({
+                        id: category.id,
+                        name: category.name,
+                        description: category.description || '',
+                        img: category.img || '',
+                        active: category.active !== null && category.active !== undefined ? category.active : true,
+                    });
+                }
+            } catch (err) {
+                setNotFound(true);
             } finally {
-                setLoading(false);
+                setIsLoading(false);
             }
         };
+        fetchCategory();
+    }, [id]);
 
-        loadCategory();
-    }, [categoryId]); // Reload if categoryId changes
+    const validateForm = (): boolean => {
+        const errors: {[key: string]: string} = {};
+        if (!formData.name.trim()) {
+            errors.name = 'Tên danh mục là bắt buộc';
+        } else if (formData.name.trim().length < 2) {
+            errors.name = 'Tên danh mục phải có ít nhất 2 ký tự';
+        }
+        if (!formData.img || !formData.img.trim()) {
+            errors.img = 'Hình ảnh là bắt buộc';
+        }
+        if (formData.description && formData.description.length > 500) {
+            errors.description = 'Mô tả không được vượt quá 500 ký tự';
+        }
+        setValidationErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        // Basic validation
-        if (!categoryName.trim()) {
-            setError('Tên danh mục không được để trống.');
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        const checked = (e.target as HTMLInputElement).checked;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+        if (validationErrors[name]) {
+            setValidationErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!validateForm()) {
             return;
         }
-
-        if (!category) return; // Should not happen if category is loaded
-
-        setSaving(true);
-        setError(null);
-
-        const updatedCategory = {
-            ...category,
-            name: categoryName,
-            // Include other updated fields
-        };
-
+        if (formData.id === null || formData.id === undefined) {
+            alert('Không xác định được ID danh mục!');
+            console.error('formData.id bị null hoặc undefined:', formData);
+            return;
+        }
         try {
-            // Simulate saving category (replace with actual API call or context function)
-            console.log('Saving category:', updatedCategory);
-            await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API delay
-            // Assuming success, navigate back to category management
-            navigate('/management/category'); // Adjust the navigation path as needed
-        } catch (err: any) {
-            setError(err.message || 'Failed to save category.');
-        } finally {
-            setSaving(false);
+            const updateData: CategoryRequestDTO = {
+                id: formData.id,
+                name: formData.name.trim(),
+                img: formData.img?.trim() || 'default.png',
+                active: formData.active === false ? false : true,
+                description: formData.description ?? '',
+            };
+            console.log('Payload gửi lên:', updateData);
+            await updateCategory(updateData);
+            navigate('/management/category');
+        } catch (err) {
+            console.error('Error updating category:', err);
         }
     };
 
     const handleCancel = () => {
-        navigate('/management/category'); // Adjust the navigation path as needed
+        navigate('/management/category');
     };
 
-    if (loading) {
-        return <div className={styles.loading}>Đang tải danh mục...</div>;
+    if (isLoading) {
+        return (
+            <div className={styles.addCategoryContainer}>
+                <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>Đang tải thông tin danh mục...</p>
+                </div>
+            </div>
+        );
     }
 
-    if (error) {
-        return <div className={styles.error}>{error}</div>;
-    }
-
-    if (!category) {
-        return <div className={styles.notFound}>Không tìm thấy danh mục.</div>; // Should be covered by error state, but as a fallback
+    if (notFound) {
+        return (
+            <div className={styles.addCategoryContainer}>
+                <div className={styles.errorContainer}>
+                    <div className={styles.errorIcon}>⚠️</div>
+                    <h3>Không tìm thấy danh mục</h3>
+                    <p>Danh mục bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.</p>
+                    <button 
+                        onClick={() => navigate('/management/category')}
+                        className={styles.submitButton}
+                    >
+                        Quay lại danh sách
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className={styles.container}>
-            <h2>Chỉnh sửa Danh mục: {category.name}</h2>
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <div className={styles.formGroup}>
-                    <label htmlFor="categoryName">Tên danh mục:</label>
-                    <input
-                        type="text"
-                        id="categoryName"
-                        value={categoryName}
-                        onChange={(e) => setCategoryName(e.target.value)}
-                        className={styles.input}
-                        disabled={saving}
-                    />
-                </div>
-                {/* Add form groups for other category fields here */}
-                
-                <div className={styles.buttonGroup}>
-                    <button type="submit" className={styles.submitButton} disabled={saving}>
-                        {saving ? 'Đang lưu...' : 'Lưu Thay đổi'}
-                    </button>
-                    <button type="button" className={styles.cancelButton} onClick={handleCancel} disabled={saving}>
-                        Hủy
-                    </button>
-                </div>
-            </form>
+        <div className={styles.addCategoryContainer}>
+            <div className={styles.header}>
+                <h1>Chỉnh sửa Danh mục</h1>
+                <nav className={styles.breadcrumbs}>
+                    <a href="/management/category">Quản lý Danh mục</a>
+                    <span>/</span>
+                    <span>Chỉnh sửa</span>
+                </nav>
+            </div>
+            <div className={styles.formContainer}>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    {error && (
+                        <div className={styles.errorMessage}>
+                            <span>⚠️</span>
+                            <p>{error}</p>
+                        </div>
+                    )}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="name" className={styles.label}>
+                            Tên danh mục <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className={`${styles.input} ${validationErrors.name ? styles.inputError : ''}`}
+                            placeholder="Nhập tên danh mục..."
+                            disabled={loading}
+                        />
+                        {validationErrors.name && (
+                            <span className={styles.errorText}>{validationErrors.name}</span>
+                        )}
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="description" className={styles.label}>
+                            Mô tả
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            value={formData.description || ''}
+                            onChange={handleInputChange}
+                            className={`${styles.textarea} ${validationErrors.description ? styles.inputError : ''}`}
+                            placeholder="Nhập mô tả danh mục (tùy chọn)..."
+                            rows={4}
+                            disabled={loading}
+                        />
+                        {validationErrors.description && (
+                            <span className={styles.errorText}>{validationErrors.description}</span>
+                        )}
+                        <span className={styles.characterCount}>
+                            {(formData.description || '').length}/500
+                        </span>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="img" className={styles.label}>
+                            Hình ảnh <span className={styles.required}>*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="img"
+                            name="img"
+                            value={formData.img || ''}
+                            onChange={handleInputChange}
+                            className={`${styles.input} ${validationErrors.img ? styles.inputError : ''}`}
+                            placeholder="Nhập URL hình ảnh..."
+                            disabled={loading}
+                        />
+                        {validationErrors.img && (
+                            <span className={styles.errorText}>{validationErrors.img}</span>
+                        )}
+                        <span className={styles.helpText}>
+                            Nhập URL hình ảnh hoặc đường dẫn đến file hình ảnh
+                        </span>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className={styles.checkboxLabel}>
+                            <input
+                                type="checkbox"
+                                name="active"
+                                checked={formData.active}
+                                onChange={handleInputChange}
+                                className={styles.checkbox}
+                                disabled={loading}
+                            />
+                            <span className={styles.checkboxText}>Kích hoạt danh mục</span>
+                        </label>
+                    </div>
+                    <div className={styles.formActions}>
+                        <button
+                            type="button"
+                            onClick={handleCancel}
+                            className={styles.cancelButton}
+                            disabled={loading}
+                        >
+                            Hủy
+                        </button>
+                        <button
+                            type="submit"
+                            className={styles.submitButton}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <div className={styles.spinner}></div>
+                                    Đang cập nhật...
+                                </>
+                            ) : (
+                                'Cập nhật danh mục'
+                            )}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

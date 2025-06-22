@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import styles from './AddPost.module.css';
 import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header'; // Import Header
+import { api } from './services/api';
 
 export function AddPost() {
     const [title, setTitle] = useState('');
@@ -15,18 +15,52 @@ export function AddPost() {
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
 
-    const handleSaveDraft = () => {
-        console.log('Saving draft...', { title, content, status, metaDescription, thumbnail, publishDate, author, tags });
-        alert('Lưu nháp thành công!');
-    };
-
-    const handlePublish = () => {
+    const handleSaveDraft = async () => {
         if (!title || !content) {
             alert('Tiêu đề và nội dung không được để trống!');
             return;
         }
-        console.log('Publishing...', { title, content, status, metaDescription, thumbnail, publishDate, author, tags });
+        try {
+            await api.createPost({
+                title,
+                content,
+                thumbnail: '', // Xử lý upload ảnh thực tế nếu có
+                category: '', // Bổ sung nếu có field category
+                status: 'draft',
+                createdAt: publishDate || new Date().toISOString(),
+                author,
+                views: 0,
+                tags,
+            });
+        alert('Lưu nháp thành công!');
+            // TODO: chuyển hướng nếu muốn
+        } catch (err) {
+            alert('Lỗi khi lưu nháp!');
+        }
+    };
+
+    const handlePublish = async () => {
+        if (!title || !content) {
+            alert('Tiêu đề và nội dung không được để trống!');
+            return;
+        }
+        try {
+            await api.createPost({
+                title,
+                content,
+                thumbnail: '', // Xử lý upload ảnh thực tế nếu có
+                category: '', // Bổ sung nếu có field category
+                status: 'published',
+                createdAt: publishDate || new Date().toISOString(),
+                author,
+                views: 0,
+                tags,
+            });
         alert('Đăng bài thành công!');
+            // TODO: chuyển hướng nếu muốn
+        } catch (err) {
+            alert('Lỗi khi đăng bài!');
+        }
     };
 
     const handleCancel = () => {

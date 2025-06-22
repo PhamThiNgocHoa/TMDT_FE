@@ -110,7 +110,7 @@ const HeaderFooterControl = () => {
         <Route path="/management/category" element={<CategoryManagement />} />
         <Route path="/management/category/add" element={<AddCategory />} />
         <Route
-          path="/management/category/edit/:categoryId"
+          path="/management/category/edit/:id"
           element={<EditCategory />}
         />
         <Route path="/payment-return" element={<PaymentReturn/>}/>
