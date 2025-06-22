@@ -1,336 +1,158 @@
-import React, { useState, useEffect } from 'react';
-import styles from '../RevenusManagement.module.css';
-import { 
-    getRevenueByMonth, 
-    getRevenueByMonthYear, 
-    getRevenueByYear, 
-    getRevenueByDate,
-    RevenueData 
-} from '../services/revenueService';
+"use client";
+import React, { useEffect, useState } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
+import styles from "../RevenusManagement.module.css";
 
-interface ChartData {
-    labels: string[];
-    data: number[];
-}
+import {
+    getRevenueByDate,
+    getRevenueByMonthYear,
+    getRevenueByMonth,
+} from "../services/revenueService";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const RevenueCharts: React.FC = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedChart, setSelectedChart] = useState<'month' | 'monthYear' | 'year' | 'date'>('month');
-    const [chartData, setChartData] = useState<ChartData>({ labels: [], data: [] });
-    const [usingMockData, setUsingMockData] = useState(false);
-    
-    // State cho filter
+    const [selectedDate, setSelectedDate] = useState<string>("");
     const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [dailyRevenue, setDailyRevenue] = useState<number>(0);
+    const [monthlyRevenue, setMonthlyRevenue] = useState<number>(0);
+    const [yearData, setYearData] = useState<number[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    // Hàm lấy dữ liệu cho biểu đồ theo tháng
-    const fetchMonthlyData = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setUsingMockData(false);
-            const response = await getRevenueByMonth();
-            
-            // Kiểm tra và xử lý dữ liệu trả về
-            let data = response;
-            if (response && response.data) {
-                data = response.data;
-            }
-            
-            // Kiểm tra xem data có phải là array không
-            if (!Array.isArray(data)) {
-                console.warn('API trả về không phải array:', data);
-                setChartData({ labels: [], data: [] });
-                setError('Dữ liệu không đúng định dạng');
-                return;
-            }
-            
-            const chartData: ChartData = {
-                labels: data.map((item: RevenueData) => item.date || ''),
-                data: data.map((item: RevenueData) => item.amount || 0)
-            };
-            setChartData(chartData);
-        } catch (err) {
-            setError('Không thể tải dữ liệu doanh thu theo tháng');
-            console.error('Error fetching monthly data:', err);
-            setChartData({ labels: [], data: [] });
-            setUsingMockData(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Hàm lấy dữ liệu cho biểu đồ theo tháng và năm
-    const fetchMonthYearData = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setUsingMockData(false);
-            const response = await getRevenueByMonthYear(selectedMonth, selectedYear);
-            
-            // Kiểm tra và xử lý dữ liệu trả về
-            let data = response;
-            if (response && response.data) {
-                data = response.data;
-            }
-            
-            // Kiểm tra xem data có phải là array không
-            if (!Array.isArray(data)) {
-                console.warn('API trả về không phải array:', data);
-                setChartData({ labels: [], data: [] });
-                setError('Dữ liệu không đúng định dạng');
-                return;
-            }
-            
-            const chartData: ChartData = {
-                labels: data.map((item: RevenueData) => item.date || ''),
-                data: data.map((item: RevenueData) => item.amount || 0)
-            };
-            setChartData(chartData);
-        } catch (err) {
-            setError('Không thể tải dữ liệu doanh thu theo tháng/năm');
-            console.error('Error fetching month/year data:', err);
-            setChartData({ labels: [], data: [] });
-            setUsingMockData(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Hàm lấy dữ liệu cho biểu đồ theo năm
-    const fetchYearlyData = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setUsingMockData(false);
-            const response = await getRevenueByYear(selectedYear);
-            
-            // Kiểm tra và xử lý dữ liệu trả về
-            let data = response;
-            if (response && response.data) {
-                data = response.data;
-            }
-            
-            // Kiểm tra xem data có phải là array không
-            if (!Array.isArray(data)) {
-                console.warn('API trả về không phải array:', data);
-                setChartData({ labels: [], data: [] });
-                setError('Dữ liệu không đúng định dạng');
-                return;
-            }
-            
-            const chartData: ChartData = {
-                labels: data.map((item: RevenueData) => item.month?.toString() || ''),
-                data: data.map((item: RevenueData) => item.amount || 0)
-            };
-            setChartData(chartData);
-        } catch (err) {
-            setError('Không thể tải dữ liệu doanh thu theo năm');
-            console.error('Error fetching yearly data:', err);
-            setChartData({ labels: [], data: [] });
-            setUsingMockData(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Hàm lấy dữ liệu cho biểu đồ theo ngày
-    const fetchDailyData = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            setUsingMockData(false);
-            const response = await getRevenueByDate(selectedDate);
-            
-            // Kiểm tra và xử lý dữ liệu trả về
-            let data = response;
-            if (response && response.data) {
-                data = response.data;
-            }
-            
-            // Xử lý cả trường hợp single object và array
-            let amount = 0;
-            if (typeof data === 'object' && data !== null) {
-                if (Array.isArray(data)) {
-                    amount = data[0]?.amount || 0;
-                } else {
-                    amount = data.amount || 0;
-                }
-            }
-            
-            const chartData: ChartData = {
-                labels: [selectedDate],
-                data: [amount]
-            };
-            setChartData(chartData);
-        } catch (err) {
-            setError('Không thể tải dữ liệu doanh thu theo ngày');
-            console.error('Error fetching daily data:', err);
-            setChartData({ labels: [], data: [] });
-            setUsingMockData(true);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Hàm xử lý thay đổi loại biểu đồ
-    const handleChartChange = (chartType: 'month' | 'monthYear' | 'year' | 'date') => {
-        setSelectedChart(chartType);
-        setError(null);
-    };
-
-    // Load dữ liệu khi component mount hoặc khi thay đổi chart type
     useEffect(() => {
-        switch (selectedChart) {
-            case 'month':
-                fetchMonthlyData();
-                break;
-            case 'monthYear':
-                fetchMonthYearData();
-                break;
-            case 'year':
-                fetchYearlyData();
-                break;
-            case 'date':
-                fetchDailyData();
-                break;
+        const fetchYearData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                const data = await getRevenueByMonth();
+                setYearData(data.map((item) => item.revenue || 0)); // ✅ lấy trường revenue
+            } catch {
+                setError(`Không thể tải doanh thu 12 tháng`);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchYearData();
+    }, []);
+
+    const fetchRevenueByDate = async () => {
+        if (!selectedDate) return;
+        setLoading(true);
+        try {
+            const data = await getRevenueByDate(selectedDate);
+            setDailyRevenue(data.amount || 0);
+        } catch {
+            setError("Không thể tải doanh thu ngày");
+        } finally {
+            setLoading(false);
         }
-    }, [selectedChart, selectedMonth, selectedYear, selectedDate]);
+    };
 
-    // Hàm render biểu đồ đơn giản (placeholder)
-    const renderSimpleChart = () => {
-        if (chartData.labels.length === 0) {
-            return <div className={styles.noData}>Không có dữ liệu</div>;
+    const fetchRevenueByMonthYear = async () => {
+        setLoading(true);
+        try {
+            const data = await getRevenueByMonthYear(selectedMonth, selectedYear);
+            setMonthlyRevenue(data.revenue || 0); // ✅ lấy trường revenue
+        } catch {
+            setError("Không thể tải doanh thu tháng/năm");
+        } finally {
+            setLoading(false);
         }
-
-        const maxValue = Math.max(...chartData.data);
-        const minHeight = 20;
-
-        return (
-            <div className={styles.simpleChart}>
-                {chartData.labels.map((label, index) => {
-                    const value = chartData.data[index];
-                    const height = maxValue > 0 ? (value / maxValue) * 200 + minHeight : minHeight;
-                    
-                    return (
-                        <div key={index} className={styles.chartBar}>
-                            <div 
-                                className={styles.bar} 
-                                style={{ height: `${height}px` }}
-                                title={`${label}: ${value.toLocaleString()} ₫`}
-                            />
-                            <span className={styles.barLabel}>{label}</span>
-                            <span className={styles.barValue}>{value.toLocaleString()} ₫</span>
-                        </div>
-                    );
-                })}
-            </div>
-        );
     };
 
     return (
         <div className={styles.chartSection}>
-            <div className={styles.chartHeader}>
-                <h2>Biểu đồ doanh thu</h2>
-                <div className={styles.chartControls}>
-                    <button 
-                        className={`${styles.chartTab} ${selectedChart === 'month' ? styles.active : ''}`}
-                        onClick={() => handleChartChange('month')}
-                    >
-                        Tháng hiện tại
-                    </button>
-                    <button 
-                        className={`${styles.chartTab} ${selectedChart === 'monthYear' ? styles.active : ''}`}
-                        onClick={() => handleChartChange('monthYear')}
-                    >
-                        Theo tháng/năm
-                    </button>
-                    <button 
-                        className={`${styles.chartTab} ${selectedChart === 'year' ? styles.active : ''}`}
-                        onClick={() => handleChartChange('year')}
-                    >
-                        Theo năm
-                    </button>
-                    <button 
-                        className={`${styles.chartTab} ${selectedChart === 'date' ? styles.active : ''}`}
-                        onClick={() => handleChartChange('date')}
-                    >
-                        Theo ngày
-                    </button>
-                </div>
+            <h3>Tra cứu doanh thu</h3>
+
+            {/* Tra cứu doanh thu ngày */}
+            <div className={styles.searchRow}>
+                <input
+                    className={styles.input}
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                />
+                <button
+                    className={styles.adminButtonWithIcon}
+                    onClick={fetchRevenueByDate}
+                >
+                    Xem doanh thu ngày
+                </button>
+            </div>
+            <div className={styles.resultText}>
+                Doanh thu ngày {selectedDate || "(chưa chọn)"}:{" "}
+                {dailyRevenue.toLocaleString()} ₫
             </div>
 
-            {/* Filter controls */}
-            {selectedChart === 'monthYear' && (
-                <div className={styles.chartFilters}>
-                    <select 
-                        value={selectedMonth} 
-                        onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                        className={styles.filterSelect}
-                    >
-                        {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
-                            <option key={month} value={month}>
-                                Tháng {month}
-                            </option>
-                        ))}
-                    </select>
-                    <select 
-                        value={selectedYear} 
-                        onChange={(e) => setSelectedYear(Number(e.target.value))}
-                        className={styles.filterSelect}
-                    >
-                        {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map(year => (
-                            <option key={year} value={year}>
-                                Năm {year}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            )}
-
-            {selectedChart === 'year' && (
-                <div className={styles.chartFilters}>
-                    <select 
-                        value={selectedYear} 
-                        onChange={(e) => setSelectedYear(Number(e.target.value))}
-                        className={styles.filterSelect}
-                    >
-                        {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i).map(year => (
-                            <option key={year} value={year}>
-                                Năm {year}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            )}
-
-            {selectedChart === 'date' && (
-                <div className={styles.chartFilters}>
-                    <input 
-                        type="date" 
-                        value={selectedDate} 
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        className={styles.filterSelect}
-                    />
-                </div>
-            )}
-
-            {/* Chart content */}
-            <div className={styles.chartContent}>
-                {loading && <div className={styles.loading}>Đang tải dữ liệu...</div>}
-                {error && <div className={styles.error}>{error}</div>}
-                {usingMockData && (
-                    <div className={styles.mockDataNotice}>
-                        <i className="fas fa-info-circle"></i>
-                        <span>Đang sử dụng dữ liệu mẫu (API chưa sẵn sàng)</span>
-                    </div>
-                )}
-                {!loading && !error && renderSimpleChart()}
+            {/* Tra cứu doanh thu tháng/năm */}
+            <div className={styles.searchRow} style={{ marginTop: "1rem" }}>
+                <input
+                    className={styles.input}
+                    type="number"
+                    min={1}
+                    max={12}
+                    value={selectedMonth}
+                    onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                    placeholder="Tháng"
+                />
+                <input
+                    className={styles.input}
+                    type="number"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(Number(e.target.value))}
+                    placeholder="Năm"
+                />
+                <button
+                    className={styles.adminButtonWithIcon}
+                    onClick={fetchRevenueByMonthYear}
+                >
+                    Xem doanh thu tháng
+                </button>
             </div>
+            <div className={styles.resultText}>
+                Doanh thu {selectedMonth}/{selectedYear}:{" "}
+                {monthlyRevenue.toLocaleString()} ₫
+            </div>
+
+            {/* Trạng thái tải hoặc lỗi */}
+            {loading && <div className={styles.loading}>Đang tải...</div>}
+            {error && <div className={styles.error}>{error}</div>}
+
+            {/* Biểu đồ doanh thu */}
+            <h3 style={{ marginTop: "2rem" }}>Biểu đồ doanh thu 12 tháng</h3>
+            <Bar
+                data={{
+                    labels: Array.from({ length: 12 }, (_, i) => `T${i + 1}`),
+                    datasets: [
+                        {
+                            label: "Doanh thu",
+                            data: yearData,
+                            backgroundColor: "#60a5fa",
+                        },
+                    ],
+                }}
+                options={{
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                    },
+                }}
+            />
         </div>
     );
+
 };
 
-export default RevenueCharts; 
+export default RevenueCharts;

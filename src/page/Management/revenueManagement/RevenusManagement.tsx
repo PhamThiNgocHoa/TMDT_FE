@@ -9,6 +9,7 @@ import { RevenueProvider, useRevenue } from './context/RevenueContext';
 const RevenueOverview: React.FC = () => {
     const {
         loading,
+        error,
         revenueToday,
         totalRevenueThisMonth,
         totalUsers,
@@ -20,22 +21,49 @@ const RevenueOverview: React.FC = () => {
 
     return (
         <div className={styles.dashboardContent}>
+            {error && (
+                <div className={styles.errorBanner}>
+                    <i className="fas fa-exclamation-triangle"></i>
+                    <span>{error}</span>
+                </div>
+            )}
+            
             <div className={styles.cards}>
                 <div className={styles.card}>
-                    <h3>Doanh thu hôm nay</h3>
-                    <p>{revenueToday.toLocaleString()} ₫</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Doanh thu hôm nay</h3>
+                        <p>{revenueToday.toLocaleString()} ₫</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Doanh thu tháng này</h3>
-                    <p>{totalRevenueThisMonth.toLocaleString()} ₫</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-chart-line"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Doanh thu tháng này</h3>
+                        <p>{totalRevenueThisMonth.toLocaleString()} ₫</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Tổng người dùng</h3>
-                    <p>{totalUsers}</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-users"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Tổng người dùng</h3>
+                        <p>{totalUsers.toLocaleString()}</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Đơn đang xử lý</h3>
-                    <p>{totalPendingOrders}</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-clock"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Đơn đang xử lý</h3>
+                        <p>{totalPendingOrders.toLocaleString()}</p>
+                    </div>
                 </div>
             </div>
 
