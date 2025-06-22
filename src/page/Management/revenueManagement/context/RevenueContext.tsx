@@ -42,49 +42,90 @@ export const RevenueProvider = ({ children }: { children: React.ReactNode }) => 
 
         try {
             const token = localStorage.getItem("authToken");
-            if (!token) throw new Error("Bạn chưa đăng nhập");
+            if (!token) {
+                setError("Bạn chưa đăng nhập. Vui lòng đăng nhập lại.");
+                return;
+            }
 
             const today = dayjs().format("YYYY-MM-DD");
-            const headers = { Authorization: `Bearer ${token}` };
+            const headers = { 
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}` 
+            };
             const year = dayjs().year();
 
-            // Gửi request
-            const [resToday, resMonth, resUsers, resPending] = await Promise.all([
-                axios.get(`/api/admin/order/revenue/date/${today}`, { headers }),
-                axios.get(`/api/admin/order/revenue`, { headers }),
-                axios.get(`/api/admin/customers`, { headers }),
-                axios.get(`/api/admin/PENDING`, { headers })
-            ]);
+            // Gửi request với error handling riêng cho từng API
+            try {
+                // 1. Doanh thu hôm nay
+                const resToday = await axios.get(`/api/admin/order/revenue/date/${today}`, { headers });
+                console.log("API doanh thu hôm nay response:", resToday.data); // Debug log
+                const todayRevenue = resToday.data.data?.revenue || 0;
+                console.log("Setting revenueToday to:", todayRevenue); // Debug log
+                setRevenueToday(todayRevenue);
+            } catch (error: any) {
+                console.error("Lỗi lấy doanh thu hôm nay:", error);
+                setRevenueToday(0);
+            }
 
-            // 🔵 Doanh thu hôm nay
-            setRevenueToday(resToday.data.data?.revenue || 0);
+            try {
+                // 2. Doanh thu theo tháng
+                const resMonth = await axios.get(`/api/admin/order/revenue`, { headers });
+                console.log("API doanh thu theo tháng response:", resMonth.data); // Debug log
+                const thisMonth = dayjs().month() + 1;
+                console.log("Tháng hiện tại:", thisMonth); // Debug log
+                const currentMonthData = resMonth.data.data?.find((m: any) => m.month === thisMonth);
+                console.log("Dữ liệu tháng hiện tại:", currentMonthData); // Debug log
+                const monthRevenue = currentMonthData?.revenue || 0;
+                console.log("Setting totalRevenueThisMonth to:", monthRevenue); // Debug log
+                setTotalRevenueThisMonth(monthRevenue);
 
-            // 🔵 Tổng doanh thu tháng này
-            const thisMonth = dayjs().month() + 1;
-            const currentMonthData = resMonth.data.data.find((m: any) => m.month === thisMonth);
-            setTotalRevenueThisMonth(currentMonthData?.revenue || 0);
+                // Doanh thu từng tháng trong năm (phục vụ biểu đồ)
+                const revenueData = resMonth.data.data?.map((item: any) => ({
+                    date: `${year}-${String(item.month).padStart(2, "0")}-01`,
+                    amount: item.revenue
+                })) || [];
+                console.log("Setting revenueByDate to:", revenueData); // Debug log
+                setRevenueByDate(revenueData);
+            } catch (error: any) {
+                console.error("Lỗi lấy doanh thu theo tháng:", error);
+                setTotalRevenueThisMonth(0);
+                setRevenueByDate([]);
+            }
 
-            // 🔵 Tổng khách hàng
-            setTotalUsers(resUsers.data.data ? resUsers.data.data.length : 0);
+            try {
+                // 3. Tổng khách hàng
+                const resUsers = await axios.get(`/api/admin/customers`, { headers });
+                setTotalUsers(resUsers.data.data ? resUsers.data.data.length : 0);
+            } catch (error: any) {
+                console.error("Lỗi lấy danh sách khách hàng:", error);
+                setTotalUsers(0);
+            }
 
-            // 🔵 Tổng đơn hàng chờ xử lý
-            setTotalPendingOrders(resPending.data.data ? resPending.data.data.length : 0);
-
-            // 🔵 Doanh thu từng tháng trong năm (phục vụ biểu đồ)
-            const revenueData = resMonth.data.data.map((item: any) => ({
-                date: `${year}-${String(item.month).padStart(2, "0")}-01`,
-                amount: item.revenue
-            }));
-            setRevenueByDate(revenueData);
+            try {
+                // 4. Đơn hàng chờ xử lý - sử dụng đúng endpoint
+                const resPending = await axios.get(`/api/admin/PENDING`, { headers });
+                console.log("API PENDING response:", resPending.data); // Debug log
+                const pendingCount = resPending.data.data ? resPending.data.data.length : 0;
+                console.log("Setting totalPendingOrders to:", pendingCount); // Debug log
+                setTotalPendingOrders(pendingCount);
+            } catch (error: any) {
+                console.error("Lỗi lấy đơn hàng chờ xử lý:", error);
+                setTotalPendingOrders(0);
+            }
 
         } catch (error: any) {
-            setError(error.message || "Không thể tải dữ liệu doanh thu");
-            console.error(error);
+            console.error("Lỗi chung:", error);
+            if (error.response?.status === 403) {
+                setError("Bạn không có quyền truy cập. Vui lòng đăng nhập với tài khoản admin.");
+            } else if (error.response?.status === 401) {
+                setError("Token hết hạn. Vui lòng đăng nhập lại.");
+            } else {
+                setError("Không thể tải dữ liệu doanh thu. Vui lòng thử lại sau.");
+            }
         } finally {
             setLoading(false);
         }
     }, []);
-
 
     useEffect(() => {
         fetchAllRevenueData();

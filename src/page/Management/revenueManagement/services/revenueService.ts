@@ -30,22 +30,34 @@ export interface RevenueByMonthYearResponse {
     revenue: number;
 }
 
-// Headers auth
+// Headers auth với error handling
 const getAuthHeaders = () => {
     const token = localStorage.getItem("authToken");
+    if (!token) {
+        throw new Error("Không tìm thấy token. Vui lòng đăng nhập lại.");
+    }
     return {
         "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        Authorization: `Bearer ${token}`,
     };
 };
 
 // ========== API doanh thu ==========
 // ✅ Tổng doanh thu 12 tháng (mỗi tháng)
 export const getRevenueByMonth = async (): Promise<RevenueByMonth[]> => {
-    const response = await axios.get("/api/admin/order/revenue", {
-        headers: getAuthHeaders(),
-    });
-    return response.data.data || [];
+    try {
+        const response = await axios.get("/api/admin/order/revenue", {
+            headers: getAuthHeaders(),
+        });
+        return response.data.data || [];
+    } catch (error: any) {
+        if (error.response?.status === 403) {
+            throw new Error("Bạn không có quyền truy cập dữ liệu doanh thu");
+        } else if (error.response?.status === 401) {
+            throw new Error("Token hết hạn. Vui lòng đăng nhập lại");
+        }
+        throw new Error("Không thể tải dữ liệu doanh thu");
+    }
 };
 
 // ✅ Doanh thu tháng/năm
@@ -53,16 +65,39 @@ export const getRevenueByMonthYear = async (
     month: number,
     year: number
 ): Promise<RevenueByMonthYearResponse> => {
-    const response = await axios.get(`/api/admin/order/revenue/${month}/${year}`, {
-        headers: getAuthHeaders(),
-    });
-    return response.data.data;
+    try {
+        const response = await axios.get(`/api/admin/order/revenue/${month}/${year}`, {
+            headers: getAuthHeaders(),
+        });
+        return response.data.data;
+    } catch (error: any) {
+        if (error.response?.status === 403) {
+            throw new Error("Bạn không có quyền truy cập dữ liệu doanh thu");
+        } else if (error.response?.status === 401) {
+            throw new Error("Token hết hạn. Vui lòng đăng nhập lại");
+        }
+        throw new Error("Không thể tải dữ liệu doanh thu");
+    }
 };
 
-// ✅ Doanh thu ngày
 export const getRevenueByDate = async (date: string): Promise<RevenueData> => {
-    const response = await axios.get(`/api/admin/order/revenue/date/${date}`, {
-        headers: getAuthHeaders(),
-    });
-    return response.data.data || { date, amount: 0 };
+    try {
+        const response = await axios.get(`/api/admin/order/revenue/date/${date}`, {
+            headers: getAuthHeaders(),
+        });
+
+        const data = response.data.data;
+        // Map sang RevenueData
+        return {
+            date: `${data.year}-${String(data.month).padStart(2, "0")}-${String(data.day).padStart(2, "0")}`,
+            amount: data.revenue, // lấy đúng trường revenue
+        };
+    } catch (error: any) {
+        if (error.response?.status === 403) {
+            throw new Error("Bạn không có quyền truy cập dữ liệu doanh thu");
+        } else if (error.response?.status === 401) {
+            throw new Error("Token hết hạn. Vui lòng đăng nhập lại");
+        }
+        throw new Error("Không thể tải dữ liệu doanh thu");
+    }
 };

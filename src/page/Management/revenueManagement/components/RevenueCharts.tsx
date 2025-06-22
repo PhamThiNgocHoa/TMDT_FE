@@ -37,8 +37,9 @@ const RevenueCharts: React.FC = () => {
                 setError(null);
                 const data = await getRevenueByMonth();
                 setYearData(data.map((item) => item.revenue || 0)); // ✅ lấy trường revenue
-            } catch {
-                setError(`Không thể tải doanh thu 12 tháng`);
+            } catch (error: any) {
+                setError(error.message || "Không thể tải doanh thu 12 tháng");
+                setYearData(Array(12).fill(0)); // Set default data
             } finally {
                 setLoading(false);
             }
@@ -49,11 +50,13 @@ const RevenueCharts: React.FC = () => {
     const fetchRevenueByDate = async () => {
         if (!selectedDate) return;
         setLoading(true);
+        setError(null);
         try {
             const data = await getRevenueByDate(selectedDate);
             setDailyRevenue(data.amount || 0);
-        } catch {
-            setError("Không thể tải doanh thu ngày");
+        } catch (error: any) {
+            setError(error.message || "Không thể tải doanh thu ngày");
+            setDailyRevenue(0);
         } finally {
             setLoading(false);
         }
@@ -61,11 +64,13 @@ const RevenueCharts: React.FC = () => {
 
     const fetchRevenueByMonthYear = async () => {
         setLoading(true);
+        setError(null);
         try {
             const data = await getRevenueByMonthYear(selectedMonth, selectedYear);
             setMonthlyRevenue(data.revenue || 0); // ✅ lấy trường revenue
-        } catch {
-            setError("Không thể tải doanh thu tháng/năm");
+        } catch (error: any) {
+            setError(error.message || "Không thể tải doanh thu tháng/năm");
+            setMonthlyRevenue(0);
         } finally {
             setLoading(false);
         }
@@ -86,8 +91,9 @@ const RevenueCharts: React.FC = () => {
                 <button
                     className={styles.adminButtonWithIcon}
                     onClick={fetchRevenueByDate}
+                    disabled={loading}
                 >
-                    Xem doanh thu ngày
+                    {loading ? "Đang tải..." : "Xem doanh thu ngày"}
                 </button>
             </div>
             <div className={styles.resultText}>
@@ -116,8 +122,9 @@ const RevenueCharts: React.FC = () => {
                 <button
                     className={styles.adminButtonWithIcon}
                     onClick={fetchRevenueByMonthYear}
+                    disabled={loading}
                 >
-                    Xem doanh thu tháng
+                    {loading ? "Đang tải..." : "Xem doanh thu tháng"}
                 </button>
             </div>
             <div className={styles.resultText}>
