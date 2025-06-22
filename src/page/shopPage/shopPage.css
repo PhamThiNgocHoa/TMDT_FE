@@ -33,6 +33,8 @@ main {
     flex-direction: column;
     gap: clamp(1.5rem, 4vw, 2.5rem);
     margin-top: clamp(1rem, 3vw, 1.5rem);
+    max-height: 400px;    /* hoặc bất kỳ chiều cao nào bạn muốn */
+    overflow-y: auto;
 }
 
 /* CSS cho phần ProductsSection */
