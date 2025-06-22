@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../../assets/css/homeStyles/promoBanner.css';
 
-// Fake data for multiple banners
 const promoBannersData = [
     {
         id: 1,

@@ -1,12 +1,11 @@
-import {ProductImage} from "../page/homePage/types/product";
-import {Rating} from "./Rating";
+import {ProductImageResponse} from "./response/ProductImageResponse";
 
 export interface Product {
     id: number;
     name: string;
     category: string;
 
-    images: ProductImage[];
+    images: ProductImageResponse[];
     img?: string;
 
     price: number;
@@ -20,6 +19,7 @@ export interface Product {
     inStock?: boolean;
     productNew?: boolean;
 
-    colors?: string[];
-    sizes?: string[];
+    color?: string;
+    size?: string;
+    featured?: boolean;
 }

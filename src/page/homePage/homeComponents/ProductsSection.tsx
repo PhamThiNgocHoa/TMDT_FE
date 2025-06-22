@@ -7,18 +7,7 @@ import useProduct from "../../../hooks/useProduct";
 
 const ProductsSection: React.FC = () => {
     const navigate = useNavigate();
-    const {fetchGetListProduct, products} = useProduct();
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await fetchGetListProduct();
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        fetchData();
-
-    }, [fetchGetListProduct]);
+    const {products} = useProduct();
 
     const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
@@ -42,17 +31,8 @@ const ProductsSection: React.FC = () => {
             </div>
 
             <div className="products-grid">
-{/*<<<<<<< HEAD*/}
-{/*                {allProducts.slice(0, 8).map(product => (*/}
-{/*                    <ProductCard*/}
-{/*                        key={product.id}*/}
-{/*                        product={product}*/}
-{/*                        onProductClick={() => handleProductClick(product.id.toString())}*/}
-{/*                    />*/}
-{/*                ))}*/}
-{/*=======*/}
                 {products && products.length > 0 ? (
-                    products.map((product)=>(
+                    products.map((product) => (
                         <ProductCard
                             key={product.id}
                             product={product}
@@ -60,13 +40,11 @@ const ProductsSection: React.FC = () => {
                         />
                     ))
 
-                ): (
+                ) : (
                     <span>Không có sản phẩm</span>
 
                 )}
-{/*>>>>>>> 2a63fcf381949e5cf14217beecd7905fc1fc1a96*/}
             </div>
-
             <div className="view-all-container">
                 <button className="btn btn-primary">Xem Tất Cả Sản Phẩm</button>
             </div>

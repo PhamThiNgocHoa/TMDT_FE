@@ -11,6 +11,7 @@ import {ProductResponse} from "../models/response/ProductResponse";
 
 function useProduct() {
     const [products, setProducts] = useState<ProductResponse[]>([]);
+    const [product, setProduct] = useState<ProductResponse>();
     const [productDetail, setProductDetail] = useState<ProductResponse | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -23,26 +24,12 @@ function useProduct() {
         throw new Error(message);
     };
 
-    const fetchGetListProduct = async (): Promise<ProductResponse[]> => {
-        setLoading(true);
-        try {
-            const data = await getListProduct();
-            setProducts(data);
-            return data;
-        } catch (error) {
-            handleError(error);
-            return [];
-        } finally {
-            setLoading(false);
-        }
-    };
-
     const fetchGetProductById = async (id: number): Promise<ProductResponse | undefined> => {
         setLoading(true);
         try {
             const data = await getProductById(id);
-            console.log(data);
-            return data;  // chỉ trả về, không set state trong hook
+            setProduct(data);
+            return data;
         } catch (error) {
             handleError(error);
             return undefined;
@@ -55,8 +42,10 @@ function useProduct() {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const product = await getListProduct();
                 const data = await getProductSale();
                 setSaleProducts(data);
+                setProducts(product)
 
             } catch (error) {
                 console.log(error);
@@ -64,7 +53,7 @@ function useProduct() {
         };
 
         fetchData();
-    }, [getProductSale]);
+    }, []);
 
 
     const fetchListFindByName = async (name: string): Promise<ProductResponse[]> => {
@@ -81,11 +70,12 @@ function useProduct() {
 
     return {
         products,
+        product,
         error,
         loading,
-        fetchGetListProduct,
         fetchGetProductById,
         setProducts,
+        setProduct,
         saleProducts, setSaleProducts,
         fetchListFindByName,
         productDetail, setProductDetail,

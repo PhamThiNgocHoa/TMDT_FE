@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./CustomProductServicePage.css";
+import "./components/css/CustomProductServicePage.css";
 
 const relatedServices = [
   {

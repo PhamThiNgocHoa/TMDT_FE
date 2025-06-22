@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import styles from './AddPost.module.css';
-import { AdminSidebar } from './AdminSidebar';
+import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header'; // Import Header
 
 export function AddPost() {

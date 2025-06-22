@@ -5,5 +5,5 @@ export interface Address {
     receiver: string;
     note?: string;
     customerId: number;
-    isDefault: boolean;
+    isDefault?: boolean;
 }

@@ -4,196 +4,112 @@ import React, {
     useContext,
     useState,
     useCallback,
-    Dispatch,
-    SetStateAction,
+    useEffect,
 } from "react";
-import { PaginationParams } from "../services/api";
+import axios from "axios";
+import dayjs from "dayjs";
 
 interface Revenue {
-    id: number;
-    customerName: string;
-    productName: string;
-    price: number;
-    status: "paid" | "debt";
-    date: string; // ISO string
-}
-
-interface RevenueFilters {
-    search?: string;
-    status?: "paid" | "debt"; // chỉ có 2 trạng thái
-    sort?: string;
-    category?: string;
+    date: string; // yyyy-mm-dd
+    amount: number;
 }
 
 interface RevenueContextType {
-    revenues: Revenue[];
     loading: boolean;
     error: string | null;
-    filters: RevenueFilters;
-    pagination: PaginationParams;
-    total: number;
-    selectedRevenues: string[];
-    setFilters: (filters: RevenueFilters) => void;
-    setPagination: (pagination: PaginationParams) => void;
-    setSelectedRevenues: Dispatch<SetStateAction<string[]>>;
-    fetchRevenues: () => Promise<void>;
-    deleteRevenue: (id: string) => Promise<void>;
-    updateRevenueStatus: (id: string, status: Revenue["status"]) => Promise<void>;
+    revenueByDate: Revenue[];
+    revenueToday: number;
+    totalUsers: number;
+    totalPendingOrders: number;
+    totalRevenueThisMonth: number;
+    fetchAllRevenueData: () => Promise<void>;
 }
 
 const RevenueContext = createContext<RevenueContextType | undefined>(undefined);
 
-// Fake data mẫu mới theo đúng interface
-const fakeRevenues: Revenue[] = [
-    {
-        id: 1,
-        customerName: "Nguyễn Văn A",
-        productName: "Sản phẩm 1",
-        price: 1500000,
-        status: "paid",
-        date: "2024-05-01T10:00:00Z",
-    },
-    {
-        id: 2,
-        customerName: "Trần Thị B",
-        productName: "Sản phẩm 2",
-        price: 2500000,
-        status: "debt",
-        date: "2024-05-02T12:00:00Z",
-    },
-    {
-        id: 3,
-        customerName: "Lê Văn C",
-        productName: "Sản phẩm 3",
-        price: 3500000,
-        status: "paid",
-        date: "2024-05-03T14:00:00Z",
-    },
-];
-
-export function RevenueProvider({ children }: { children: React.ReactNode }) {
-    const [revenues, setRevenues] = useState<Revenue[]>([]);
+export const RevenueProvider = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [total, setTotal] = useState(fakeRevenues.length);
-    const [filters, setFilters] = useState<RevenueFilters>({
-        search: "",
-        status: undefined, // Không khởi tạo '' nữa mà là undefined
-        sort: "newest",
-    });
-    const [pagination, setPagination] = useState<PaginationParams>({
-        page: 1,
-        limit: 10,
-    });
-    const [selectedRevenues, setSelectedRevenues] = useState<string[]>([]);
+    const [revenueByDate, setRevenueByDate] = useState<Revenue[]>([]);
+    const [revenueToday, setRevenueToday] = useState<number>(0);
+    const [totalRevenueThisMonth, setTotalRevenueThisMonth] = useState<number>(0);
+    const [totalUsers, setTotalUsers] = useState<number>(0);
+    const [totalPendingOrders, setTotalPendingOrders] = useState<number>(0);
 
-    const fetchRevenues = useCallback(async () => {
+    const fetchAllRevenueData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            setLoading(true);
-            setError(null);
+            const token = localStorage.getItem("authToken");
+            if (!token) throw new Error("Bạn chưa đăng nhập");
 
-            // Fake delay mô phỏng request
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            const today = dayjs().format("YYYY-MM-DD");
+            const headers = { Authorization: `Bearer ${token}` };
+            const year = dayjs().year();
 
-            let filtered = [...fakeRevenues];
+            // Gửi request
+            const [resToday, resMonth, resUsers, resPending] = await Promise.all([
+                axios.get(`/api/admin/order/revenue/date/${today}`, { headers }),
+                axios.get(`/api/admin/order/revenue`, { headers }),
+                axios.get(`/api/admin/customers`, { headers }),
+                axios.get(`/api/admin/PENDING`, { headers })
+            ]);
 
-            if (filters.search) {
-                filtered = filtered.filter((revenue) =>
-                    revenue.customerName.toLowerCase().includes(filters.search!.toLowerCase())
-                );
-            }
+            // 🔵 Doanh thu hôm nay
+            setRevenueToday(resToday.data.data?.revenue || 0);
 
-            if (filters.status) {
-                filtered = filtered.filter((r) => r.status === filters.status);
-            }
+            // 🔵 Tổng doanh thu tháng này
+            const thisMonth = dayjs().month() + 1;
+            const currentMonthData = resMonth.data.data.find((m: any) => m.month === thisMonth);
+            setTotalRevenueThisMonth(currentMonthData?.revenue || 0);
 
-            if (filters.sort === "newest") {
-                filtered.sort(
-                    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-                );
-            } else if (filters.sort === "oldest") {
-                filtered.sort(
-                    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-                );
-            }
+            // 🔵 Tổng khách hàng
+            setTotalUsers(resUsers.data.data ? resUsers.data.data.length : 0);
 
-            const totalFiltered = filtered.length;
-            const start = ((pagination.page || 1) - 1) * (pagination.limit || 10);
-            const end = start + (pagination.limit || 10);
-            const paginated = filtered.slice(start, end);
+            // 🔵 Tổng đơn hàng chờ xử lý
+            setTotalPendingOrders(resPending.data.data ? resPending.data.data.length : 0);
 
-            setRevenues(paginated);
-            setTotal(totalFiltered);
-        } catch {
-            setError("Failed to fetch revenues");
+            // 🔵 Doanh thu từng tháng trong năm (phục vụ biểu đồ)
+            const revenueData = resMonth.data.data.map((item: any) => ({
+                date: `${year}-${String(item.month).padStart(2, "0")}-01`,
+                amount: item.revenue
+            }));
+            setRevenueByDate(revenueData);
+
+        } catch (error: any) {
+            setError(error.message || "Không thể tải dữ liệu doanh thu");
+            console.error(error);
         } finally {
             setLoading(false);
         }
-    }, [filters, pagination]);
+    }, []);
 
-    const deleteRevenue = async (id: string) => {
-        try {
-            setLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 500));
 
-            // Xóa trong fakeRevenues (mutable)
-            const updated = fakeRevenues.filter((r) => r.id !== Number(id));
-            fakeRevenues.splice(0, fakeRevenues.length, ...updated);
-
-            await fetchRevenues();
-            setSelectedRevenues([]);
-        } catch {
-            setError("Failed to delete revenue");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const updateRevenueStatus = async (id: string, status: Revenue["status"]) => {
-        try {
-            setLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 500));
-
-            const updated = fakeRevenues.map((r) =>
-                r.id === Number(id) ? { ...r, status } : r
-            );
-            fakeRevenues.splice(0, fakeRevenues.length, ...updated);
-
-            await fetchRevenues();
-        } catch {
-            setError("Failed to update revenue status");
-        } finally {
-            setLoading(false);
-        }
-    };
+    useEffect(() => {
+        fetchAllRevenueData();
+    }, [fetchAllRevenueData]);
 
     return (
         <RevenueContext.Provider
             value={{
-                revenues,
                 loading,
                 error,
-                filters,
-                pagination,
-                total,
-                selectedRevenues,
-                setFilters,
-                setPagination,
-                setSelectedRevenues,
-                fetchRevenues,
-                deleteRevenue,
-                updateRevenueStatus,
+                revenueByDate,
+                revenueToday,
+                totalUsers,
+                totalPendingOrders,
+                totalRevenueThisMonth,
+                fetchAllRevenueData,
             }}
         >
             {children}
         </RevenueContext.Provider>
     );
-}
+};
 
-export const useRevenues = () => {
+export const useRevenue = () => {
     const context = useContext(RevenueContext);
-    if (context === undefined) {
-        throw new Error("useRevenues must be used within a RevenueProvider");
-    }
+    if (!context) throw new Error("useRevenue must be used within a RevenueProvider");
     return context;
 };

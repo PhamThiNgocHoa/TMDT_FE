@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Customer} from "../models/Customer";
 import {authenticate, login, register} from "../server/api/authentication/auth.post";
 import {checkUsername, getQuantity, getUser} from "../server/api/customers/customer.get";
@@ -8,6 +8,7 @@ import {changePassword} from "../server/api/customers/customer.patch";
 import {updateCustomer} from "../server/api/customers/customer.put";
 import {IntrospectRequest} from "../models/request/IntrospectRequest";
 import {CustomerResponse} from "../models/response/CustomerResponse";
+import {logout} from "../server/api/authentication/auth.post";
 
 function useCustomer() {
     const [users, setUsers] = useState<Customer[]>([]);
@@ -16,36 +17,68 @@ function useCustomer() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
-    const handleError = (error: unknown) => {
-        const message = error instanceof Error ? error.message : "Unknown error occurred";
-        setError(message);
-        throw new Error(message);
-    };
 
     const handleLogin = async (username: string, password: string) => {
         setLoading(true);
         try {
             const userData = await login(username, password);
+
+            if (userData?.token && userData?.user?.id) {
+                localStorage.setItem("authToken", userData.token);
+                localStorage.setItem("customerId", userData.user.id.toString());
+            }
+
+
             setUsers(userData);
             return userData;
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
     };
 
+    const handleLogout = async () => {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+
+        setLoading(true);
+        try {
+            await logout();
+        } catch (err) {
+            console.error("Lỗi khi gọi API logout:", err);
+        } finally {
+            localStorage.removeItem("authToken");
+            setUser(null);
+            setLoading(false);
+        }
+    };
+
     const fetchUser = async () => {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
         setLoading(true);
         try {
             const userData = await getUser();
             setUser(userData);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
     };
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) return;
+        const fetchUser = async () => {
+            try {
+                const userData = await getUser();
+                setUser(userData);
+            } catch (err) {
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const fetchQuantity = async (userId: number) => {
         setLoading(true);
@@ -53,7 +86,6 @@ function useCustomer() {
             const data = await getQuantity(userId);
             setQuantity(data);
         } catch (error) {
-            handleError(error);
         } finally {
             setLoading(false);
         }
@@ -64,7 +96,6 @@ function useCustomer() {
         try {
             return await checkUsername(username);
         } catch (error) {
-            handleError(error);
         } finally {
             setLoading(false);
         }
@@ -75,7 +106,6 @@ function useCustomer() {
         try {
             return await register(fullname, username, email, password, phone);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -86,7 +116,6 @@ function useCustomer() {
         try {
             return await initPasswordReset(username);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -97,7 +126,6 @@ function useCustomer() {
         try {
             return await resetPassword(username, resetCode, newPassword);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -108,7 +136,6 @@ function useCustomer() {
         try {
             return await changePassword(customerId, dto);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -119,7 +146,6 @@ function useCustomer() {
         try {
             return await updateCustomer(customerId, customer);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
         }
@@ -130,7 +156,6 @@ function useCustomer() {
         try {
             return await authenticate(request);
         } catch (err) {
-            handleError(err);
         } finally {
             setLoading(false);
 
@@ -143,6 +168,7 @@ function useCustomer() {
         error,
         loading,
         handleLogin,
+        handleLogout,
         fetchUser,
         fetchQuantity,
         quantity,

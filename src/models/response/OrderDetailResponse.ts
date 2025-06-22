@@ -5,4 +5,5 @@ export interface OrderDetailResponse {
     orderId: number;
     productResponseDTO: ProductResponse;
     quantity: number;
+    color: string;
 }

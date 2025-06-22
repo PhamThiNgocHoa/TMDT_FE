@@ -1,16 +1,15 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 import SectionHeader from './SectionHeader';
-import { topProducts } from '../data/products';
 import '../../../assets/css/homeStyles/topProductsSection.css';
 import {useNavigate} from "react-router-dom";
-import { Product } from '../types/product';
 import useProduct from "../../../hooks/useProduct";
 
 
 const TopProductsSection: React.FC = () => {
     const navigate = useNavigate();
     const {products} = useProduct();
+    const hotProducts = products.filter(product => product.hot === true);
 
     const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
@@ -27,17 +26,18 @@ const TopProductsSection: React.FC = () => {
                     <button className="btn btn-primary">Xem Tất Cả Sản Phẩm</button>
                 </div>
             </div>
+            {hotProducts.length > 0 && (
+                <div className="top-products-grid">
+                    {hotProducts.map(product => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onProductClick={() => handleProductClick(product.id)}
+                        />
+                    ))}
+                </div>
+            )}
 
-            <div className="top-products-grid">
-                {topProducts.map((products) => (
-                    <ProductCard
-                        key={products.id}
-                        product={products}
-                        onProductClick={() => handleProductClick(products.id)}
-
-                    />
-                ))}
-            </div>
         </section>
     );
 };

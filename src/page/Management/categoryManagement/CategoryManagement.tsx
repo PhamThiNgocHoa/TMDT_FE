@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import styles from './CategoryManagement.module.css';
-import { AdminSidebar } from '../postManagement/AdminSidebar'; // Import AdminSidebar
+import { AdminSidebar } from '../AdminSidebar'; // Import AdminSidebar
 import CategoryTable from './components/CategoryTable';
 import { useCategory } from './context/CategoryContext';
 import { useNavigate } from 'react-router-dom';
@@ -45,7 +45,7 @@ const CategoryManagement: React.FC = () => {
     }
 
     return (
-        <div className={styles.postManagement}> {/* Use the same class name as RevenueManagement */}
+        <div className={styles.postManagement}> {/* Use the same class name as OrdersManagement */}
             <AdminSidebar /> {/* Include AdminSidebar */}
             <div className={styles.body}> {/* Main content body */}
                 <Header/>

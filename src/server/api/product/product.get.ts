@@ -1,4 +1,3 @@
-import {Product} from "../../../models/Product";
 import ApiService from "../ApiService";
 import {Category} from "../../../models/Category";
 import {ProductResponse} from "../../../models/response/ProductResponse";
@@ -12,7 +11,6 @@ export const getListProduct = async (): Promise<ProductResponse[]> => {
     return result.data;
 
 };
-
 export const searchProduct = async (name: string): Promise<ProductResponse[]> => {
     const result = await ApiService.get(`/api/product/search?name=${encodeURIComponent(name)}`, false);
     return result.data;

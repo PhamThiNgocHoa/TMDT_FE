@@ -22,7 +22,7 @@ function useCategory() {
             setCategories(res);
         }
         data();
-    }, [getListCategory()]);
+    }, []);
 
     const fetchGetCategoryById = async (id: number): Promise<Category | null> => {
         try {

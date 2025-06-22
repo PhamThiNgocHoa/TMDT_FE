@@ -37,13 +37,22 @@ import CustomerManagement from "./page/Management/customerManagement/CustomerMan
 import { AddCustomer } from "./page/Management/customerManagement/AddCustomer";
 import { EditCustomer } from "./page/Management/customerManagement/EditCustomer";
 import { CustomerProvider } from "./page/Management/customerManagement/context/CustomerContext";
-import RevenueManagement from "./page/Management/revenueManagement/RevenueManagement";
-import { AddRevenue } from "./page/Management/revenueManagement/AddRevenue";
-import { EditRevenue } from "./page/Management/revenueManagement/EditRevenue";
-import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
+import OrderManagement from "./page/Management/orderManagement/OrderManagement";
+import { AddOrder } from "./page/Management/orderManagement/AddOrder";
+import { EditOrder } from "./page/Management/orderManagement/EditOrder";
+import { OrderProvider } from "./page/Management/orderManagement/context/OrderContext";
 import CustomProductServicePage from "./page/custom/CustomProductServicePage";
 import OrderManagementPage from "./page/account/OrderManagementPage/OrderManagementPage";
 import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
+
+import RevenusManagement from "./page/Management/revenueManagement/RevenusManagement";
+import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
+import HomepageManagment from "./page/Management/homepageMangement/HomepageManagment";
+import { HomepageProvider } from "./page/Management/homepageMangement/context/HomepageContext";
+import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
+import GoogleRedirectHandler from "./page/GoogleRedirectHandler";
+
+
 
 const App = () => {
   return (
@@ -51,11 +60,15 @@ const App = () => {
       <WishlistProvider>
         <CategoryProvider>
           <CustomerProvider>
-            <RevenueProvider>
-              <Router>
-                <HeaderFooterControl />
-              </Router>
-            </RevenueProvider>
+            <OrderProvider>
+              <RevenueProvider>
+                <HomepageProvider>
+                  <Router>
+                    <HeaderFooterControl />
+                  </Router>
+                </HomepageProvider>
+              </RevenueProvider>
+            </OrderProvider>
           </CustomerProvider>
         </CategoryProvider>
       </WishlistProvider>
@@ -71,7 +84,11 @@ const HeaderFooterControl = () => {
     "/postManagement",
     "/management/category",
     "/management/customer",
+    "/management/customerManagement",
+    "/management/orderManagement",
+    "/management/orders",
     "/management/revenue",
+    "/management/homepage",
   ];
   return (
     <>
@@ -91,6 +108,7 @@ const HeaderFooterControl = () => {
         <Route path="/cart" element={<CartMain />} />
         <Route path="/loginad" element={<LoginAd />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/oauth2/redirect" element={<GoogleRedirectHandler/>} />
         <Route path="/wishlistPage" element={<WishlistPage />} />
         {/* Admin routes */}
         <Route path="/admin/*" element={<AdminDashboard />} />
@@ -100,28 +118,43 @@ const HeaderFooterControl = () => {
           path="/management/category/edit/:categoryId"
           element={<EditCategory />}
         />
+        <Route path="/payment-return" element={<PaymentReturn/>}/>
         <Route path="/postManagement" element={<PostManagement />} />
         <Route path="/postManagement/add" element={<AddPost />} />
         <Route path="/postManagement/edit/:postId" element={<EditPost />} />
+        
+        {/* Customer Management Routes */}
         <Route path="/management/customer" element={<CustomerManagement />} />
         <Route
           path="/management/customerManagement/add"
           element={<AddCustomer />}
         />
-        <Route
-          path="/management/customerManagement/edit/:Id"
-          element={<EditCustomer />}
+        <Route 
+          path="/management/customerManagement/edit/:Id" 
+          element={<EditCustomer />} 
         />
-        <Route path="/management/revenue" element={<RevenueManagement />} />
-        <Route
-          path="/management/revenueManagement/add"
-          element={<AddRevenue />}
+        
+        {/* Order Management Routes */}
+        <Route path="/management/orderManagement" element={<OrderManagement />} />
+        <Route 
+          path="/management/orderManagement/add" 
+          element={<AddOrder />}
         />
-        <Route
-          path="/management/revenueManagement/edit/:id"
-          element={<EditRevenue />}
+        <Route 
+          path="/management/orderManagement/edit/:Id" 
+          element={<EditOrder />}
         />
-        {/* Các route custom từ nhánh khai */}
+        
+        {/* Legacy Order Routes (for backward compatibility) */}
+        <Route path="/management/orders" element={<OrderManagement />} />
+        
+        {/* Revenue Management Routes */}
+        <Route path="/management/revenue" element={<RevenusManagement />} />
+        
+        {/* Homepage Management Routes */}
+        <Route path="/management/homepage" element={<HomepageManagment />} />
+        
+        {/* Các route custom từ nhánh khải */}
         <Route path="/custom" element={<CustomProductServicePage />} />
         <Route path="/orders" element={<OrderManagementPage />} />
         <Route

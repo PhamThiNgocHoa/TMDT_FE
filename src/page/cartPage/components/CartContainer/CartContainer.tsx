@@ -1,45 +1,49 @@
 import React from 'react';
-import { useCart } from '../../context/CartContext';
 import CartHeader from '../CartHeader/CartHeader';
 import CartItem from '../CartItem/CartItem';
-import CartActions from '../CartActions/CartActions';
 import CouponForm from '../CouponForm/CouponForm';
 import CartSummary from '../CartSummary/CartSummary';
 import EmptyCart from '../EmptyCart/EmptyCart';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import styles from './CartContainer.module.css';
+import { CartResponse } from '../../../../models/response/CartResponse';
 
-const CartContainer: React.FC = () => {
-  const { items, isLoading } = useCart();
+interface CartContainerProps {
+    cartData: CartResponse | null;
+    onUpdateCartItem: (cartItemId: number, quantity: number) => void;
+    onDeleteCartItem: (cartItemId: number) => void;
+}
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+const CartContainer: React.FC<CartContainerProps> = ({
+                                                         cartData,
+                                                         onUpdateCartItem,
+                                                         onDeleteCartItem
+                                                     }) => {
+    if (!cartData || cartData.cartItems.length === 0) {
+        return <EmptyCart />;
+    }
 
-  if (items.length === 0) {
-    return <EmptyCart />;
-  }
+    return (
+        <div className={styles.cartContainer}>
+            <div className={styles.cartContent}>
+                <div className={styles.cartItems}>
+                    <CartHeader />
+                    {cartData.cartItems.map(item => (
+                        <CartItem
+                            key={item.id}
+                            item={item}
+                            onUpdateCartItem={onUpdateCartItem}
+                            onDeleteCartItem={onDeleteCartItem}
+                        />
+                    ))}
+                </div>
+            </div>
 
-  return (
-    <div className={styles.cartContainer}>
-      <div className={styles.cartContent}>
-        <div className={styles.cartItems}>
-          <CartHeader />
-          
-          {items.map(item => (
-            <CartItem key={item.id} item={item} />
-          ))}
+            <div className={styles.cartSummarySection}>
+                <CouponForm />
+                <CartSummary cartData={cartData} />
+            </div>
         </div>
-        
-        <CartActions />
-      </div>
-      
-      <div className={styles.cartSummarySection}>
-        <CouponForm />
-        <CartSummary />
-      </div>
-    </div>
-  );
+    );
 };
 
 export default CartContainer;
