@@ -47,6 +47,8 @@ import CustomProductDetailPage from "./page/custom/CustomProductDetailPage";
 
 import RevenusManagement from "./page/Management/revenueManagement/RevenusManagement";
 import { RevenueProvider } from "./page/Management/revenueManagement/context/RevenueContext";
+import HomepageManagment from "./page/Management/homepageMangement/HomepageManagment";
+import { HomepageProvider } from "./page/Management/homepageMangement/context/HomepageContext";
 import PaymentReturn from "./page/checkOutPage/page/PaymentReturn";
 import GoogleRedirectHandler from "./page/GoogleRedirectHandler";
 
@@ -60,9 +62,11 @@ const App = () => {
           <CustomerProvider>
             <OrderProvider>
               <RevenueProvider>
-                <Router>
-                  <HeaderFooterControl />
-                </Router>
+                <HomepageProvider>
+                  <Router>
+                    <HeaderFooterControl />
+                  </Router>
+                </HomepageProvider>
               </RevenueProvider>
             </OrderProvider>
           </CustomerProvider>
@@ -84,6 +88,7 @@ const HeaderFooterControl = () => {
     "/management/orderManagement",
     "/management/orders",
     "/management/revenue",
+    "/management/homepage",
   ];
   return (
     <>
@@ -145,6 +150,9 @@ const HeaderFooterControl = () => {
         
         {/* Revenue Management Routes */}
         <Route path="/management/revenue" element={<RevenusManagement />} />
+        
+        {/* Homepage Management Routes */}
+        <Route path="/management/homepage" element={<HomepageManagment />} />
         
         {/* Các route custom từ nhánh khải */}
         <Route path="/custom" element={<CustomProductServicePage />} />
