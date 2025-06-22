@@ -14,7 +14,7 @@ export const AdminSidebar: React.FC<Props> = ({user}) => {
         {
             section: 'DANH MỤC', items: [
                 ...(user?.role === 'ADMIN' ? [
-                    {name: 'Trang chủ', icon: 'fas fa-home', path: '/management/homepage'},
+                    {name: 'Trang chủ', icon: 'fas fa-home', path: '/'},
                     {name: 'Danh mục', icon: 'fas fa-tags', path: '/management/category'},
                 ] : []),
 
@@ -47,11 +47,7 @@ export const AdminSidebar: React.FC<Props> = ({user}) => {
     return (
         <aside className={styles.adminSidebar}>
             <header className={styles.sidebarLogo}>
-                <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F76e222ee62f149c2bbceec67ad94b0d2%2F116ae39fa132422baae9dc1514de3e6f"
-                    alt="Company Logo"
-                    className="logo"
-                />
+                <i className={`fas fa-rocket ${styles.logoIcon}`}></i>
                 <h1 className={styles.sidebarBrand}>OrangeTech</h1>
             </header>
             <nav className={styles.sidebarNav}>

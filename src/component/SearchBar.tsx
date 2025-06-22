@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import "../assets/css/header.css";
 import { SearchIcon } from "../assets/icons/SearchIcon";
 import {listFindByName, searchProduct} from "../server/api/product/product.get"; // ✅ Import API
-import { ProductResponse } from "../models/response/ProductResponse"; // ✅ Kiểu dữ liệu thật
+import { ProductResponse } from "../models/response/ProductResponse";
+import {useNavigate} from "react-router-dom"; // ✅ Kiểu dữ liệu thật
 
 export const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<ProductResponse[]>([]);
     const [showResults, setShowResults] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigator = useNavigate();
 
     const performSearch = async (term: string) => {
         if (term.trim() === '') {
@@ -47,8 +49,7 @@ export const SearchBar = () => {
     };
 
     const handleResultClick = (productId: number) => {
-        console.log("Clicked product:", productId);
-        // TODO: Bạn có thể điều hướng đến trang chi tiết tại đây
+        navigator(`/product/${productId}`);
         setShowResults(false);
     };
 

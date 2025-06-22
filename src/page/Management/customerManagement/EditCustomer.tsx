@@ -17,6 +17,7 @@ export function EditCustomer() {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('USER');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const {user} = useCustomer();
@@ -35,6 +36,7 @@ export function EditCustomer() {
                 setUsername(customer.username || '');
                 setEmail(customer.email || '');
                 setPhone(customer.phone || '');
+                setRole(customer.role || 'USER');
             } catch (err: any) {
                 const status = err.response?.status;
                 const code = err.response?.data?.code;
@@ -80,6 +82,7 @@ export function EditCustomer() {
                 username,
                 email,
                 phone,
+                role,
             };
 
             if (password.trim() !== '') {
@@ -185,6 +188,7 @@ export function EditCustomer() {
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
+
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Email *</label>
                             <input
@@ -203,6 +207,35 @@ export function EditCustomer() {
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Quyền</label>
+
+                            {user?.role === 'ADMIN' ? (
+                                <select
+                                    className={styles.input}
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                >
+                                    <option value="USER">Người dùng</option>
+                                    <option value="STAFF">Nhân viên</option>
+                                    <option value="ADMIN">Quản trị viên</option>
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    className={styles.input}
+                                    value={
+                                        role === 'ADMIN'
+                                            ? 'Quản trị viên'
+                                            : role === 'STAFF'
+                                                ? 'Nhân viên'
+                                                : 'Người dùng'
+                                    }
+                                    readOnly
+                                />
+                            )}
+                        </div>
+
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Mật khẩu mới (nếu muốn đổi)</label>
                             <input
