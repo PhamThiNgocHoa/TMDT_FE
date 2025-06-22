@@ -1,10 +1,36 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './RevenusManagement.module.css';
 import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header';
 import RevenueCharts from './components/RevenueCharts';
 import { RevenueProvider, useRevenue } from './context/RevenueContext';
+
+// Component kiểm tra authentication
+const AuthCheck: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
+        }
+        
+        // Kiểm tra token có hợp lệ không (có thể thêm logic kiểm tra role admin)
+        setIsAuthenticated(true);
+    }, []);
+
+    if (isAuthenticated === null) {
+        return <div className={styles.loading}>Đang kiểm tra quyền truy cập...</div>;
+    }
+
+    if (!isAuthenticated) {
+        return null; // Sẽ redirect
+    }
+
+    return <>{children}</>;
+};
 
 const RevenueOverview: React.FC = () => {
     const {
@@ -16,6 +42,13 @@ const RevenueOverview: React.FC = () => {
         totalPendingOrders,
         revenueByDate
     } = useRevenue();
+
+    // Debug log để kiểm tra giá trị
+    console.log("RevenueOverview - revenueToday:", revenueToday);
+    console.log("RevenueOverview - totalRevenueThisMonth:", totalRevenueThisMonth);
+    console.log("RevenueOverview - totalUsers:", totalUsers);
+    console.log("RevenueOverview - totalPendingOrders:", totalPendingOrders);
+    console.log("RevenueOverview - revenueByDate:", revenueByDate);
 
     if (loading) return <div className={styles.loading}>Đang tải dữ liệu...</div>;
 
@@ -137,12 +170,14 @@ const RevenueManagementContent: React.FC = () => {
     );
 };
 
-// Bọc toàn bộ bằng RevenueProvider
+// Bọc toàn bộ bằng RevenueProvider và AuthCheck
 const RevenusManagement: React.FC = () => {
     return (
-        <RevenueProvider>
-            <RevenueManagementContent />
-        </RevenueProvider>
+        <AuthCheck>
+            <RevenueProvider>
+                <RevenueManagementContent />
+            </RevenueProvider>
+        </AuthCheck>
     );
 };
 
