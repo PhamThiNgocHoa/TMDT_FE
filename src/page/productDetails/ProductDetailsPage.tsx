@@ -7,6 +7,7 @@ import {ProductInfo} from "./ProductInfo";
 import ProductReviewsSection from "./ProductReviewsSection";
 import {RelatedProducts} from "./RelatedProducts";
 import useCustomer from "../../hooks/useCustomer";
+import ProductRelatedPosts from "./ProductRelatedPosts";
 
 export default function ProductDetailsPage() {
     const {id} = useParams<{ id: string }>();
@@ -59,6 +60,8 @@ export default function ProductDetailsPage() {
                         </aside>
                     </div>
                 </div>
+                <RelatedProducts products={products} loading={loading}/>
+                <ProductRelatedPosts productId={product.id} product={product} />
                 {user?.id !== 0 &&(
                     <ProductReviewsSection
                         productId={product.id}
@@ -66,7 +69,6 @@ export default function ProductDetailsPage() {
                         customerName={user?.fullname ?? ""}
                     />
                 )}
-                <RelatedProducts products={products} loading={loading}/>
             </section>
         </main>
     );

@@ -35,18 +35,18 @@ const EditCategory: React.FC = () => {
                 if (!category || category.id === undefined || category.id === null) {
                     setNotFound(true);
                 } else {
-                    setFormData({
+            setFormData({
                         id: category.id,
                         name: category.name,
                         description: category.description || '',
                         img: category.img || '',
                         active: category.active !== null && category.active !== undefined ? category.active : true,
-                    });
-                }
+            });
+        }
             } catch (err) {
                 setNotFound(true);
             } finally {
-                setIsLoading(false);
+        setIsLoading(false);
             }
         };
         fetchCategory();

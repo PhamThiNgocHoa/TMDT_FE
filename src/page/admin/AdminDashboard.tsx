@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
 import UserPermissionPage from "./UserPermissionPage/UserPermissionPage";
-import ProductsPage from "./ProductPage/ProductsPage";
 import CustomersPage from "./CustomersPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 import OrderDetailPage from "./OrdersPage/OrderDetailPage";
@@ -21,7 +20,6 @@ const AdminDashboard = () => {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<div>Dashboard Content</div>} />
-            <Route path="/products" element={<ProductsPage />} />
             <Route path="/category" element={<div>Category Content</div>} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/orders/:id" element={<OrderDetailPage />} />

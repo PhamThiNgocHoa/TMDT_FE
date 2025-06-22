@@ -18,7 +18,7 @@ export const AdminSidebar: React.FC<Props> = ({user}) => {
                     {name: 'Danh mục', icon: 'fas fa-tags', path: '/management/category'},
                 ] : []),
 
-                {name: 'Sản phẩm', icon: 'fas fa-box-open', path: '/admin/products'},
+                {name: 'Sản phẩm', icon: 'fas fa-box-open', path: '/management/product'},
                 {name: 'Đơn hàng', icon: 'fas fa-shopping-cart', path: '/management/orders'},
                 {name: 'Voucher', icon: 'fas fa-ticket-alt', path: '/admin/vouchers'},
                 {name: 'Bài viết', icon: 'fas fa-pencil-alt', path: '/postManagement'},
