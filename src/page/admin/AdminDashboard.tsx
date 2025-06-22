@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, Routes, Route } from "react-router-dom";
-import Sidebar from "../../component/Sidebar";
-import "../../assets/css/admin.css";
 import UserPermissionPage from "./UserPermissionPage/UserPermissionPage";
 import ProductsPage from "./ProductPage/ProductsPage";
 import CustomersPage from "./CustomersPage";
-import AdminTopbar from "./AdminTopbar/AdminTopbar";
 import OrdersPage from "./OrdersPage/OrdersPage";
 import OrderDetailPage from "./OrdersPage/OrderDetailPage";
 
@@ -20,9 +17,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <AdminTopbar />
       <div className="dashboard-container">
-        <Sidebar currentTab={currentTab} />
         <div className="main-content">
           <Routes>
             <Route path="/" element={<div>Dashboard Content</div>} />
