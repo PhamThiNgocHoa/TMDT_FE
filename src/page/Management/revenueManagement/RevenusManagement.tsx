@@ -1,14 +1,42 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './RevenusManagement.module.css';
 import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header';
 import RevenueCharts from './components/RevenueCharts';
 import { RevenueProvider, useRevenue } from './context/RevenueContext';
+import useCustomer from "../../../hooks/useCustomer";
+
+// Component kiểm tra authentication
+const AuthCheck: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            window.location.href = '/admin/login';
+            return;
+        }
+        
+        // Kiểm tra token có hợp lệ không (có thể thêm logic kiểm tra role admin)
+        setIsAuthenticated(true);
+    }, []);
+
+    if (isAuthenticated === null) {
+        return <div className={styles.loading}>Đang kiểm tra quyền truy cập...</div>;
+    }
+
+    if (!isAuthenticated) {
+        return null; // Sẽ redirect
+    }
+
+    return <>{children}</>;
+};
 
 const RevenueOverview: React.FC = () => {
     const {
         loading,
+        error,
         revenueToday,
         totalRevenueThisMonth,
         totalUsers,
@@ -16,26 +44,60 @@ const RevenueOverview: React.FC = () => {
         revenueByDate
     } = useRevenue();
 
+    // Debug log để kiểm tra giá trị
+    console.log("RevenueOverview - revenueToday:", revenueToday);
+    console.log("RevenueOverview - totalRevenueThisMonth:", totalRevenueThisMonth);
+    console.log("RevenueOverview - totalUsers:", totalUsers);
+    console.log("RevenueOverview - totalPendingOrders:", totalPendingOrders);
+    console.log("RevenueOverview - revenueByDate:", revenueByDate);
+
     if (loading) return <div className={styles.loading}>Đang tải dữ liệu...</div>;
 
     return (
         <div className={styles.dashboardContent}>
+            {error && (
+                <div className={styles.errorBanner}>
+                    <i className="fas fa-exclamation-triangle"></i>
+                    <span>{error}</span>
+                </div>
+            )}
+            
             <div className={styles.cards}>
                 <div className={styles.card}>
-                    <h3>Doanh thu hôm nay</h3>
-                    <p>{revenueToday.toLocaleString()} ₫</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Doanh thu hôm nay</h3>
+                        <p>{revenueToday.toLocaleString()} ₫</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Doanh thu tháng này</h3>
-                    <p>{totalRevenueThisMonth.toLocaleString()} ₫</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-chart-line"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Doanh thu tháng này</h3>
+                        <p>{totalRevenueThisMonth.toLocaleString()} ₫</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Tổng người dùng</h3>
-                    <p>{totalUsers}</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-users"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Tổng người dùng</h3>
+                        <p>{totalUsers.toLocaleString()}</p>
+                    </div>
                 </div>
                 <div className={styles.card}>
-                    <h3>Đơn đang xử lý</h3>
-                    <p>{totalPendingOrders}</p>
+                    <div className={styles.cardIcon}>
+                        <i className="fas fa-clock"></i>
+                    </div>
+                    <div className={styles.cardContent}>
+                        <h3>Đơn đang xử lý</h3>
+                        <p>{totalPendingOrders.toLocaleString()}</p>
+                    </div>
                 </div>
             </div>
 
@@ -46,7 +108,7 @@ const RevenueOverview: React.FC = () => {
 
 const RevenueManagementContent: React.FC = () => {
     const { revenueByDate } = useRevenue();
-
+    const {user} = useCustomer();
     // Hàm xuất báo cáo doanh thu
     const exportRevenueReport = () => {
         const headers = ['Ngày', 'Doanh thu (VNĐ)'];
@@ -76,7 +138,7 @@ const RevenueManagementContent: React.FC = () => {
 
     return (
         <div className={styles.postManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <header className={styles.adminTitle}>
@@ -109,12 +171,14 @@ const RevenueManagementContent: React.FC = () => {
     );
 };
 
-// Bọc toàn bộ bằng RevenueProvider
+// Bọc toàn bộ bằng RevenueProvider và AuthCheck
 const RevenusManagement: React.FC = () => {
     return (
-        <RevenueProvider>
-            <RevenueManagementContent />
-        </RevenueProvider>
+        <AuthCheck>
+            <RevenueProvider>
+                <RevenueManagementContent />
+            </RevenueProvider>
+        </AuthCheck>
     );
 };
 

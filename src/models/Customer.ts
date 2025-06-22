@@ -4,7 +4,7 @@ export interface Customer {
     email: string;
     phone: string;
     username: string;
-    password: string;
+    password?: string;
     role?: string;
     resetCode?: string;
 

@@ -1,5 +1,9 @@
 import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "../../Management/postManagement/PostManagement.module.css";
+import { Header } from "../../Management/postManagement/components/Header";
+import {AdminSidebar} from "../../Management/AdminSidebar";
+import useCustomer from "../../../hooks/useCustomer";
 
 const STATUS_LIST = [
   { label: "Tất cả", value: "all" },
@@ -81,25 +85,12 @@ function StatusTabs({
   setStatus: (v: string) => void;
 }) {
   return (
-    <div style={{ display: "flex", gap: 8 }}>
+    <div className={styles.tabsFilter}>
       {STATUS_LIST.map((tab) => (
         <button
           key={tab.value}
           onClick={() => setStatus(tab.value)}
-          style={{
-            background: status === tab.value ? "#fff" : "#f3f6fa",
-            color: status === tab.value ? "#3d5af1" : "#222",
-            border:
-              status === tab.value
-                ? "1.5px solid #3d5af1"
-                : "1.5px solid #e0e0e0",
-            borderRadius: 8,
-            padding: "8px 18px",
-            fontWeight: 600,
-            fontSize: 15,
-            cursor: "pointer",
-            minWidth: 110,
-          }}
+          className={status === tab.value ? styles.tabActive : styles.tab}
         >
           {tab.label}
         </button>
@@ -123,210 +114,472 @@ function Pagination({
 }) {
   const totalPages = Math.ceil(total / pageSize);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-      <span style={{ color: "#bfc9d8", fontSize: 14 }}>
+    <div className={styles.paginationContainer}>
+      <div className={styles.paginationInfo}>
         Hiển thị {Math.min((page - 1) * pageSize + 1, total)}-
         {Math.min(page * pageSize, total)} trên {total}
-      </span>
-      <select
-        value={pageSize}
-        onChange={(e) => setPageSize(Number(e.target.value))}
-        style={{
-          borderRadius: 6,
-          border: "1.5px solid #e0e0e0",
-          padding: "4px 8px",
-          fontSize: 15,
-        }}
-      >
-        {[10, 20, 30, 50].map((size) => (
-          <option key={size} value={size}>
-            {size}/trang
-          </option>
-        ))}
-      </select>
-      <button
-        disabled={page === 1}
-        onClick={() => setPage((p) => Math.max(1, p - 1))}
-        style={{
-          background: "#fff",
-          border: "1.5px solid #e0e0e0",
-          borderRadius: "50%",
-          width: 36,
-          height: 36,
-          color: "#3d5af1",
-          fontWeight: 700,
-          fontSize: 18,
-          cursor: "pointer",
-          opacity: page === 1 ? 0.5 : 1,
-        }}
-      >
-        {"<"}
-      </button>
-      {Array.from({ length: totalPages })
-        .slice(0, 5)
-        .map((_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setPage(i + 1)}
-            style={{
-              background: page === i + 1 ? "#3d5af1" : "#fff",
-              color: page === i + 1 ? "#fff" : "#3d5af1",
-              border: "none",
-              borderRadius: "50%",
-              width: 36,
-              height: 36,
-              fontWeight: 700,
-              fontSize: 16,
-              cursor: "pointer",
-            }}
-          >
-            {(i + 1).toString().padStart(2, "0")}
-          </button>
-        ))}
-      <button
-        disabled={page === totalPages}
-        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-        style={{
-          background: "#fff",
-          border: "1.5px solid #e0e0e0",
-          borderRadius: "50%",
-          width: 36,
-          height: 36,
-          color: "#3d5af1",
-          fontWeight: 700,
-          fontSize: 18,
-          cursor: "pointer",
-          opacity: page === totalPages ? 0.5 : 1,
-        }}
-      >
-        {">"}
-      </button>
+      </div>
+      <div className={styles.paginationControls}>
+        <button
+          className={styles.paginationButton}
+          disabled={page === 1}
+          onClick={() => setPage((p) => Math.max(1, p - 1))}
+        >
+          {"<"}
+        </button>
+        {Array.from({ length: totalPages })
+          .slice(0, 5)
+          .map((_, i) => (
+            <button
+              key={i + 1}
+              className={
+                page === i + 1
+                  ? `${styles.paginationPageButton} ${styles.active}`
+                  : styles.paginationPageButton
+              }
+              onClick={() => setPage(i + 1)}
+            >
+              {(i + 1).toString().padStart(2, "0")}
+            </button>
+          ))}
+        <button
+          className={styles.paginationButton}
+          disabled={page === totalPages}
+          onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+        >
+          {">"}
+        </button>
+      </div>
     </div>
   );
 }
 
-function OrdersTable({ orders }: { orders: typeof MOCK_ORDERS }) {
-  const navigate = useNavigate();
-
+function OrderDetailModal({
+  open,
+  order,
+  onClose,
+}: {
+  open: boolean;
+  order: any;
+  onClose: () => void;
+}) {
+  if (!open || !order) return null;
   return (
-    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 15 }}>
-      <thead style={{ background: "#f7f8fa" }}>
-        <tr style={{ color: "#bfc9d8", fontWeight: 600, textAlign: "left" }}>
-          <th style={{ padding: "14px 12px" }}>
-            <input type="checkbox" />
-          </th>
-          <th style={{ padding: "14px 12px" }}>Mã đơn</th>
-          <th style={{ padding: "14px 12px" }}>Sản phẩm</th>
-          <th style={{ padding: "14px 12px" }}>Ngày</th>
-          <th style={{ padding: "14px 12px" }}>Khách hàng</th>
-          <th style={{ padding: "14px 12px" }}>Tổng tiền</th>
-          <th style={{ padding: "14px 12px" }}>Thanh toán</th>
-          <th style={{ padding: "14px 12px" }}>Trạng thái</th>
-          <th style={{ padding: "14px 12px" }}>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        {orders.map((order, idx) => (
-          <tr
-            key={order.id}
+    <div className="add-product-modal-bg">
+      <div
+        className="add-product-modal"
+        style={{
+          maxWidth: 1100,
+          minWidth: 400,
+          background: "#f7f8fa",
+          borderRadius: 16,
+          padding: 0,
+        }}
+      >
+        <div
+          style={{
+            padding: 32,
+            borderBottom: "1.5px solid #f0f0f0",
+            background: "#fff",
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+          }}
+        >
+          <div
             style={{
-              borderBottom: "1.5px solid #f3f6fa",
-              background: idx % 2 === 0 ? "#fff" : "#f7f8fa",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <td style={{ padding: "12px" }}>
-              <input type="checkbox" />
-            </td>
-            <td
-              style={{
-                padding: "12px",
-                color: "#3d5af1",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-              onClick={() => navigate(`/admin/orders/${order.id}`)}
-            >
-              {order.id}
-            </td>
-            <td
-              style={{
-                padding: "12px",
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-              }}
-            >
-              <img
-                src={order.product.img}
-                alt="product"
-                style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: 8,
-                  objectFit: "cover",
-                  marginRight: 8,
-                }}
-              />
-              <div>
-                <div style={{ fontWeight: 600 }}>{order.product.name}</div>
-                <div style={{ color: "#bfc9d8", fontSize: 13 }}>
-                  +{order.product.more} sản phẩm
-                </div>
-              </div>
-            </td>
-            <td style={{ padding: "12px" }}>
-              {order.date.split("-").reverse().join("/")}
-            </td>
-            <td style={{ padding: "12px" }}>{order.customer}</td>
-            <td style={{ padding: "12px" }}>{order.total}</td>
-            <td style={{ padding: "12px" }}>
-              {order.payment.split("-").reverse().join("/")}
-            </td>
-            <td style={{ padding: "12px" }}>
+            <div style={{ fontSize: 26, fontWeight: 700 }}>
+              Chi tiết đơn hàng
+            </div>
+            <div>
+              <button className="add-btn cancel" onClick={onClose}>
+                Đóng
+              </button>
+            </div>
+          </div>
+          <div
+            style={{
+              color: "#bfc9d8",
+              fontWeight: 500,
+              marginTop: 8,
+              fontSize: 15,
+            }}
+          >
+            Trang chủ / Quản lý đơn hàng / Chi tiết đơn hàng
+          </div>
+        </div>
+        <div
+          style={{ display: "flex", gap: 24, padding: 32, flexWrap: "wrap" }}
+        >
+          <div
+            style={{
+              flex: 1,
+              minWidth: 260,
+              background: "#fff",
+              borderRadius: 12,
+              padding: 24,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              Đơn hàng #{order.id}{" "}
               <span
                 style={{
-                  background: STATUS_BG[order.status] || "#eee",
-                  color: STATUS_COLOR[order.status] || "#222",
+                  background: "#fff7e0",
+                  color: "#ffb200",
                   borderRadius: 8,
-                  padding: "6px 16px",
+                  padding: "4px 14px",
                   fontWeight: 600,
                   fontSize: 14,
+                  marginLeft: 8,
                 }}
               >
-                {order.status === "processing"
-                  ? "Đang xử lý"
-                  : order.status === "shipped"
-                  ? "Đã giao"
-                  : order.status === "delivered"
-                  ? "Đã nhận"
-                  : order.status === "cancelled"
-                  ? "Đã hủy"
-                  : order.status}
+                Đang xử lý
               </span>
-            </td>
-            <td style={{ padding: "12px" }}>
-              <span
-                style={{
-                  cursor: "pointer",
-                  marginRight: 12,
-                  color: "#bfc9d8",
-                  fontSize: 18,
-                }}
-                title="Sửa"
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 6,
+              }}
+            >
+              <i className="fas fa-calendar-alt"></i> <span>Ngày tạo:</span>{" "}
+              <b style={{ marginLeft: 4 }}>{order.date}</b>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 6,
+              }}
+            >
+              <i className="fas fa-credit-card"></i>{" "}
+              <span>Phương thức thanh toán:</span>{" "}
+              <b style={{ marginLeft: 4 }}>Chuyển khoản</b>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <i className="fas fa-shipping-fast"></i> <span>Vận chuyển:</span>{" "}
+              <b style={{ marginLeft: 4 }}>Giao hàng tiêu chuẩn</b>
+            </div>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              minWidth: 260,
+              background: "#fff",
+              borderRadius: 12,
+              padding: 24,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>Khách hàng</div>
+            <div>
+              <b>Họ tên:</b> {order.customer}
+            </div>
+            <div>
+              <b>Email:</b> khachhang@email.com
+            </div>
+            <div>
+              <b>Số điện thoại:</b> 0909 999 999
+            </div>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              minWidth: 260,
+              background: "#fff",
+              borderRadius: 12,
+              padding: 24,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>Tài liệu</div>
+            <div>
+              <b>Hoá đơn:</b> INV-32011
+            </div>
+            <div>
+              <b>Vận chuyển:</b> SHP-2011REG
+            </div>
+            <div>
+              <b>Điểm thưởng:</b> 480 điểm
+            </div>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              minWidth: 260,
+              background: "#fff",
+              borderRadius: 12,
+              padding: 24,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>Địa chỉ</div>
+            <div>
+              <b>Địa chỉ thanh toán:</b> 1833 Bel Meadow Drive, Fontana,
+              California 92335, USA
+            </div>
+            <div>
+              <b>Địa chỉ giao hàng:</b> 1833 Bel Meadow Drive, Fontana,
+              California 92335, USA
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            margin: "0 32px 32px 32px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: 600,
+              fontSize: 17,
+              marginBottom: 0,
+              padding: "24px 24px 0 24px",
+            }}
+          >
+            Danh sách sản phẩm{" "}
+            <span
+              style={{
+                background: "#e6f9f2",
+                color: "#4ad991",
+                borderRadius: 8,
+                padding: "2px 10px",
+                fontWeight: 600,
+                fontSize: 14,
+                marginLeft: 8,
+              }}
+            >
+              +2 sản phẩm
+            </span>
+          </div>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: 15,
+              marginTop: 12,
+            }}
+          >
+            <thead style={{ background: "#f7f8fa" }}>
+              <tr
+                style={{ color: "#bfc9d8", fontWeight: 600, textAlign: "left" }}
               >
-                ✏️
-              </span>
-              <span
-                style={{ cursor: "pointer", color: "#bfc9d8", fontSize: 18 }}
-                title="Xóa"
-              >
-                🗑️
-              </span>
-            </td>
+                <th style={{ padding: "10px 8px" }}>Sản phẩm</th>
+                <th style={{ padding: "10px 8px" }}>SKU</th>
+                <th style={{ padding: "10px 8px" }}>Số lượng</th>
+                <th style={{ padding: "10px 8px" }}>Giá</th>
+                <th style={{ padding: "10px 8px" }}>Tổng</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: "1.5px solid #f3f6fa" }}>
+                <td
+                  style={{
+                    padding: "10px 8px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 38,
+                      height: 38,
+                      background: "#eee",
+                      borderRadius: 8,
+                    }}
+                  ></div>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>Logic+ Wireless Mouse</div>
+                    <div style={{ color: "#bfc9d8", fontSize: 13 }}>Đen</div>
+                  </div>
+                </td>
+                <td
+                  style={{
+                    padding: "10px 8px",
+                    color: "#2563eb",
+                    fontWeight: 600,
+                  }}
+                >
+                  302011
+                </td>
+                <td style={{ padding: "10px 8px" }}>1 pcs</td>
+                <td style={{ padding: "10px 8px" }}>$121.00</td>
+                <td style={{ padding: "10px 8px" }}>$121.00</td>
+              </tr>
+              <tr style={{ borderBottom: "1.5px solid #f3f6fa" }}>
+                <td
+                  style={{
+                    padding: "10px 8px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 38,
+                      height: 38,
+                      background: "#eee",
+                      borderRadius: 8,
+                    }}
+                  ></div>
+                  <div>
+                    <div style={{ fontWeight: 600 }}>Smartwatch E2</div>
+                    <div style={{ color: "#bfc9d8", fontSize: 13 }}>Đen</div>
+                  </div>
+                </td>
+                <td
+                  style={{
+                    padding: "10px 8px",
+                    color: "#2563eb",
+                    fontWeight: 600,
+                  }}
+                >
+                  302011
+                </td>
+                <td style={{ padding: "10px 8px" }}>1 pcs</td>
+                <td style={{ padding: "10px 8px" }}>$590.00</td>
+                <td style={{ padding: "10px 8px" }}>$590.00</td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            style={{
+              padding: "0 24px 24px 24px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: 6,
+            }}
+          >
+            <div>
+              Thành tiền: <b>$711.00</b>
+            </div>
+            <div>
+              VAT(0)%: <b>$0.00</b>
+            </div>
+            <div>
+              Phí vận chuyển: <b>$20.00</b>
+            </div>
+            <div style={{ fontWeight: 700, fontSize: 17 }}>
+              Tổng cộng: <span style={{ color: "#2563eb" }}>$731.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OrdersTable({
+  orders,
+  onView,
+}: {
+  orders: typeof MOCK_ORDERS;
+  onView: (order: any) => void;
+}) {
+  const navigate = useNavigate();
+  return (
+    <div className={styles.tableContainer}>
+      <table className={styles.table}>
+        <thead>
+          <tr>
+            <th>
+              <input type="checkbox" />
+            </th>
+            <th>Mã đơn</th>
+            <th>Sản phẩm</th>
+            <th>Ngày</th>
+            <th>Khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Thanh toán</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {orders.map((order, idx) => (
+            <tr key={order.id}>
+              <td>
+                <input type="checkbox" />
+              </td>
+              <td
+                className={styles.postId}
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/admin/orders/${order.id}`)}
+              >
+                {order.id}
+              </td>
+              <td className={styles.postInfo}>
+                <img
+                  src={order.product.img}
+                  alt="product"
+                  className={styles.thumbnail}
+                />
+                <div>
+                  <div className={styles.postTitleText}>
+                    {order.product.name}
+                  </div>
+                  <div style={{ color: "#bfc9d8", fontSize: 13 }}>
+                    +{order.product.more} sản phẩm
+                  </div>
+                </div>
+              </td>
+              <td>{order.date.split("-").reverse().join("/")}</td>
+              <td>{order.customer}</td>
+              <td>{order.total}</td>
+              <td>{order.payment.split("-").reverse().join("/")}</td>
+              <td>
+                <span
+                  className={
+                    order.status === "processing"
+                      ? `${styles.status} ${styles.pending}`
+                      : order.status === "shipped"
+                      ? `${styles.status} ${styles.draft}`
+                      : order.status === "delivered"
+                      ? `${styles.status} ${styles.published}`
+                      : `${styles.status} ${styles.rejected}`
+                  }
+                >
+                  {order.status === "processing"
+                    ? "Đang xử lý"
+                    : order.status === "shipped"
+                    ? "Đã giao"
+                    : order.status === "delivered"
+                    ? "Đã nhận"
+                    : order.status === "cancelled"
+                    ? "Đã hủy"
+                    : order.status}
+                </span>
+              </td>
+              <td>
+                <div className={styles.actions}>
+                  <button
+                    className={styles.viewBtn}
+                    title="Xem"
+                    onClick={() => onView(order)}
+                  >
+                    <i className="fas fa-eye"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -336,6 +589,10 @@ const OrdersPage = () => {
   const [date, setDate] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+    const {user} = useCustomer();
+
 
   // Filter logic
   const filteredOrders = useMemo(() => {
@@ -362,109 +619,58 @@ const OrdersPage = () => {
   }, [filteredOrders, page, pageSize]);
 
   return (
-    <div
-      style={{
-        background: "#f7f8fa",
-        minHeight: "100vh",
-        padding: 32,
-        fontFamily: "Inter, Arial, sans-serif",
-      }}
-    >
-      <div style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>
-        Đơn hàng
-      </div>
-      <div
-        style={{
-          color: "#bfc9d8",
-          fontWeight: 500,
-          marginBottom: 24,
-          fontSize: 15,
-        }}
-      >
-        Bảng điều khiển <span style={{ color: "#222" }}>&gt;</span>{" "}
-        <span style={{ color: "#222" }}>Danh sách đơn hàng</span>
-      </div>
-      {/* Tabs + Actions */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: 18,
-        }}
-      >
-        <StatusTabs status={status} setStatus={setStatus} />
-        <div style={{ display: "flex", gap: 12 }}>
-          <button
-            style={{
-              background: "#f3f6fa",
-              border: "none",
-              borderRadius: 8,
-              padding: "8px 18px",
-              fontWeight: 500,
-              color: "#3d5af1",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              fontSize: 15,
+    <div className={styles.postManagement}>
+      <AdminSidebar user={user} />
+      <div className={styles.body}>
+        <Header />
+        <header className={styles.adminTitle}>
+          <div className={styles.title}>
+            <h1 className={styles.text}>Quản lý đơn hàng</h1>
+            <nav className={styles.adminBreadcrumbs}>
+              <a href="/admin">Trang chủ</a>
+              <span>/</span>
+              <span>Quản lý đơn hàng</span>
+            </nav>
+          </div>
+          <div className={styles.right2}>
+            <button className={styles.adminButtonWithIcon}>
+              <i className="fas fa-file-export"></i>
+              <span>Xuất file đơn hàng</span>
+            </button>
+            <button className={styles.adminButtonWithIcon2}>
+              <i className="fas fa-bullhorn"></i>
+              <span>Gửi thông báo</span>
+            </button>
+          </div>
+        </header>
+        <div className={styles.content}>
+          <StatusTabs status={status} setStatus={setStatus} />
+          <div style={{ margin: "18px 0" }}>
+            <FilterBar
+              search={search}
+              setSearch={setSearch}
+              date={date}
+              setDate={setDate}
+            />
+          </div>
+          <OrdersTable
+            orders={pagedOrders}
+            onView={(order) => {
+              setSelectedOrder(order);
+              setShowDetail(true);
             }}
-          >
-            <span role="img" aria-label="export">
-              ⬇️
-            </span>{" "}
-            Xuất Excel
-          </button>
-          <button
-            style={{
-              background: "#3d5af1",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              padding: "8px 22px",
-              fontWeight: 600,
-              fontSize: 15,
-              cursor: "pointer",
-            }}
-          >
-            + Thêm đơn hàng
-          </button>
-        </div>
-      </div>
-      {/* Filters */}
-      <FilterBar
-        search={search}
-        setSearch={setSearch}
-        date={date}
-        setDate={setDate}
-      />
-      {/* Table */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 16,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
-          padding: 0,
-          overflow: "hidden",
-        }}
-      >
-        <OrdersTable orders={pagedOrders} />
-        {/* Pagination */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "18px 24px",
-            background: "#fff",
-          }}
-        >
+          />
           <Pagination
             page={page}
             setPage={setPage}
             pageSize={pageSize}
             setPageSize={setPageSize}
             total={filteredOrders.length}
+          />
+          <OrderDetailModal
+            open={showDetail}
+            order={selectedOrder}
+            onClose={() => setShowDetail(false)}
           />
         </div>
       </div>

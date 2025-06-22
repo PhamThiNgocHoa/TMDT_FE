@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {AdminSidebar} from "../AdminSidebar";
 import {Header} from "./components/Header"; // Import hooks for routing
 import { api } from './services/api';
+import useCustomer from "../../../hooks/useCustomer";
 
 // Assuming a function to fetch fake post data by ID
 // In a real app, this would be an API call
@@ -31,6 +32,7 @@ const fetchFakePostById = (id: number) => {
 
 export function EditPost() {
     const { postId } = useParams<{ postId: string }>(); // Get post ID from URL params    const navigate = useNavigate();
+    const {user} = useCustomer();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -128,7 +130,7 @@ export function EditPost() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
             <div className={styles.editPostHeader}>
@@ -140,7 +142,7 @@ export function EditPost() {
             </div>
             <div className={styles.editPostContent}>
                 {/* Left Column */}
-                <AdminSidebar />
+                <AdminSidebar user={user} />
 
                 <div className={styles.mainContent}>
                     <div className={styles.formGroup}>

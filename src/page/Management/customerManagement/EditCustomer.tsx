@@ -2,10 +2,11 @@
 import React, {useState, useEffect} from 'react';
 import styles from './EditCustomer.module.css';
 import {useParams, useNavigate} from 'react-router-dom';
-import {AdminSidebar} from './AdminSidebar';
 import {Header} from './components/Header';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // ✅ Thêm dòng này
+import Swal from 'sweetalert2';
+import useCustomer from "../../../hooks/useCustomer";
+import {AdminSidebar} from "../AdminSidebar"; // ✅ Thêm dòng này
 
 export function EditCustomer() {
     const navigate = useNavigate();
@@ -16,8 +17,10 @@ export function EditCustomer() {
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('USER');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const {user} = useCustomer();
 
     useEffect(() => {
         const fetchCustomer = async () => {
@@ -33,6 +36,7 @@ export function EditCustomer() {
                 setUsername(customer.username || '');
                 setEmail(customer.email || '');
                 setPhone(customer.phone || '');
+                setRole(customer.role || 'USER');
             } catch (err: any) {
                 const status = err.response?.status;
                 const code = err.response?.data?.code;
@@ -78,6 +82,7 @@ export function EditCustomer() {
                 username,
                 email,
                 phone,
+                role,
             };
 
             if (password.trim() !== '') {
@@ -152,7 +157,7 @@ export function EditCustomer() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar/>
+            <AdminSidebar user={user}/>
             <div className={styles.body}>
                 <Header/>
                 <div className={styles.editPostHeader}>
@@ -183,6 +188,7 @@ export function EditCustomer() {
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
+
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Email *</label>
                             <input
@@ -201,6 +207,35 @@ export function EditCustomer() {
                                 onChange={(e) => setPhone(e.target.value)}
                             />
                         </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Quyền</label>
+
+                            {user?.role === 'ADMIN' ? (
+                                <select
+                                    className={styles.input}
+                                    value={role}
+                                    onChange={(e) => setRole(e.target.value)}
+                                >
+                                    <option value="USER">Người dùng</option>
+                                    <option value="STAFF">Nhân viên</option>
+                                    <option value="ADMIN">Quản trị viên</option>
+                                </select>
+                            ) : (
+                                <input
+                                    type="text"
+                                    className={styles.input}
+                                    value={
+                                        role === 'ADMIN'
+                                            ? 'Quản trị viên'
+                                            : role === 'STAFF'
+                                                ? 'Nhân viên'
+                                                : 'Người dùng'
+                                    }
+                                    readOnly
+                                />
+                            )}
+                        </div>
+
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Mật khẩu mới (nếu muốn đổi)</label>
                             <input

@@ -52,9 +52,14 @@ body {
 }
 
 .logo {
-    width: 3rem; /* Reduced from 4.375rem */
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
 }
+.logo2 {
+    width: 8rem;
+    height: 8rem;
+}
+
 
 .navigation {
     align-items: center;

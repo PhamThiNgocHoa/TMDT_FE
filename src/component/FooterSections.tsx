@@ -74,49 +74,35 @@ export const FooterQuickLinks = () => (
 export const FooterDownloadApp = () => (
     <section className="flex flex-col">
         <div>
-            <h3 className="text-sm font-medium leading-snug text-neutral-50">
-                Tải ứng dụng
-            </h3>
+
             <div className="flex flex-col mt-2">
-                <p className="text-xs font-medium opacity-70 text-neutral-50">
-                    Giảm 3$ cho người mới trên ứng dụng
-                </p>
+
                 <div className="flex items-start gap-1 mt-1">
-                    {/* QR Code */}
                     <img
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/7701e8149e935c154e1c85738af10248f63657e9?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
-                        alt="QR Code"
-                        className="w-4 aspect-square object-contain"
+                        src="https://cdn.builder.io/api/v1/image/assets%2F76e222ee62f149c2bbceec67ad94b0d2%2F116ae39fa132422baae9dc1514de3e6f"
+                        alt="Company Logo"
+                        className="logo2"
                     />
 
                     <div className="flex flex-col justify-between h-full">
+                        <div>
                         <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/3706bc9b1019136b5de843184cddef93c5a80fac?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
                             alt="Google Play"
-                            className="w-[20px] aspect-[2.75] object-contain"
+                            className="w-[5px] aspect-[2.75] object-contain"
                         />
+                        </div>
+                        <div>
                         <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/061b76ebd0d9d13981d067e14c04fa11cc94f911?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
                             alt="App Store"
-                            className="w-[20px] aspect-[2.75] object-contain mt-1"
+                            className="w-[5px] aspect-[2.75] object-contain mt-1"
                         />
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/e9da0afe6582e9dee2a2c88753e3cd07107437a5?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
-                alt="Facebook"
-                className="footer-social-icon w-6 h-6"
-            />
-            <div className="w-6 h-6" aria-label="Twitter"/>
-            <div className="w-6 h-6" aria-label="Instagram"/>
-            <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/675febadc305552cf1a198afac39129e8d916a73?placeholderIfAbsent=true&apiKey=5520a4f102154e9f835ab126f337bb29"
-                alt="LinkedIn"
-                className="w-6 aspect-square object-contain"
-            />
         </div>
     </section>);
 

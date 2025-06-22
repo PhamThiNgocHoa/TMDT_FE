@@ -6,7 +6,8 @@ import {OrderStatus} from "../../../enums/OrderStatus";
 import {RevenueResponse} from "../../../models/response/RevenueResponse";
 
 export const getCustomers = async (): Promise<CustomerResponse[]> => {
-    return await ApiService.get("/api/admin/customers");
+    const response =  await ApiService.get("/api/admin/customers");
+    return response.data
 }
 export const getCustomer = async (customerId: number): Promise<CustomerResponse> => {
     return await ApiService.get(`/api/admin/customer/${customerId}`);

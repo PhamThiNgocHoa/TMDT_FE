@@ -3,6 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styles from '../CustomerManagement.module.css';
 import { useCustomers } from '../context/CustomerContext';
 import { useNavigate } from 'react-router-dom';
+import {Customer} from "../../../../models/Customer";
+import ViewCustomer from "../ViewCustomer";
 
 export const CustomerTable: React.FC = () => {
     const {
@@ -14,6 +16,8 @@ export const CustomerTable: React.FC = () => {
         selectedCustomers,
         setSelectedCustomers
     } = useCustomers();
+
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
 
     const navigate = useNavigate();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -130,8 +134,10 @@ export const CustomerTable: React.FC = () => {
                 </thead>
 
                 <tbody>
-                {customers.map((customer) => (
-                    <tr key={customer.id}>
+                {customers
+                    .filter((customer) => customer.role === 'USER')
+                    .map((customer) => (
+                        <tr key={customer.id}>
                         <td>
                             <input
                                 type="checkbox"
@@ -149,10 +155,15 @@ export const CustomerTable: React.FC = () => {
                                 <button className={styles.editBtn} onClick={() => handleEditClick(customer.id)}>
                                     <i className="fas fa-edit"></i>
                                 </button>
-                                <button className={styles.viewBtn} onClick={() => console.log('View customer:', customer.id)}>
+                                <button
+                                    className={styles.viewBtn}
+                                    onClick={() => setSelectedCustomer(customer)}
+                                >
                                     <i className="fas fa-eye"></i>
                                 </button>
-                                <button className={styles.deleteBtn} onClick={() => handleShowDeleteConfirm(customer.id.toString())}>
+
+                                <button className={styles.deleteBtn}
+                                        onClick={() => handleShowDeleteConfirm(customer.id.toString())}>
                                     <i className="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -179,6 +190,13 @@ export const CustomerTable: React.FC = () => {
                     </div>
                 </div>
             )}
+            {selectedCustomer && (
+                <ViewCustomer
+                    customer={selectedCustomer}
+                    onClose={() => setSelectedCustomer(null)}
+                />
+            )}
+
         </div>
     );
 };

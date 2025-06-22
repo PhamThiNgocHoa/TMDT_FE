@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import useProduct from "../../../hooks/useProduct";
 import useCategory from "../../../hooks/useCategory";
 import formatToVND from "../../../hooks/formatToVND";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Shimmer from '../../../component/Shimmer';
 
 interface Filters {
@@ -31,6 +31,7 @@ const ProductsSection: React.FC = () => {
     const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
     const [isFiltered, setIsFiltered] = useState<boolean>(false);
     const [isFiltersVisible, setIsFiltersVisible] = useState<boolean>(false); // State kiểm soát việc ẩn/hiện filters
+    const navigate = useNavigate();
 
     const location = useLocation();
     // Lấy query param spec và value
@@ -282,7 +283,7 @@ const ProductsSection: React.FC = () => {
                   <Shimmer type="product-card" count={8} />
                 ) : filteredProducts.length > 0 ? (
                     filteredProducts.slice(0, visibleProducts).map((product) => (
-                        <div key={product.id} className="product-card">
+                        <div key={product.id} className="product-card"  onClick={() => navigate(`/product/${product.id}`)}  style={{ cursor: 'pointer' }}>
                             <div className="product-image-container">
                                 {product.discount && parseFloat(product.discount) > 0 && (
                                     <div className="discount-badge">

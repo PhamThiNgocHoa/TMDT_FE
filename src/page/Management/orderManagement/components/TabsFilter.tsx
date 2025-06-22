@@ -1,17 +1,18 @@
 import React from 'react';
 import styles from '../OrderManagement.module.css';
 import { useOrders } from '../context/OrderContext';
+import { OrderStatus, OrderStatusDisplayName } from '../../../../enums/OrderStatus';
 
 const TABS = [
   { key: '', label: 'Tất cả' },
-  { key: 'PENDING', label: 'Chờ xử lý' },
-  { key: 'PENDING_PAYMENT', label: 'Chờ thanh toán' },
-  { key: 'SHIPPING', label: 'Đang giao' },
-  { key: 'CARRIER_CANCELLED', label: 'Hủy vận chuyển' },
-  { key: 'PAYMENT_SUCCESS', label: 'Thanh toán thành công' },
-  { key: 'PAYMENT_FAILED', label: 'Thanh toán thất bại' },
-  { key: 'DELIVERED', label: 'Đã giao' },
-  { key: 'CANCELLED', label: 'Đã hủy' },
+  { key: OrderStatus.PENDING, label: OrderStatusDisplayName[OrderStatus.PENDING] },
+  { key: OrderStatus.PENDING_PAYMENT, label: OrderStatusDisplayName[OrderStatus.PENDING_PAYMENT] },
+  { key: OrderStatus.SHIPPING, label: OrderStatusDisplayName[OrderStatus.SHIPPING] },
+  { key: OrderStatus.PAYMENT_SUCCESS, label: OrderStatusDisplayName[OrderStatus.PAYMENT_SUCCESS] },
+  { key: OrderStatus.PAYMENT_FAILED, label: OrderStatusDisplayName[OrderStatus.PAYMENT_FAILED] },
+  { key: OrderStatus.DELIVERED, label: OrderStatusDisplayName[OrderStatus.DELIVERED] },
+  { key: OrderStatus.CANCELLED, label: OrderStatusDisplayName[OrderStatus.CANCELLED] },
+  { key: OrderStatus.RETURNED, label: OrderStatusDisplayName[OrderStatus.RETURNED] },
 ];
 
 export const TabsFilter: React.FC = () => {
@@ -25,15 +26,7 @@ export const TabsFilter: React.FC = () => {
   const handleTab = async (status: string) => {
     setFilters({
       ...filters,
-      status: status === '' ? undefined : status as
-          | "PENDING"
-          | "PENDING_PAYMENT"
-          | "SHIPPING"
-          | "CARRIER_CANCELLED"
-          | "PAYMENT_SUCCESS"
-          | "PAYMENT_FAILED"
-          | "DELIVERED"
-          | "CANCELLED",
+      status: status === '' ? undefined : status as OrderStatus,
     });
     await fetchOrders();
   };

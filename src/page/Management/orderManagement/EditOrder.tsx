@@ -6,17 +6,8 @@ import { AdminSidebar } from "../AdminSidebar";
 import { Header } from "./components/Header";
 import axios from "axios";
 import Swal from "sweetalert2";
-
-type OrderStatus =
-    | "PENDING"
-    | "PENDING_PAYMENT"
-    | "SHIPPING"
-    | "CARRIER_CANCELLED"
-    | "PAYMENT_SUCCESS"
-    | "PAYMENT_FAILED"
-    | "DELIVERED"
-    | "CANCELLED"
-    | "RETURNED";
+import { OrderStatus, OrderStatusDisplayName } from "../../../enums/OrderStatus";
+import useCustomer from "../../../hooks/useCustomer";
 
 interface OrderData {
     id: number;
@@ -36,32 +27,33 @@ interface OrderData {
 export function EditOrder() {
     const navigate = useNavigate();
     const { Id: orderId } = useParams();
+    const {user} = useCustomer();
 
     const [orderData, setOrderData] = useState<OrderData>({
         id: 0,
         fullname: "",
         address: "",
         phone: "",
-        status: "PENDING",
+        status: OrderStatus.PENDING,
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isUsingMockData, setIsUsingMockData] = useState(false);
 
     const statusOptions = [
-        { value: "PENDING", label: "Đang chờ xử lý" },
-        { value: "PENDING_PAYMENT", label: "Đang chờ thanh toán" },
-        { value: "SHIPPING", label: "Đang giao hàng" },
-        { value: "DELIVERED", label: "Đã giao hàng" },
-        { value: "PAYMENT_SUCCESS", label: "Đã thanh toán" },
-        { value: "PAYMENT_FAILED", label: "Thanh toán thất bại" },
-        { value: "CANCELLED", label: "Đã hủy" },
-        { value: "RETURNED", label: "Đã trả hàng" },
+        { value: OrderStatus.PENDING, label: OrderStatusDisplayName[OrderStatus.PENDING] },
+        { value: OrderStatus.PENDING_PAYMENT, label: OrderStatusDisplayName[OrderStatus.PENDING_PAYMENT] },
+        { value: OrderStatus.SHIPPING, label: OrderStatusDisplayName[OrderStatus.SHIPPING] },
+        { value: OrderStatus.DELIVERED, label: OrderStatusDisplayName[OrderStatus.DELIVERED] },
+        { value: OrderStatus.PAYMENT_SUCCESS, label: OrderStatusDisplayName[OrderStatus.PAYMENT_SUCCESS] },
+        { value: OrderStatus.PAYMENT_FAILED, label: OrderStatusDisplayName[OrderStatus.PAYMENT_FAILED] },
+        { value: OrderStatus.CANCELLED, label: OrderStatusDisplayName[OrderStatus.CANCELLED] },
+        { value: OrderStatus.RETURNED, label: OrderStatusDisplayName[OrderStatus.RETURNED] },
     ];
 
     const canEditOrder = (status: string) => {
         // Chỉ có thể chỉnh sửa đơn hàng ở các trạng thái: PENDING_PAYMENT, PENDING, PAYMENT_FAILED
-        return ['PENDING_PAYMENT', 'PENDING', 'PAYMENT_FAILED'].includes(status);
+        return [OrderStatus.PENDING_PAYMENT, OrderStatus.PENDING, OrderStatus.PAYMENT_FAILED].includes(status as OrderStatus);
     };
 
     useEffect(() => {
@@ -86,10 +78,10 @@ export function EditOrder() {
 
                 setOrderData({
                     id: order.id,
-                    fullname: order.customerDTO?.fullname || order.fullname || "",
+                    fullname: order.receiver || "",
                     address: order.address || "",
                     phone: order.numberPhone || order.phone || "",
-                    status: order.status || "PENDING",
+                    status: order.status || OrderStatus.PENDING,
                     totalAmount: order.totalAmount,
                     orderDate: order.orderDate,
                     customerDTO: order.customerDTO,
@@ -108,7 +100,7 @@ export function EditOrder() {
                     fullname: "Nguyễn Văn A (Mock)",
                     address: "123 Đường ABC, Quận 1, TP.HCM (Mock)",
                     phone: "0123456789 (Mock)",
-                    status: "PENDING",
+                    status: OrderStatus.PENDING,
                     totalAmount: 1500000,
                     orderDate: new Date().toISOString(),
                     customerDTO: {
@@ -213,7 +205,7 @@ export function EditOrder() {
 
     return (
         <div className={styles.editPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <div className={styles.editPostHeader}>

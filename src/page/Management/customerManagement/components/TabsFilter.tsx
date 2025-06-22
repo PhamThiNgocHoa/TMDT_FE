@@ -3,14 +3,17 @@ import styles from '../CustomerManagement.module.css';
 import { useCustomers } from '../context/CustomerContext';
 
 export const TabsFilter: React.FC = () => {
-  const { customers } = useCustomers();
+    const { customers } = useCustomers();
 
-  return (
-      <div className={styles.tabsFilter}>
-        <button className={styles.tabActive}>
-          Tất cả khách hàng
-          <span className={styles.tabCount}>{customers.length}</span>
-        </button>
-      </div>
-  );
+    // Đếm số khách hàng có role là "USER"
+    const userCount = customers.filter((customer) => customer.role === 'USER').length;
+
+    return (
+        <div className={styles.tabsFilter}>
+            <button className={styles.tabActive}>
+                Khách hàng người dùng
+                <span className={styles.tabCount}>{userCount}</span>
+            </button>
+        </div>
+    );
 };

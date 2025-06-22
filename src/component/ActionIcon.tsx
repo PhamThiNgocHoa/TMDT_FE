@@ -7,20 +7,24 @@ import { UserIcon } from "../assets/icons/UserIcon";
 import { useNavigate } from 'react-router-dom';
 import useCustomer from "../hooks/useCustomer";
 import {CartResponse} from "../models/response/CartResponse";
+import {CustomerResponse} from "../models/response/CustomerResponse";
 
 interface Props {
     cartItems : CartResponse | null;
+    user: CustomerResponse | null;
+
 }
 
-export const ActionIcons: React.FC<Props> = ({cartItems}) => {
+export const ActionIcons: React.FC<Props> = ({cartItems,user}) => {
     const [showAccountDropdown, setShowAccountDropdown] = useState(false);
     const [showCartDropdown, setShowCartDropdown] = useState(false);
+    const {handleLogout} = useCustomer();
     const navigate = useNavigate();
-    const { handleLogout } = useCustomer();
     const allCartItems = cartItems?.cartItems ?? [];
     const handleLogoutClick = async () => {
         await handleLogout();
         navigate("/login");
+
     };
 
     const handleMouseEnterAccount = () => {
@@ -42,6 +46,14 @@ export const ActionIcons: React.FC<Props> = ({cartItems}) => {
     const handleMenuItemClick = (action: string) => {
         if (action === 'manageAccount') {
             navigate('/account');
+            window.location.reload();
+        }
+        else if(action === 'manage') {
+            if(user?.role === 'ADMIN'){
+                navigate('/management/revenue');
+            }else {
+                navigate('/management/customer');
+            }
         }
         setShowAccountDropdown(false);
     };
@@ -109,23 +121,21 @@ export const ActionIcons: React.FC<Props> = ({cartItems}) => {
                     <div className="accountDropdown">
                         <div className="dropdownItem" onClick={() => handleMenuItemClick('manageAccount')}>
                             <i className="fas fa-user"></i>
-                            <span>Manage My Account</span>
+                            <span>Tài khoản</span>
                         </div>
                         <div className="dropdownItem" onClick={() => handleMenuItemClick('myOrder')}>
                             <i className="fas fa-box"></i>
-                            <span>My Order</span>
+                            <span>Đơn hàng của tôi</span>
                         </div>
-                        <div className="dropdownItem" onClick={() => handleMenuItemClick('myCancellations')}>
-                            <i className="fas fa-times-circle"></i>
-                            <span>My Cancellations</span>
-                        </div>
-                        <div className="dropdownItem" onClick={() => handleMenuItemClick('myReviews')}>
-                            <i className="fas fa-star"></i>
-                            <span>My Reviews</span>
-                        </div>
+                        {(user?.role === 'ADMIN' || user?.role === 'STAFF') && (
+                            <div className="dropdownItem" onClick={() => handleMenuItemClick('manage')}>
+                                <i className="fas fa-star"></i>
+                                <span>Quản trị</span>
+                            </div>
+                        )}
                         <div className="dropdownItem" onClick={handleLogoutClick}>
                             <i className="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
+                            <span>Đăng xất</span>
                         </div>
                     </div>
                 )}

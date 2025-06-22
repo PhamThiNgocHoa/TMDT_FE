@@ -180,7 +180,7 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
                     <tr>
                         <th style={{...tableStyles.th, width: '80px'}}>ID</th>
                         <th style={{...tableStyles.th, minWidth: '200px'}}>Tên danh mục</th>
-                        <th style={{...tableStyles.th, width: '120px'}}>Trạng thái</th>
+                        {/*<th style={{...tableStyles.th, width: '120px'}}>Trạng thái</th>*/}
                         <th style={{...tableStyles.th, width: '120px'}}>Số sản phẩm</th>
                         <th style={{...tableStyles.th, width: '120px', textAlign: 'center'}}>Hành động</th>
                     </tr>
@@ -201,14 +201,14 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
                                     )}
                                 </div>
                             </td>
-                            <td style={{...tableStyles.td, textAlign: 'center'}}>
-                                <span style={{
-                                    ...tableStyles.statusBadge,
-                                    ...(category.active ? tableStyles.activeStatus : tableStyles.inactiveStatus)
-                                }}>
-                                    {category.active ? 'Kích hoạt' : 'Không kích hoạt'}
-                                </span>
-                            </td>
+                            {/*<td style={{...tableStyles.td, textAlign: 'center'}}>*/}
+                            {/*    <span style={{*/}
+                            {/*        ...tableStyles.statusBadge,*/}
+                            {/*        ...(category.active ? tableStyles.activeStatus : tableStyles.inactiveStatus)*/}
+                            {/*    }}>*/}
+                            {/*        {category.active ? 'Kích hoạt' : 'Không kích hoạt'}*/}
+                            {/*    </span>*/}
+                            {/*</td>*/}
                             <td style={{...tableStyles.td, textAlign: 'center'}}>
                                 <span style={tableStyles.productsCount}>
                                     {products.filter(p => p.categoryId === category.id).length} sản phẩm

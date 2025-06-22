@@ -5,6 +5,7 @@ import { Header } from './components/Header'; // Import Header
 import { api } from './services/api';
 import useProduct from '../../../hooks/useProduct';
 import { ProductResponse } from '../../../models/response/ProductResponse';
+import useCustomer from "../../../hooks/useCustomer";
 
 export function AddPost() {
     const [title, setTitle] = useState('');
@@ -16,6 +17,7 @@ export function AddPost() {
     const [author, setAuthor] = useState('Admin');
     const [tags, setTags] = useState<string[]>([]);
     const [tagInput, setTagInput] = useState('');
+    const {user} = useCustomer();
     const [productSearch, setProductSearch] = useState('');
     const [selectedProduct, setSelectedProduct] = useState<ProductResponse | null>(null);
     const { products, fetchListFindByName } = useProduct();
@@ -108,7 +110,7 @@ export function AddPost() {
 
     return (
         <div className={styles.addPostContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
             <Header />
             <div className={styles.addPostHeader}>
