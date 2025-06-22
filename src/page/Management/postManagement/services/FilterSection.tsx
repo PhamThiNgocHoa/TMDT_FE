@@ -1,31 +1,68 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../PostManagement.module.css';
 import { usePosts } from '../context/PostContext';
 
 export const FilterSection: React.FC = () => {
-    const { filters, setFilters } = usePosts();
+    const { filters, setFilters, fetchPosts } = usePosts();
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     // Search functionality moved to Header component
     // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     setFilters({ ...filters, search: e.target.value });
     // };
 
-    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilters({ ...filters, category: e.target.value });
+        await fetchPosts();
     };
 
-    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSortChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFilters({ ...filters, sort: e.target.value });
+        await fetchPosts();
+    };
+
+    const handleDateChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFilters({ ...filters, date: e.target.value });
+        await fetchPosts();
+    };
+
+    const clearDateFilter = async () => {
+        setFilters({ ...filters, date: '' });
+        await fetchPosts();
     };
 
     return (
         <div className={styles.filterSection}>
             <div className={styles.filters}>
-                <button className={styles.adminButtonWithIcon} onClick={() => console.log('Chọn ngày clicked')}>
-                    <i className="fas fa-calendar-alt"></i>
-                    <span>Chọn ngày</span>
-                </button>
+                <div className={styles.dateFilter}>
+                    <button 
+                        className={styles.adminButtonWithIcon} 
+                        onClick={() => setShowDatePicker(!showDatePicker)}
+                    >
+                        <i className="fas fa-calendar-alt"></i>
+                        <span>Chọn ngày</span>
+                    </button>
+                    {showDatePicker && (
+                        <div className={styles.datePickerContainer}>
+                            <input
+                                type="date"
+                                value={filters.date || ''}
+                                onChange={handleDateChange}
+                                className={styles.dateInput}
+                            />
+                            {filters.date && (
+                                <button 
+                                    onClick={clearDateFilter}
+                                    className={styles.clearDateBtn}
+                                >
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+
                 <button className={styles.adminButtonWithIcon} onClick={() => console.log('Bộ lọc clicked')}>
                     <i className="fas fa-filter"></i>
                     <span>Bộ lọc</span>

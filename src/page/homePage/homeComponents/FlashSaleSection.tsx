@@ -5,6 +5,7 @@ import { flashSaleProducts } from '../data/products';
 import '../../../assets/css/homeStyles/flashSale.css';
 import { useNavigate } from 'react-router-dom';
 import useProduct from "../../../hooks/useProduct";
+import Shimmer from '../../../component/Shimmer';
 
 const FlashSaleSection: React.FC = () => {
     const [timeLeft, setTimeLeft] = useState({
@@ -13,12 +14,18 @@ const FlashSaleSection: React.FC = () => {
         minutes: 19,
         seconds: 56
     });
+    const [showAllProducts, setShowAllProducts] = useState(false);
     const navigate = useNavigate();
+    
     const handleProductClick = (productId: number) => {
         navigate(`/product/${productId}`);
     };
 
-    const {saleProducts} = useProduct();
+    const {saleProducts, loading} = useProduct();
+
+    // Lấy 4 sản phẩm đầu tiên để hiển thị ban đầu
+    const initialProducts = saleProducts ? saleProducts.slice(0, 4) : [];
+    const allProducts = saleProducts || [];
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -51,6 +58,10 @@ const FlashSaleSection: React.FC = () => {
         return () => clearInterval(timer);
     }, []);
 
+    const handleViewAllClick = () => {
+        setShowAllProducts(!showAllProducts);
+    };
+
     return (
         <section className="section flash-sale-section">
             <div className="flash-sale-header">
@@ -79,30 +90,32 @@ const FlashSaleSection: React.FC = () => {
                         <span className="timer-label">Giây</span>
                     </div>
                 </div>
+            </div>
 
-                <div className="navigation-buttons">
-                    <button className="nav-btn prev-btn">
-                        <span className="icon">←</span>
-                    </button>
-                    <button className="nav-btn next-btn">
-                        <span className="icon">→</span>
+            <div className="products-grid">
+                {loading ? (
+                    <Shimmer type="product-card" count={4} />
+                ) : (
+                    (showAllProducts ? allProducts : initialProducts).map(product => (
+                        <ProductCard
+                            key={product.id}
+                            product={product}
+                            onProductClick={() => handleProductClick(product.id)}
+                        />
+                    ))
+                )}
+            </div>
+
+            {allProducts.length > 4 && (
+                <div className="view-all-container">
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleViewAllClick}
+                    >
+                        {showAllProducts ? 'Thu gọn' : 'Xem Tất Cả Sản Phẩm'}
                     </button>
                 </div>
-            </div>
-
-            <div className="products-slider">
-                {saleProducts && saleProducts.length > 0 && saleProducts.map(product => (
-                    <ProductCard
-                        key={product.id}
-                        product={product}
-                        onProductClick={() => handleProductClick(product.id)}
-                    />
-                ))}
-            </div>
-
-            <div className="view-all-container">
-                <button className="btn btn-primary">Xem Tất Cả Sản Phẩm</button>
-            </div>
+            )}
         </section>
     );
 };

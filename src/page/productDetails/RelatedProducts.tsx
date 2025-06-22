@@ -4,12 +4,14 @@ import styles from './ProductDetailsPage.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProductResponse } from "../../models/response/ProductResponse";
 import ProductCard from "../homePage/homeComponents/ProductCard";
+import Shimmer from "../../component/Shimmer";
 
 interface RelatedProductsProps {
     products: ProductResponse[];
+    loading?: boolean;
 }
 
-export const RelatedProducts = ({ products }: RelatedProductsProps) => {
+export const RelatedProducts = ({ products, loading = false }: RelatedProductsProps) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
     const { id } = useParams();
@@ -66,7 +68,9 @@ export const RelatedProducts = ({ products }: RelatedProductsProps) => {
                 ref={scrollContainerRef}
                 className={styles.productsScroll}
             >
-                {related.length > 0 ? (
+                {loading ? (
+                    <Shimmer type="product-card" count={4} />
+                ) : related.length > 0 ? (
                     related.map(product => (
                         <ProductCard
                             key={product.id}

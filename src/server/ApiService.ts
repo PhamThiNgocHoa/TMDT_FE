@@ -48,9 +48,26 @@ class ApiService {
       return response.data;
     } catch (error: any) {
       console.error("Error during API call:", error.message);
-      throw new Error(
-          `Error fetching data: ${error.response?.status} - ${error.response?.data || error.message}`
-      );
+      console.error("Full error details:", {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        method: error.config?.method,
+        headers: error.config?.headers
+      });
+      
+      // Preserve the original error information
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data || 
+                          error.message || 
+                          'Unknown error';
+      
+      const enhancedError: any = new Error(`API Error ${error.response?.status || 'Unknown'}: ${errorMessage}`);
+      enhancedError.response = error.response;
+      enhancedError.config = error.config;
+      
+      throw enhancedError;
     }
   }
 

@@ -66,7 +66,7 @@ export default function ProductDetailsPage() {
                         customerName={user?.fullname ?? ""}
                     />
                 )}
-                <RelatedProducts products={products}/>
+                <RelatedProducts products={products} loading={loading}/>
             </section>
         </main>
     );

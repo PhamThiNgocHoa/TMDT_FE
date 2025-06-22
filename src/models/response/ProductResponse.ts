@@ -4,6 +4,13 @@ import { ProductColorResponse } from "./ProductColorResponse";
 import { ProductSizeResponse } from "./ProductSizeResponse";
 import { ProductImageResponse } from "./ProductImageResponse";
 
+export interface ProductSpecification {
+  id: number;
+  value: string;
+  specificationId: number;
+  specificationName: string;
+}
+
 export interface ProductResponse {
   id: number;
   name: string;
@@ -25,4 +32,5 @@ export interface ProductResponse {
   productColors: ProductColorResponse[];
   productSizes: ProductSizeResponse[];
   productImages: ProductImageResponse[];
+  productSpecifications?: ProductSpecification[];
 }
