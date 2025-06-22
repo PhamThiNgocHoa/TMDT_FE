@@ -6,42 +6,32 @@ import { Header } from './components/Header';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
-type OrderStatus = 
-    | "PENDING"
-    | "PENDING_PAYMENT"
-    | "SHIPPING"
-    | "CARRIER_CANCELLED"
-    | "PAYMENT_SUCCESS"
-    | "PAYMENT_FAILED"
-    | "DELIVERED"
-    | "CANCELLED"
-    | "RETURNED";
+import { OrderStatus, OrderStatusDisplayName } from '../../../enums/OrderStatus';
 
 export function AddOrder() {
     const [fullname, setFullname] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<OrderStatus>('PENDING');
+    const [status, setStatus] = useState<OrderStatus>(OrderStatus.PENDING);
     const [totalAmount, setTotalAmount] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const statusOptions = [
-        { value: 'PENDING', label: 'Đang chờ xử lý' },
-        { value: 'PENDING_PAYMENT', label: 'Đang chờ thanh toán' },
-        { value: 'SHIPPING', label: 'Đang giao hàng' },
-        { value: 'DELIVERED', label: 'Đã giao hàng' },
-        { value: 'PAYMENT_SUCCESS', label: 'Đã thanh toán' },
-        { value: 'PAYMENT_FAILED', label: 'Thanh toán thất bại' },
-        { value: 'CANCELLED', label: 'Đã hủy' },
-        { value: 'RETURNED', label: 'Đã trả hàng' }
+        { value: OrderStatus.PENDING, label: OrderStatusDisplayName[OrderStatus.PENDING] },
+        { value: OrderStatus.PENDING_PAYMENT, label: OrderStatusDisplayName[OrderStatus.PENDING_PAYMENT] },
+        { value: OrderStatus.SHIPPING, label: OrderStatusDisplayName[OrderStatus.SHIPPING] },
+        { value: OrderStatus.DELIVERED, label: OrderStatusDisplayName[OrderStatus.DELIVERED] },
+        { value: OrderStatus.PAYMENT_SUCCESS, label: OrderStatusDisplayName[OrderStatus.PAYMENT_SUCCESS] },
+        { value: OrderStatus.PAYMENT_FAILED, label: OrderStatusDisplayName[OrderStatus.PAYMENT_FAILED] },
+        { value: OrderStatus.CANCELLED, label: OrderStatusDisplayName[OrderStatus.CANCELLED] },
+        { value: OrderStatus.RETURNED, label: OrderStatusDisplayName[OrderStatus.RETURNED] }
     ];
 
     const canEditOrder = (status: string) => {
         // Chỉ có thể chỉnh sửa đơn hàng ở các trạng thái: PENDING_PAYMENT, PENDING, PAYMENT_FAILED
-        return ['PENDING_PAYMENT', 'PENDING', 'PAYMENT_FAILED'].includes(status);
+        return [OrderStatus.PENDING_PAYMENT, OrderStatus.PENDING, OrderStatus.PAYMENT_FAILED].includes(status as OrderStatus);
     };
 
     const handleSave = async () => {
