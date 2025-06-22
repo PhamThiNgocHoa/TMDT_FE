@@ -4,9 +4,10 @@ import AddOrEditProductModal, {
   Product,
   AddOrEditProductModalProps,
 } from "../../../component/AddOrEditProductModal";
-import { AdminSidebar } from "../../Management/postManagement/AdminSidebar";
 import { Header } from "../../Management/postManagement/components/Header";
 import styles from "../../Management/postManagement/PostManagement.module.css";
+import useCustomer from "../../../hooks/useCustomer";
+import {AdminSidebar} from "../../Management/AdminSidebar";
 
 const initialProducts = [
   {
@@ -103,6 +104,7 @@ const tabStatusMap = [
 const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [activeTab, setActiveTab] = useState(0);
+  const {user} = useCustomer();
   const [selected, setSelected] = useState([0, 3, 4]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -155,7 +157,7 @@ const ProductsPage = () => {
 
   return (
     <div className={styles.postManagement}>
-      <AdminSidebar />
+      <AdminSidebar user={user} />
       <div className={styles.body}>
         <Header />
         <header className={styles.adminTitle}>

@@ -5,6 +5,7 @@ import { AdminSidebar } from '../AdminSidebar';
 import { Header } from './components/Header';
 import RevenueCharts from './components/RevenueCharts';
 import { RevenueProvider, useRevenue } from './context/RevenueContext';
+import useCustomer from "../../../hooks/useCustomer";
 
 // Component kiểm tra authentication
 const AuthCheck: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -107,7 +108,7 @@ const RevenueOverview: React.FC = () => {
 
 const RevenueManagementContent: React.FC = () => {
     const { revenueByDate } = useRevenue();
-
+    const {user} = useCustomer();
     // Hàm xuất báo cáo doanh thu
     const exportRevenueReport = () => {
         const headers = ['Ngày', 'Doanh thu (VNĐ)'];
@@ -137,7 +138,7 @@ const RevenueManagementContent: React.FC = () => {
 
     return (
         <div className={styles.postManagement}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <header className={styles.adminTitle}>

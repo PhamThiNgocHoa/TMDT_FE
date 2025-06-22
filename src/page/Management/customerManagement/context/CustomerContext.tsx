@@ -17,6 +17,7 @@ interface Customer {
     email: string;
     phone: string;
     avatar?: string;
+    role?: string;
 }
 
 interface CustomerFilters {

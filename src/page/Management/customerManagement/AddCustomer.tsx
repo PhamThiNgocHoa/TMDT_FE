@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styles from './AddCustomer.module.css';
-import { AdminSidebar } from './AdminSidebar';
 import { Header } from './components/Header';
 import { addCustomer } from './services/customerService';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import useCustomer from "../../../hooks/useCustomer";
+import {useToken} from "../../../hooks/useToken";
+import {useCustomerManagement} from "../../../hooks/useCustomerManagement";
+import {AdminSidebar} from "../AdminSidebar";
 
 export function AddCustomer() {
     const [fullName, setFullName] = useState('');
@@ -14,6 +17,9 @@ export function AddCustomer() {
     const [phone, setPhone] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const {user} = useCustomer();
+    const token = useToken();
+    const { customers, addNewCustomer } = useCustomerManagement(token, user?.role);
 
     const handleSave = async () => {
         if (!fullName || !username || !email || !password) {
@@ -44,7 +50,7 @@ export function AddCustomer() {
         try {
             setLoading(true);
             console.log("📦 Dữ liệu gửi đi:", customerData);
-            await addCustomer(customerData);
+            await addNewCustomer(customerData);
             await Swal.fire({
                 icon: 'success',
                 title: 'Thêm người dùng thành công!',
@@ -81,7 +87,7 @@ export function AddCustomer() {
 
     return (
         <div className={styles.addCustomerContainer}>
-            <AdminSidebar />
+            <AdminSidebar user={user} />
             <div className={styles.body}>
                 <Header />
                 <div className={styles.headerSection}>

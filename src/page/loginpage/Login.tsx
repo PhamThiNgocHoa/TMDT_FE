@@ -10,7 +10,7 @@ import {loginWithGoogle} from "../../server/api/authentication/auth.post";
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const {handleLogin} = useCustomer();
+    const {handleLogin,setUsers} = useCustomer();
     const navigate = useNavigate();
 
     const handleLogins = async () => {
@@ -24,6 +24,12 @@ const Login = () => {
 
         try {
             const response = await handleLogin(username, password);
+            if (response.success) {
+                localStorage.setItem("token", response.token);
+                setUsers(response.user);
+                navigate("/");
+                window.location.reload();
+            }
 
             if (response && response.success) {
                 Swal.fire({
