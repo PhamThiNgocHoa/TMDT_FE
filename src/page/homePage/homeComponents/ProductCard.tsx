@@ -1,4 +1,4 @@
-import Swal from "sweetalert2"; // import Swal
+
 import React, { useState } from "react";
 import "../../../assets/css/homeStyles/productCard.css";
 import { useWishlist } from "../../../context/WishlistContext";
@@ -6,6 +6,7 @@ import formatToVND from "../../../hooks/formatToVND";
 import { ProductResponse } from "../../../models/response/ProductResponse";
 import useCartItem from "../../../hooks/useCartItem";
 import useCustomer from "../../../hooks/useCustomer";
+import Swal from "sweetalert2";
 
 interface ProductCardProps {
     product: ProductResponse;
@@ -27,6 +28,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
 
     const handleAddToCart = async (event: React.MouseEvent) => {
         event.stopPropagation();
+        if (user?.role === 'ADMIN' || user?.role === 'STAFF') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Thêm sản phẩm thất bại',
+            });
+            return;
+        }
         try {
             await fetchSaveCartItem({
                 cartId: user?.cartId ?? 0,
@@ -34,6 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onProductClick }) =>
                 quantity: 1,
                 color: "",
             });
+
 
             // ✅ Dùng Swal thay vì alert
             Swal.fire({

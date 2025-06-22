@@ -43,18 +43,7 @@ const CategorySection: React.FC = () => {
         }
     };
 
-    const customCategory = {
-        id: -1,
-        name: "Sản phẩm tùy chọn",
-        img: "",
-        active: false,
-        products: []
-    };
-
-    // Nếu không có categories, chỉ hiển thị custom category
-    const displayCategories = safeCategories.length > 0
-        ? [customCategory, ...safeCategories]
-        : [customCategory];
+    const displayCategories = safeCategories;
 
     const handleCategoryClick = (categoryId: number) => {
         if (categoryId === -1) {
