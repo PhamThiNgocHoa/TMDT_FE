@@ -4,6 +4,9 @@ import AddOrEditProductModal, {
   Product,
   AddOrEditProductModalProps,
 } from "../../../component/AddOrEditProductModal";
+import { AdminSidebar } from "../../Management/postManagement/AdminSidebar";
+import { Header } from "../../Management/postManagement/components/Header";
+import styles from "../../Management/postManagement/PostManagement.module.css";
 
 const initialProducts = [
   {
@@ -151,190 +154,225 @@ const ProductsPage = () => {
   });
 
   return (
-    <div className="products-page">
-      <div className="products-header-row">
-        <div className="products-header-title">Quản lý sản phẩm</div>
-        <div className="products-header-actions">
-          <button className="products-btn purple">Xuất file</button>
-          <button
-            className="products-btn blue"
-            onClick={() => setShowAddModal(true)}
-          >
-            + Thêm sản phẩm
-          </button>
-        </div>
-      </div>
-      <div className="products-breadcrumb">
-        Trang chủ &nbsp; &gt; &nbsp; Quản lý sản phẩm
-      </div>
-      <div className="products-tabs-row">
-        {tabs.map((tab, idx) => (
-          <button
-            key={tab}
-            className={activeTab === idx ? "active" : ""}
-            onClick={() => setActiveTab(idx)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-      <div className="products-filter-row">
-        <input
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="products-btn light"
-          style={{ width: 160 }}
-        />
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="products-btn light"
-        >
-          <option value="">Tất cả danh mục</option>
-          <option value="Bàn phím">Bàn phím</option>
-          <option value="Chuột">Chuột</option>
-          <option value="Tai nghe">Tai nghe</option>
-        </select>
-        <button className="products-btn light">
-          <i className="fas fa-sliders-h"></i> Bộ lọc
-        </button>
-      </div>
-      <div className="products-table-wrap">
-        <table className="products-table">
-          <thead>
-            <tr>
-              <th>
-                <input type="checkbox" />
-              </th>
-              <th>Sản phẩm</th>
-              <th>SKU</th>
-              <th>Danh mục</th>
-              <th>Còn lại</th>
-              <th>Giá tiền</th>
-              <th>Trạng thái</th>
-              <th>Ngày tạo</th>
-              <th>Chức năng</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map((product, idx) => (
-              <tr key={`${product.id ?? idx}-${idx}`}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(idx)}
-                    onChange={() => handleSelect(idx)}
-                  />
-                </td>
-                <td className="product-info-cell">
-                  <img
-                    src={product.img}
-                    alt={product.name}
-                    className="product-img"
-                  />
-                  {product.name}
-                </td>
-                <td className="product-link">{product.sku}</td>
-                <td>{product.category}</td>
-                <td>{product.remain}</td>
-                <td>{product.price}</td>
-                <td>
-                  <span
-                    className={`product-badge ${statusClass[product.status]}`}
-                  >
-                    {product.status}
-                  </span>
-                </td>
-                <td>{product.created}</td>
-                <td>
-                  <button
-                    className="product-action-btn"
-                    title="Sửa"
-                    onClick={() => {
-                      setEditingProduct(product);
-                      setShowEditModal(true);
-                    }}
-                  >
-                    <i className="fas fa-pen"></i>
-                  </button>
-                  <button className="product-action-btn" title="Xem">
-                    <i className="fas fa-eye"></i>
-                  </button>
-                  <button
-                    className="product-action-btn"
-                    title="Xoá"
-                    onClick={() => setDeleteProduct(product)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="products-pagination">
-        <div className="products-pagination-info">Showing 1-10 from 100</div>
-        <div className="products-pagination-pages">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            &lt;
-          </button>
-          {[1, 2, 3, 4, 5].map((i) => (
+    <div className={styles.postManagement}>
+      <AdminSidebar />
+      <div className={styles.body}>
+        <Header />
+        <header className={styles.adminTitle}>
+          <div className={styles.title}>
+            <h1 className={styles.text}>Quản lý sản phẩm</h1>
+            <nav className={styles.adminBreadcrumbs}>
+              <a href="/admin">Trang chủ</a>
+              <span>/</span>
+              <span>Quản lý sản phẩm</span>
+            </nav>
+          </div>
+          <div className={styles.right2}>
+            <button className={styles.adminButtonWithIcon}>Xuất file</button>
             <button
-              key={i}
-              className={currentPage === i ? "active" : ""}
-              onClick={() => setCurrentPage(i)}
+              className={styles.adminButtonWithIcon2}
+              onClick={() => setShowAddModal(true)}
             >
-              {String(i).padStart(2, "0")}
+              + Thêm sản phẩm
             </button>
-          ))}
-          <button
-            disabled={currentPage === totalPage}
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            &gt;
-          </button>
-        </div>
-      </div>
-      {showAddModal && (
-        <AddOrEditProductModal
-          mode="add"
-          onClose={() => setShowAddModal(false)}
-          onSubmit={handleAddProduct}
-        />
-      )}
-      {showEditModal && editingProduct && (
-        <AddOrEditProductModal
-          mode="edit"
-          product={editingProduct}
-          onClose={() => setShowEditModal(false)}
-          onSubmit={handleEditProduct}
-        />
-      )}
-      {deleteProduct && (
-        <div className="modal-bg">
-          <div className="modal">
-            <p>
-              Bạn có chắc muốn xoá sản phẩm <b>{deleteProduct.name}</b>?
-            </p>
-            <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+          </div>
+        </header>
+        <div className={styles.content}>
+          <div className={styles.tabsFilter}>
+            {tabs.map((tab, idx) => (
               <button
-                className="add-btn cancel"
-                onClick={() => setDeleteProduct(null)}
+                key={tab}
+                className={activeTab === idx ? styles.tabActive : styles.tab}
+                onClick={() => setActiveTab(idx)}
               >
-                Huỷ
+                {tab}
               </button>
-              <button className="add-btn confirm" onClick={handleDeleteProduct}>
-                Xoá
+            ))}
+          </div>
+          <div style={{ margin: "18px 0", display: "flex", gap: 12 }}>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className={styles.adminButtonWithIcon}
+              style={{ width: 160 }}
+            />
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className={styles.adminButtonWithIcon}
+            >
+              <option value="">Tất cả danh mục</option>
+              <option value="Bàn phím">Bàn phím</option>
+              <option value="Chuột">Chuột</option>
+              <option value="Tai nghe">Tai nghe</option>
+            </select>
+            <button className={styles.adminButtonWithIcon}>
+              <i className="fas fa-sliders-h"></i> Bộ lọc
+            </button>
+          </div>
+          <div className={styles.tableContainer}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" />
+                  </th>
+                  <th>Sản phẩm</th>
+                  <th>SKU</th>
+                  <th>Danh mục</th>
+                  <th>Còn lại</th>
+                  <th>Giá tiền</th>
+                  <th>Trạng thái</th>
+                  <th>Ngày tạo</th>
+                  <th>Chức năng</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product, idx) => (
+                  <tr key={`${product.id ?? idx}-${idx}`}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(idx)}
+                        onChange={() => handleSelect(idx)}
+                      />
+                    </td>
+                    <td className={styles.postInfo}>
+                      <img
+                        src={product.img}
+                        alt={product.name}
+                        className={styles.thumbnail}
+                      />
+                      <span className={styles.postTitleText}>
+                        {product.name}
+                      </span>
+                    </td>
+                    <td className={styles.postId}>{product.sku}</td>
+                    <td>{product.category}</td>
+                    <td>{product.remain}</td>
+                    <td>{product.price}</td>
+                    <td>
+                      <span
+                        className={
+                          product.status === "Còn hàng"
+                            ? `${styles.status} ${styles.published}`
+                            : product.status === "Số lượng ít"
+                            ? `${styles.status} ${styles.pending}`
+                            : product.status === "Bản nháp"
+                            ? `${styles.status} ${styles.draft}`
+                            : `${styles.status} ${styles.rejected}`
+                        }
+                      >
+                        {product.status}
+                      </span>
+                    </td>
+                    <td>{product.created}</td>
+                    <td>
+                      <div className={styles.actions}>
+                        <button
+                          className={styles.editBtn}
+                          title="Sửa"
+                          onClick={() => {
+                            setEditingProduct(product);
+                            setShowEditModal(true);
+                          }}
+                        >
+                          <i className="fas fa-pen"></i>
+                        </button>
+                        <button className={styles.viewBtn} title="Xem">
+                          <i className="fas fa-eye"></i>
+                        </button>
+                        <button
+                          className={styles.deleteBtn}
+                          title="Xoá"
+                          onClick={() => setDeleteProduct(product)}
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className={styles.paginationContainer}>
+            <div className={styles.paginationInfo}>
+              Hiển thị {1 + (currentPage - 1) * pageSize}-
+              {Math.min(currentPage * pageSize, filteredProducts.length)} trên{" "}
+              {filteredProducts.length}
+            </div>
+            <div className={styles.paginationControls}>
+              <button
+                className={styles.paginationButton}
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(currentPage - 1)}
+              >
+                &lt;
+              </button>
+              {Array.from({ length: totalPage }, (_, i) => i + 1).map((i) => (
+                <button
+                  key={i}
+                  className={
+                    currentPage === i
+                      ? `${styles.paginationPageButton} ${styles.active}`
+                      : styles.paginationPageButton
+                  }
+                  onClick={() => setCurrentPage(i)}
+                >
+                  {String(i).padStart(2, "0")}
+                </button>
+              ))}
+              <button
+                className={styles.paginationButton}
+                disabled={currentPage === totalPage}
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                &gt;
               </button>
             </div>
           </div>
+          {showAddModal && (
+            <AddOrEditProductModal
+              mode="add"
+              onClose={() => setShowAddModal(false)}
+              onSubmit={handleAddProduct}
+            />
+          )}
+          {showEditModal && editingProduct && (
+            <AddOrEditProductModal
+              mode="edit"
+              product={editingProduct}
+              onClose={() => setShowEditModal(false)}
+              onSubmit={handleEditProduct}
+            />
+          )}
+          {deleteProduct && (
+            <div className="modal-bg">
+              <div className="modal">
+                <p>
+                  Bạn có chắc muốn xoá sản phẩm <b>{deleteProduct.name}</b>?
+                </p>
+                <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+                  <button
+                    className="add-btn cancel"
+                    onClick={() => setDeleteProduct(null)}
+                  >
+                    Huỷ
+                  </button>
+                  <button
+                    className="add-btn confirm"
+                    onClick={handleDeleteProduct}
+                  >
+                    Xoá
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
